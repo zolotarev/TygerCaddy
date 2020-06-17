@@ -15,27 +15,10 @@ const findConfigById = (req, res) => {
     console.log("Executing Query")
     Configuration.findAll({ where: { id } })
       .then(result => {
-        console.log("Result: ")
-        console.log(result)
         if(!result.length) {
           return res.json({ msg: 'Config not found'})
         }
         res.json(result[0])
-        //console.log(config)
-      })
-      .catch(err => res.status(500).json({ err }));
-  };
-  const findConfigByPk = (req, res) => {
-    const id = "1";
-    console.log("Getting Config")
-    Configuration.findByPk(1)
-      .then(config => {
-        if(!config.length) {
-          console.log("Error getting config")
-          return res.json({ msg: 'Config not found'})
-        }
-        res.json({ config })
-        console.log(config)
       })
       .catch(err => res.status(500).json({ err }));
   };

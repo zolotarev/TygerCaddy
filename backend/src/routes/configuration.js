@@ -1,7 +1,7 @@
 import passport from 'passport';
 import config from '../config/config';
 import { allowOnly } from '../services/routesHelper';
-import { findConfigById, updateConfig, findAllConfig, findConfigByPk
+import { findConfigById, updateConfig, findAllConfig
 } from '../controllers/configuration';
 
 module.exports = (app) => {
