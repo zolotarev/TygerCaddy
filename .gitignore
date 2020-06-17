@@ -102,3 +102,19 @@ dist
 
 # TernJS port file
 .tern-port
+
+# dependencies
+node_modules
+
+# logs
+npm-debug.log
+
+# Nuxt build
+.nuxt
+
+# Nuxt generate
+dist
+
+node_modules
+*.sqlite
+src/db/dev.db.sqlite
