@@ -70,6 +70,5 @@ const updateConfig = (req, res) => {
   export { 
     findConfigById, 
     updateConfig,
-    findAllConfig,
-    findConfigByPk
+    findAllConfig
 }

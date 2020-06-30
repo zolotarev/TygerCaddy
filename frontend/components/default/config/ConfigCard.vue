@@ -13,7 +13,7 @@
         <v-icon large color="white">mdi-cog</v-icon>
 
     </v-toolbar>
-    <v-card class="blue-grey lighten-5">
+    <v-card>
       <v-card-text>
         <v-container fluid>
               <v-layout row justify-space-between>
