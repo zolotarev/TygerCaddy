@@ -12,12 +12,17 @@ WORKDIR /tygercaddy/frontend
 COPY /frontend/* ./
 RUN npm install
 
-#WORKDIR /tygercaddy/docker
-#COPY /docker/start.sh ./
+WORKDIR /tygercaddy/docker
+COPY /docker/start.sh ./
 
 
 
 COPY --from=caddy /usr/bin/caddy /usr/bin/caddy
 
-EXPOSE 3000
-EXPOSE 8080
+EXPOSE 3000 8080 80 443
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/tygercaddy/docker/entrypoint.sh"]
+
+CMD ["run"]
