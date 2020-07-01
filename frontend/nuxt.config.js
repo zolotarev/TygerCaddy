@@ -36,9 +36,9 @@ module.exports = {
          }
    ]
 },
-  axios: {
-    baseURL: 'http://localhost:8080/api'
-  },
+  plugins: [
+    '@/plugins/axios'
+  ],
 
   auth: {
     strategies: {
