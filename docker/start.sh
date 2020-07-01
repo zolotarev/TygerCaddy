@@ -1,4 +1,7 @@
 #!/bin/bash
-caddy
-npm run --prefix /tygercaddy/backend
-npm run --prefix /tygercaddy/frontend
+printf "Starting Caddy\n"
+/usr/bin/caddy run &
+npm run start --prefix /tygercaddy/backend &
+npm run dev --prefix /tygercaddy/frontend
+
+
