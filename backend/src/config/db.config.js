@@ -3,7 +3,7 @@ import path from 'path';
 const config = {
         development: {
         dialect: "sqlite",
-        storage: path.join(process.cwd(), "/src", "/dev.db.sqlite")
+        storage: path.join(process.cwd(), "/db", "/dev.db.sqlite")
       },
       test: {
         dialect: "sqlite",
