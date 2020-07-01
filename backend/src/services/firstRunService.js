@@ -98,12 +98,12 @@ function Admin(){
                             {persist: config.persist},
                             disabled: config.disabled,
                             enforce_origin: config.enforce_origin,
-                            listen:config.listen,
+                            //listen:config.listen,
                             origins:config.origins
                         }
                     } 
                     console.log("Data captured, sending config to Caddy")
-                    caddy.applyCaddyConfig(data);
+                    //caddy.applyCaddyConfig(data);
                     
                 }
                 console.log("Caddy Config apply complete");
