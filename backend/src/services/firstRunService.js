@@ -69,6 +69,7 @@ function Admin(){
             console.log("Checking Caddy has started")
             const status = await caddy.checkCaddyStatus();
             var config = status.data
+            console.log(config)
             if (!config){
                 console.log("Caddy is not running!")
                 return "Caddy Config check failed!";

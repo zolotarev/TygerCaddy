@@ -30,7 +30,9 @@ WORKDIR /tygercaddy/frontend
 COPY --from=nodefrontend /tygercaddy/frontend/ ./
 #COPY --from=nodefrontend /tygercaddy/frontend/node_modules ./node_modules
 
+
 COPY /docker/start.sh /start.sh
+COPY /docker/caddyconfig.json /caddyconfig.json
 RUN chmod +x /start.sh
 
 EXPOSE 3000 8080 80 443
