@@ -3,15 +3,19 @@ FROM caddy:2.0.0-alpine AS caddy
 
 #Build the backend
 FROM node:alpine AS nodebackend
-WORKDIR /tygercaddy/backend
-COPY /backend/* ./
 RUN apk add --no-cache python make g++
+WORKDIR /tygercaddy/backend
+COPY ./backend ./
+RUN ls
 RUN npm install
+RUN mkdir ./src/db
+RUN touch ./src/db/dev.db.sqlite
 RUN npm run build
 
 FROM node:alpine AS nodefrontend
+RUN apk add --no-cache python make g++
 WORKDIR /tygercaddy/frontend
-COPY /frontend/* ./
+COPY ./frontend ./
 RUN npm install
 RUN npm run build
 
