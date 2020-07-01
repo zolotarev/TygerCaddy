@@ -7,17 +7,25 @@ import Sequelize  from 'sequelize';
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 //const config = require(__dirname + '/../config/config.json')[env];
-const config = require('../config/db.config');
+
+const dbfile = path.resolve(__dirname,'../db/dev.db.sqlite');
+const config = {
+  dialect: "sqlite",
+  storage: dbfile
+};
+
 const db = {};
 
 let sequelize;
-
+console.log(config.storage);
 if (config.use_env_variable) {
+  console.log(config.storage)
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
+  console.log(config.storage)
   sequelize = new Sequelize({
-    dialect: config.development.dialect,
-    storage: config.development.storage,
+    dialect: config.dialect,
+    storage: config.storage,
     transactionType: 'IMMEDIATE'
   });
 }
