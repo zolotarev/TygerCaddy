@@ -1,5 +1,5 @@
 const axios = require('axios');
-const caddyHost = '10.10.200.73';
+const caddyHost = 'localhost';
 import db from '../models';
 const Address = db.Address;
 const App = db.App;
