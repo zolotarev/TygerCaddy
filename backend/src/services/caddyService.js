@@ -151,7 +151,7 @@ module.exports = {
         //TODO: apply function here
         try {
             //console.log(dbConfig);
-            //var config = await axios.post(caddy.config, dbConfig);
+            var config = await axios.get(caddy.config);
             //console.log("Config Applied")
             if (config) {
 
