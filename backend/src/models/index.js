@@ -26,6 +26,7 @@ if (config.use_env_variable) {
   sequelize = new Sequelize({
     dialect: config.dialect,
     storage: config.storage,
+    logging: false,
     transactionType: 'IMMEDIATE'
   });
 }
