@@ -3,7 +3,7 @@ import isEmpty from '../isEmpty';
 
 function validateAddressForm(data) {
   let errors = {};
-  console.log(data)
+  //console.log(data)
   data.address = !isEmpty(data.address) ? data.address : '';
   data.tls = !isEmpty(data.tls) ? data.tls : '';
   data.staging = !isEmpty(data.staging) ? data.staging : '';

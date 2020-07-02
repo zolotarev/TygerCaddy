@@ -17,12 +17,12 @@ const config = {
 const db = {};
 
 let sequelize;
-console.log(config.storage);
+//console.log(config.storage);
 if (config.use_env_variable) {
-  console.log(config.storage)
+  //console.log(config.storage)
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  console.log(config.storage)
+  //console.log(config.storage)
   sequelize = new Sequelize({
     dialect: config.dialect,
     storage: config.storage,

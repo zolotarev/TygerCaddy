@@ -12,7 +12,7 @@ const Configuration = db.Configuration;
 // fetch config by id
 const findConfigById = (req, res) => {
     const id = 1;
-    console.log("Executing Query")
+    //console.log("Executing Query")
     Configuration.findAll({ where: { id } })
       .then(result => {
         if(!result.length) {

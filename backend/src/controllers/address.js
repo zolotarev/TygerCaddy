@@ -110,14 +110,14 @@ const deleteAddress = (req, res) => {
 
   const caddyConfig = (req, res) => {
     caddy.getCaddyConfig().then(response => {
-      console.log(response.data)
+      //console.log(response.data)
       res.status(200).json(response.data);
     } 
     )
   };
   const caddyConfigTest = (req, res) => {
     caddy.addCaddyApp().then(response => {
-      console.log(response.data)
+      //console.log(response.data)
       res.status(200).json(response.data);
     } 
     )

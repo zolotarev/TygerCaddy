@@ -15,9 +15,9 @@ export default (sequelize, DataTypes) => {
           return value
         },
         set: function(val) {
-          console.log(val)
+         // console.log(val)
           const newVal = val.join(';');
-          console.log(newVal)
+          //console.log(newVal)
           this.setDataValue('roles',newVal);
         }
       }

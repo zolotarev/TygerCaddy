@@ -41,7 +41,7 @@ module.exports = {
                         },
                     ],
                 });
-            console.log(address)
+            //console.log(address)
             let route = {
                 "@id": address.id,
                 "match": [{
@@ -63,7 +63,7 @@ module.exports = {
                 }]
             }
             var saveConfig = await axios.post(caddy.proxy, route);
-            console.log(address)
+            //console.log(address)
             return address
         } catch (err) {
             console.error(err)
@@ -84,7 +84,7 @@ module.exports = {
                         },
                     ],
                 });
-            console.log(address)
+            //console.log(address)
             let route = {
                 "@id": address.id,
                 "match": [{
@@ -106,7 +106,7 @@ module.exports = {
                 }]
             }
             var saveConfig = await axios.post(caddy.object + addressId + '/', route);
-            console.log(address)
+            //console.log(address)
             return address
         } catch (err) {
             console.error(err)
@@ -119,7 +119,7 @@ module.exports = {
         //TODO: delete function here
         try {
             var deleteAddress = await axios.delete(caddy.object + addressId + '/')
-            console.log(deleteAddress.result);
+            //console.log(deleteAddress.result);
             return deleteAddress
         } catch (error) {
             console.log(error)
