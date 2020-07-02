@@ -38,17 +38,18 @@ models.sequelize.sync().then(() => {
   admin.caddyConfig();
   var caddystatus = async ()=> {
     var result = await admin.checkCaddyStatus();
+    console.log(result)
     if (result) {
       //console.log(result)
       //Apply initial Caddy Config
       var apply = await admin.applyCaddyConfig();
       if (apply){
-       // console.log("Caddy config applied, Caddy is ready to serve.")
+        console.log("Caddy config applied, Caddy is ready to serve.")
       }else{
-        //console.log("Caddy is Broken!")
+        console.log("Caddy is Broken!")
       }
     } else {
-      //console.log(result)
+      console.log(result)
     }
   }
   caddystatus();
