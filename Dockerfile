@@ -8,8 +8,8 @@ WORKDIR /tygercaddy/backend
 COPY ./backend ./
 RUN ls
 RUN npm install
-RUN mkdir ./src/db
-RUN touch ./src/db/dev.db.sqlite
+#RUN mkdir ./src/db
+#RUN touch ./src/db/dev.db.sqlite
 RUN npm run build
 
 FROM node:alpine AS nodefrontend
