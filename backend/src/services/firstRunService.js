@@ -72,10 +72,10 @@ function Admin(){
             //console.log(config)
             if (!config){
                 console.log("Caddy is not running!")
-                return "Caddy Config check failed!";
+                return false
             }else {
                 console.log("Caddy is running!")
-                return "Caddy Config check complete";
+                return true
             }
         } catch (err){
             console.log(err)
