@@ -6,6 +6,7 @@ import models from './models';
 import db from './models';
 const User = db.User;
 var Admin = require('./services/firstRunService');
+var Caddy = require('./services/caddyService');
 
 const app = express();
 
@@ -33,9 +34,19 @@ app.use(cors());
 models.sequelize.sync().then(() => {
   console.log('Drop and Resync with {force: true}');
   var admin = new Admin();
-  //Create admin user if it does not exist
-  admin.check();
-  admin.caddyConfig();
+  //Check admin user, create it if it does not exist
+  var AdminExists = admin.check();
+  //Check default config, create it if it does not exist
+  var ConfigExists = admin.configCheck();
+  //Check that caddy API is accessible
+  var CaddyRunning = admin.caddyReady();
+
+  if (AdminExists && ConfigExists && CaddyRunning ) {
+    console.log("Setting up caddy.....")
+    var applyCaddyServer = admin.applyCaddyServer();
+    console.log(applyCaddyServer)
+  }
+  /*admin.caddyConfig();
   var caddystatus = async ()=> {
     var result = await admin.checkCaddyStatus();
     console.log(result)
@@ -51,8 +62,8 @@ models.sequelize.sync().then(() => {
     } else {
       console.log(result)
     }
-  }
-  caddystatus();
+  }*/
+
 });
 
 

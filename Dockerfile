@@ -32,6 +32,7 @@ COPY --from=nodefrontend /tygercaddy/frontend/ ./
 
 
 COPY /docker/start.sh /start.sh
+COPY /docker/checkresponse.sh /checkresponse.sh
 COPY /docker/caddyconfig.json /caddyconfig.json
 RUN chmod +x /start.sh
 

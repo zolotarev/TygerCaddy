@@ -96,7 +96,10 @@ const updateAddress = (req, res) => {
       },
       { where: { id } }
     )
-      .then(address => res.status(200).json({ address }))
+      .then(address => {
+        caddy.updateCaddyApp(address)
+        res.status(200).json({ address })
+      })      
       .catch(err => res.status(500).json({ err }));
   };
 // delete an address

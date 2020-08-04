@@ -6,6 +6,7 @@ import db from '../models';
 const App = db.App;
 // load input validation
 import validateAppForm from '../validation/app/app.validation';
+import { caddyConfig } from './address';
 
 // create app
 const createApp = (req, res) => {
@@ -88,7 +89,11 @@ const updateApp = (req, res) => {
       },
       { where: { id } }
     )
-      .then(app => res.status(200).json({ app }))
+      .then(app => {
+        caddy.updateCaddyUpstream(app);
+        res.status(200).json({ app })
+    
+    })
       .catch(err => res.status(500).json({ err }));
   };
 // delete an app

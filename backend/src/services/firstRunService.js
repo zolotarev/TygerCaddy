@@ -3,38 +3,56 @@ import bcrypt from 'bcryptjs';
 const User = db.User;
 const Configuration = db.Configuration;
 const caddy = require('./caddyService');
+const initial = require('./InitialLoadService');
 
 function Admin(){
     Admin.prototype.check = async function(){
         try {
-            console.log("Checking for admin")
-            const admin = await User.findAll({where:{username: "admin"}});
-            if (!admin.length){
-                console.log("Admin not found, creating default admin account. ")
-               
-                //Hash the password field and replace the plain text version with the hashed version
-                let salt = await bcrypt.genSalt(10)
-                let password = "password123";
-                let hashedPassword = await bcrypt.hash(password, salt);
-                let adminUser = {
-                    firstname: "Admin",
-                    lastname:"",
-                    username: "admin",
-                    roles: ['superAdmin', 'user'],
-                    avatar: "https://eu.ui-avatars.com/api/?name=Admin",
-                    email: "admin@admin.com",
-                    password:hashedPassword, 
-                };
-                const result = await User.create(adminUser)
-                console.log("Admin created: " + result)
-            }else {
-                console.log("Admin found, doing nothing")
-            }
+            var AdminAccount = await initial.getAdminAccount()
+            console.log(AdminAccount)
+            console.log("Admin Check Complete...")
+            return true
         } catch (err){
             console.log(err)
+            return false
         }
-        return "Admin check complete";
-    };   
+        
+    };
+    
+    Admin.prototype.configCheck = async function(){
+        try {
+            var InitialConfig = await initial.getInitialConfig()
+            
+            console.log(InitialConfig)
+            console.log("Config Check Complete...")
+            return true
+        }catch(err){
+            console.log(err)
+            return false
+        }
+    };
+
+    Admin.prototype.caddyReady = async function(){
+        try {
+            var CaddyRunning = await initial.caddyRunning()
+            console.log("Config is: " + CaddyRunning)
+            console.log("Config Check Complete...")
+            return true
+        } catch(err){
+            console.log(err)
+            return false
+        }
+    };
+
+    Admin.prototype.applyCaddyServer = async function(){
+        try{
+            console.log("Setting the initial server config....");
+            var caddyServer = caddy.applyCaddyConfig()
+        }catch(error){
+
+        }
+    }
+
     Admin.prototype.caddyConfig = async function(){
         try {
             console.log("Setting up caddy config")
@@ -82,7 +100,7 @@ function Admin(){
         }
         
     };  
-    
+
     Admin.prototype.applyCaddyConfig = async function(){
         
         try {
@@ -90,6 +108,7 @@ function Admin(){
             let config = await Configuration.findAll({where:{id: 1}});
             //console.log(config)
             if (config.length){
+                console.log("Caddy Config apply failed!");
                 return "Caddy Config apply failed!";
             }else {
                 let data = {
