@@ -1,0 +1,49 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+stages:
+  - Build Image
+  - Test Dev Image
+  - Deploy Dev Build
+  - Deploy BETA Build
+
+variables:
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY/morph1904/tyger2:dev
+
+docker build:
+  stage: Build Image
+  script:  
+  - docker info
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker build -t $CI_REGISTRY/morph1904/tygercaddy:dev -t morph1904/tygercaddy:dev .
+  - docker build -t $CI_REGISTRY/morph1904/tygercaddy:dev -t morph1904/tygercaddy:beta .
+  - docker push $CI_REGISTRY/morph1904/tygercaddy:dev
+  
+
+test:
+  stage: Test Dev Image
+  before_script:
+    - docker info
+    - BRANCH_LOWER=$(echo "$CI_COMMIT_REF_NAME" | awk '{print tolower($0)}')
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker stop tygercaddytest
+    - docker rm tygercaddytest
+    - docker rmi $CONTAINER_TEST_IMAGE
+    - docker run -d -p 81:80 -p 8443:443 -p 9001:9001 --name tygercaddytest $CONTAINER_TEST_IMAGE
+
+  script:
+    - docker exec tygercaddytest /bin/bash /checkresponse.sh
+  
+deploy dev build:
+  stage: Deploy Dev Build
+  script:
+    - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD $DOCKERHUB_REGISTRY
+    - docker push morph1904/tygercaddy:dev
+
+deploy BETA build:
+  stage: Deploy Dev Build
+  script:
+    - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD $DOCKERHUB_REGISTRY
+    - docker push morph1904/tygercaddy:beta
