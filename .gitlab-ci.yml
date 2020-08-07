@@ -1,7 +1,7 @@
-image: docker:19.03.0
+image: docker:18.09.7
 
 services:
-  - docker:19.03.0-dind
+  - docker:18.09.7-dind
   alias: docker
 
 stages:
@@ -12,6 +12,8 @@ stages:
 
 variables:
   CONTAINER_TEST_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
 
 docker build:
