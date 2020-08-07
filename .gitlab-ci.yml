@@ -13,7 +13,7 @@ variables:
   CONTAINER_TEST_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
+  DOCKER_TLS_CERTDIR: "/certs"
 
 docker build:
   stage: Build Image
