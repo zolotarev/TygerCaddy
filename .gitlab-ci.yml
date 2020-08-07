@@ -1,7 +1,7 @@
-image: docker:latest
+image: docker:19.03.0
 
 services:
-  - docker:dind
+  - docker:19.03.0-dind
 
 stages:
   - Build Image
@@ -11,6 +11,7 @@ stages:
 
 variables:
   CONTAINER_TEST_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
+  DOCKER_TLS_CERTDIR: ""
 
 docker build:
   stage: Build Image
