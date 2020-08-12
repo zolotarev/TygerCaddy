@@ -1,5 +1,11 @@
 #Prep the caddy image for the binary
-FROM caddy:2.0.0-alpine AS caddy
+FROM caddy:builder AS caddy
+RUN caddy-builder \
+    github.com/caddy-dns/digitalocean \
+    github.com/caddy-dns/cloudflare \
+    github.com/caddy-dns/dnspod \
+    github.com/caddy-dns/route53 \
+    github.com/caddy-dns/gandi
 
 #Build the backend
 FROM node:alpine AS nodebackend
