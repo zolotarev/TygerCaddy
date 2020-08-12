@@ -4,6 +4,7 @@ import db from '../models';
 import { Console } from 'console';
 const Address = db.Address;
 const App = db.App;
+const Config = db.Configuration;
 const util = require('util')
 const caddy = {
     url: 'http://' + caddyHost + ':2019',
@@ -12,7 +13,7 @@ const caddy = {
     object: 'http://' + caddyHost + ':2019/id/',
     proxy: 'http://' + caddyHost + ':2019/config/apps/http/servers/tyger2/routes'
 };
-
+const TygerConfig = Config.findOne({where: {id: 1}});
 const initialApp = {
     "http": {
         "servers": {
@@ -218,12 +219,20 @@ module.exports = {
         try{
             console.log("Getting all addresses.....")
             var allAddresses = await Address.findAll({include: [{model: App}]})
-            
+
             let routeArray = [];
             allAddresses.forEach( 
                 (address) => { 
                     //appName = address.App.name.replace(/\s+/g, '');
                     //console.log(appName);
+                    if(TygerConfig.use_dns_verification){
+                        let tls = {
+                            "tls": {
+                                "insecure_skip_verify": address.App.verify_ssl,
+                                ""
+                        }
+                    }
+                    }
                     let route = {
                         "@id": address.id,
                         "match": [{
@@ -240,7 +249,7 @@ module.exports = {
                             "transport": {
                                 "protocol": "http",
                                 "tls": {
-                                    "insecure_skip_verify": false
+                                    "insecure_skip_verify": address.App.verify_ssl
                                 }
                             }
                         }]
