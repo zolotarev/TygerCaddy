@@ -13,49 +13,51 @@ const caddy = {
     object: 'http://' + caddyHost + ':2019/id/',
     proxy: 'http://' + caddyHost + ':2019/config/apps/http/servers/tyger2/routes'
 };
-const TygerConfig = Config.findOne({where: {id: 1}});
-if (TygerConfig.use_dns_verification){
-    const initialApp = {
-        "http": {
-            "servers": {
-                "tyger2": {
-                    "@id":"tyger2",
-                    "automatic_https": {
-                        "disable": true,
-                        "disable_redirects": true,
-                    },
-                    "listen": [":80", ":443"],
-                    "routes": []
+const TygerConfig = Config.findOne({where: {id: 1}}).then(response => {
+    if (response.use_dns_verification){
+        const initialApp = {
+            "http": {
+                "servers": {
+                    "tyger2": {
+                        "@id":"tyger2",
+                        "automatic_https": {
+                            "disable": true,
+                            "disable_redirects": true,
+                        },
+                        "listen": [":80", ":443"],
+                        "routes": []
+                    }
                 }
-            }
-        },
-            "module": "acme",
-            "challenges": {
-                "dns": {
-                    "provider": {
-                        "name": TygerConfig.dns_provider_name,
-                        "api_token": TygerConfig.dns_api_token
+            },
+                "module": "acme",
+                "challenges": {
+                    "dns": {
+                        "provider": {
+                            "name": response.dns_provider_name,
+                            "api_token": response.dns_api_token
+                        }
+                    }
+                }
+        }
+    } else {
+        const initialApp = {
+            "http": {
+                "servers": {
+                    "tyger2": {
+                        "@id":"tyger2",
+                        "automatic_https": {
+                            "disable": true,
+                            "disable_redirects": true,
+                        },
+                        "listen": [":80", ":443"],
+                        "routes": []
                     }
                 }
             }
     }
-} else {
-    const initialApp = {
-        "http": {
-            "servers": {
-                "tyger2": {
-                    "@id":"tyger2",
-                    "automatic_https": {
-                        "disable": true,
-                        "disable_redirects": true,
-                    },
-                    "listen": [":80", ":443"],
-                    "routes": []
-                }
-            }
-        }
-}
-} 
+    } 
+});
+
 
 
 module.exports = {
@@ -222,7 +224,7 @@ module.exports = {
 
     updateConfig: async () => {
         //Update the base caddy config with the new config. 
-        
+
     },
 
     applyCaddyConfig: async function (dbConfig) {
