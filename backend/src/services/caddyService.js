@@ -14,21 +14,49 @@ const caddy = {
     proxy: 'http://' + caddyHost + ':2019/config/apps/http/servers/tyger2/routes'
 };
 const TygerConfig = Config.findOne({where: {id: 1}});
-const initialApp = {
-    "http": {
-        "servers": {
-            "tyger2": {
-                "@id":"tyger2",
-                "automatic_https": {
-                    "disable": true,
-                    "disable_redirects": true,
-                },
-                "listen": [":80", ":443"],
-                "routes": []
+if (TygerConfig.use_dns_verification){
+    const initialApp = {
+        "http": {
+            "servers": {
+                "tyger2": {
+                    "@id":"tyger2",
+                    "automatic_https": {
+                        "disable": true,
+                        "disable_redirects": true,
+                    },
+                    "listen": [":80", ":443"],
+                    "routes": []
+                }
+            }
+        },
+            "module": "acme",
+            "challenges": {
+                "dns": {
+                    "provider": {
+                        "name": TygerConfig.dns_provider_name,
+                        "api_token": TygerConfig.dns_api_token
+                    }
+                }
+            }
+    }
+} else {
+    const initialApp = {
+        "http": {
+            "servers": {
+                "tyger2": {
+                    "@id":"tyger2",
+                    "automatic_https": {
+                        "disable": true,
+                        "disable_redirects": true,
+                    },
+                    "listen": [":80", ":443"],
+                    "routes": []
+                }
             }
         }
-    }
 }
+} 
+
 
 module.exports = {
 
@@ -225,14 +253,6 @@ module.exports = {
                 (address) => { 
                     //appName = address.App.name.replace(/\s+/g, '');
                     //console.log(appName);
-                    if(TygerConfig.use_dns_verification){
-                        let tls = {
-                            "tls": {
-                                "insecure_skip_verify": address.App.verify_ssl,
-                                ""
-                        }
-                    }
-                    }
                     let route = {
                         "@id": address.id,
                         "match": [{
