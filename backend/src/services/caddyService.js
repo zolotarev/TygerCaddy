@@ -219,6 +219,12 @@ module.exports = {
             return error;
         }
     },
+
+    updateConfig: async () => {
+        //Update the base caddy config with the new config. 
+        
+    },
+
     applyCaddyConfig: async function (dbConfig) {
         //TODO: apply function here
         try {

@@ -4,6 +4,8 @@ import passport from 'passport';
 
 import db from '../models';
 
+const caddy = require('../services/caddyService');
+
 const Configuration = db.Configuration;
 
 // load input validation
@@ -64,7 +66,10 @@ const updateConfig = (req, res) => {
       },
       { where: { id } }
     )
-      .then(config => res.status(200).json({ config }))
+      .then(config => {
+        caddy.updateConfig();
+        res.status(200).json({ config })
+      })
       .catch(err => res.status(500).json({ err }));
   };
   export { 
