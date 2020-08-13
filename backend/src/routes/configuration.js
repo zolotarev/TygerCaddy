@@ -15,11 +15,11 @@ module.exports = (app) => {
   );
 
     // update config
-  /*app.put(
-    '/api/config',
+  app.put(
+    '/api/configuration',
     passport.authenticate('jwt', {
       session: false,
     }),
     allowOnly(config.accessLevels.admin, updateConfig)
-  );*/
+  );
 };

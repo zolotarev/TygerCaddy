@@ -121,10 +121,16 @@ export default {
      save(){
         let data = {
           server_name: this.item.server_name,
+          listen: this.item.listen,
+          automatic_https: this.item.automatic_https,
+          redirect_https: this.item.redirect_https,
+          use_dns_verification: this.item.use_dns_verification,
+          dns_provider_name: this.item.dns_provider_name,
+          dns_api_token: this.item.dns_api_token         
       }
       console.log(this.item)
       console.log(data)
-      //this.$store.dispatch('addresses/updateAddress', data)
+      this.$store.dispatch('configuration/updateConfig', data)
       },
   }
 };
