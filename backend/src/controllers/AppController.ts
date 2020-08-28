@@ -2,125 +2,121 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 
-import { User } from "../entity/User";
+import { App } from "../entity/App";
 
-class UserController{
+class AppController{
 
 static listAll = async (req: Request, res: Response) => {
-  //Get users from database
-  const userRepository = getRepository(User);
-  const users = await userRepository.find({
-    select: ["id", "name", "role"] //We dont want to send the passwords on response
-  });
+  //Get apps from database
+  const appRepository = getRepository(App);
+  const apps = await appRepository.find();
 
-  //Send the users object
-  res.send(users);
+  //Send the apps object
+  res.send(apps);
 };
 
 static getOneById = async (req: Request, res: Response) => {
   //Get the ID from the url
   const id: number = req.params.id;
 
-  //Get the user from database
-  const userRepository = getRepository(User);
+  //Get the app from database
+  const appRepository = getRepository(App);
   try {
-    const user = await userRepository.findOneOrFail(id, {
-      select: ["id", "name", "role"] //We dont want to send the password on response
-    });
+    const app = await appRepository.findOneOrFail(id);
   } catch (error) {
-    res.status(404).send("User not found");
+    res.status(404).send("App not found");
   }
 };
 
-static newUser = async (req: Request, res: Response) => {
+static newApp = async (req: Request, res: Response) => {
   //Get parameters from the body
-  let { name, email, password, role, register_timestamp, login_timestamp } = req.body;
-  let user = new User();
-  user.name = name;
-  user.email = email;
-  user.password = password;
-  user.role = role;
-  user.register_timestamp = register_timestamp;
-  user.login_timestamp = login_timestamp;
+  let { name, url, verify_ssl, transparent, websocket } = req.body;
+  let app = new App();
+  app.name = name;
+  app.url = url;
+  app.verify_ssl = verify_ssl;
+  app.transparent = transparent;
+  app.websocket = websocket;
 
   //Validade if the parameters are ok
-  const errors = await validate(user);
+  const errors = await validate(app);
   if (errors.length > 0) {
     res.status(400).send(errors);
     return;
   }
 
-  //Hash the password, to securely store on DB
-  user.hashPassword();
-
-  //Try to save. If fails, the username is already in use
-  const userRepository = getRepository(User);
+  //Try to save. If fails, the appname is already in use
+  const appRepository = getRepository(App);
   try {
-    await userRepository.save(user);
+    await appRepository.save(app);
   } catch (e) {
-    res.status(409).send("username already in use");
+    res.status(409).send("App already in use");
     return;
   }
 
   //If all ok, send 201 response
-  res.status(201).send("User created");
+  res.status(201).send("App created");
 };
 
-static editUser = async (req: Request, res: Response) => {
+static editApp = async (req: Request, res: Response) => {
   //Get the ID from the url
   const id = req.params.id;
 
   //Get values from the body
-  const { name, role } = req.body;
+  let { name, url, verify_ssl, transparent, websocket } = req.body;
 
-  //Try to find user on database
-  const userRepository = getRepository(User);
-  let user;
+
+  //Try to find app on database
+  const appRepository = getRepository(App);
+  let newApp;
   try {
-    user = await userRepository.findOneOrFail(id);
+    newApp = await appRepository.findOneOrFail(id);
   } catch (error) {
     //If not found, send a 404 response
-    res.status(404).send("User not found");
+    res.status(404).send("App not found");
     return;
   }
 
   //Validate the new values on model
-  user.name = name;
-  user.role = role;
-  const errors = await validate(user);
+  newApp.name = name;
+  newApp.url = url;
+  newApp.verify_ssl = verify_ssl;
+  newApp.transparent = transparent;
+  newApp.websocket = websocket;
+  const errors = await validate(newApp);
   if (errors.length > 0) {
     res.status(400).send(errors);
     return;
   }
 
-  //Try to safe, if fails, that means username already in use
+  //Try to safe, if fails, that means appname already in use
   try {
-    await userRepository.save(user);
+    await appRepository.save(newApp);
   } catch (e) {
-    res.status(409).send("username already in use");
+    res.status(409).send("App already in use");
     return;
   }
   //After all send a 204 (no content, but accepted) response
   res.status(204).send();
 };
 
-static deleteUser = async (req: Request, res: Response) => {
+static deleteApp = async (req: Request, res: Response) => {
   //Get the ID from the url
   const id = req.params.id;
 
-  const userRepository = getRepository(User);
-  let user: User;
+  const appRepository = getRepository(App);
+  let app: App;
   try {
-    user = await userRepository.findOneOrFail(id);
+    app = await appRepository.findOneOrFail(id);
   } catch (error) {
-    res.status(404).send("User not found");
+    res.status(404).send("App not found");
     return;
   }
-  userRepository.delete(id);
+  appRepository.delete(id);
 
   //After all send a 204 (no content, but accepted) response
   res.status(204).send();
 };
 };
 
-export default UserController;
+export default AppController;

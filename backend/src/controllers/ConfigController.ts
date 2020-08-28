@@ -6,27 +6,28 @@ import { Config } from "../entity/Config";
 
 class ConfigController{
 
-static getOneById = async (req: Request, res: Response) => {
-  //Get the ID from the url
-  const id: number = req.params.id;
+static getConfig = async (req: Request, res: Response) => {
+  //Get the ID 
+  const id = 1;
 
   //Get the config from database
   const configRepository = getRepository(Config);
   try {
-    const user = await configRepository.findOneOrFail(id);
+    const config = await configRepository.findOneOrFail(id);
+    res.send(config);
   } catch (error) {
     res.status(404).send("Config not found");
   }
 };
 
 static editConfig = async (req: Request, res: Response) => {
-  //Get the ID from the url
-  const id = req.params.id;
+  //Get the ID
+  const id = 1;
 
   //Get values from the body
   const { server_name, automatic_https, redirect_https, use_dns_verification, dns_provider_name, dns_api_token } = req.body;
 
-  //Try to find user on database
+  //Try to find config on database
   const configRepository = getRepository(Config);
   let config;
   try {
@@ -51,7 +52,6 @@ static editConfig = async (req: Request, res: Response) => {
     return;
   }
 
-  //Try to save, if fails, that means username already in use
   try {
     await configRepository.save(config);
   } catch (e) {

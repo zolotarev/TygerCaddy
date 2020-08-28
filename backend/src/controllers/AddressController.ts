@@ -2,125 +2,119 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 
-import { User } from "../entity/User";
+import { Address } from "../entity/Address";
 
-class UserController{
+class AddressController{
 
 static listAll = async (req: Request, res: Response) => {
-  //Get users from database
-  const userRepository = getRepository(User);
-  const users = await userRepository.find({
-    select: ["id", "name", "role"] //We dont want to send the passwords on response
-  });
+  //Get addresses from database
+  const addressRepository = getRepository(Address);
+  const addresses = await addressRepository.find();
 
-  //Send the users object
-  res.send(users);
+  //Send the addresses object
+  res.send(addresses);
 };
 
 static getOneById = async (req: Request, res: Response) => {
   //Get the ID from the url
   const id: number = req.params.id;
 
-  //Get the user from database
-  const userRepository = getRepository(User);
+  //Get the address from database
+  const addressRepository = getRepository(Address);
   try {
-    const user = await userRepository.findOneOrFail(id, {
-      select: ["id", "name", "role"] //We dont want to send the password on response
-    });
+    const address = await addressRepository.findOneOrFail(id);
   } catch (error) {
-    res.status(404).send("User not found");
+    res.status(404).send("Address not found");
   }
 };
 
-static newUser = async (req: Request, res: Response) => {
+static newAddress = async (req: Request, res: Response) => {
   //Get parameters from the body
-  let { name, email, password, role, register_timestamp, login_timestamp } = req.body;
-  let user = new User();
-  user.name = name;
-  user.email = email;
-  user.password = password;
-  user.role = role;
-  user.register_timestamp = register_timestamp;
-  user.login_timestamp = login_timestamp;
+  let { address, tls, staging, app} = req.body;
+  let newAddress = new Address();
+  newAddress.address = address;
+  newAddress.tls = tls;
+  newAddress.staging = staging;
+  newAddress.app = app;
 
   //Validade if the parameters are ok
-  const errors = await validate(user);
+  const errors = await validate(newAddress);
   if (errors.length > 0) {
     res.status(400).send(errors);
     return;
   }
 
-  //Hash the password, to securely store on DB
-  user.hashPassword();
-
-  //Try to save. If fails, the username is already in use
-  const userRepository = getRepository(User);
+  //Try to save. If fails, the addressname is already in use
+  const addressRepository = getRepository(Address);
   try {
-    await userRepository.save(user);
+    await addressRepository.save(newAddress);
   } catch (e) {
-    res.status(409).send("username already in use");
+    res.status(409).send("Address already in use");
     return;
   }
 
   //If all ok, send 201 response
-  res.status(201).send("User created");
+  res.status(201).send("Address created");
 };
 
-static editUser = async (req: Request, res: Response) => {
+static editAddress = async (req: Request, res: Response) => {
   //Get the ID from the url
   const id = req.params.id;
 
   //Get values from the body
-  const { name, role } = req.body;
+  let { address, tls, staging, app} = req.body;
 
-  //Try to find user on database
-  const userRepository = getRepository(User);
-  let user;
+
+  //Try to find address on database
+  const addressRepository = getRepository(Address);
+  let editAddress;
   try {
-    user = await userRepository.findOneOrFail(id);
+    editAddress = await addressRepository.findOneOrFail(id);
   } catch (error) {
     //If not found, send a 404 response
-    res.status(404).send("User not found");
+    res.status(404).send("Address not found");
     return;
   }
 
   //Validate the new values on model
-  user.name = name;
-  user.role = role;
-  const errors = await validate(user);
+  editAddress.address = address;
+  editAddress.tls = tls;
+  editAddress.staging = staging;
+  editAddress.app = app;
+  const errors = await validate(editAddress);
   if (errors.length > 0) {
     res.status(400).send(errors);
     return;
   }
 
-  //Try to safe, if fails, that means username already in use
+  //Try to safe, if fails, that means addressname already in use
   try {
-    await userRepository.save(user);
+    await addressRepository.save(editAddress);
   } catch (e) {
-    res.status(409).send("username already in use");
+    res.status(409).send("Address already in use");
     return;
   }
   //After all send a 204 (no content, but accepted) response
   res.status(204).send();
 };
 
-static deleteUser = async (req: Request, res: Response) => {
+static deleteAddress = async (req: Request, res: Response) => {
   //Get the ID from the url
   const id = req.params.id;
 
-  const userRepository = getRepository(User);
-  let user: User;
+  const addressRepository = getRepository(Address);
+  let address: Address;
   try {
-    user = await userRepository.findOneOrFail(id);
+    address = await addressRepository.findOneOrFail(id);
   } catch (error) {
-    res.status(404).send("User not found");
+    res.status(404).send("Address not found");
     return;
   }
-  userRepository.delete(id);
+  addressRepository.delete(id);
 
   //After all send a 204 (no content, but accepted) response
   res.status(204).send();
 };
 };
 
-export default UserController;
+export default AddressController;
