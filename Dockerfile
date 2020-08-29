@@ -40,6 +40,7 @@ COPY --from=nodebackend /tygercaddy/backend/ormconfig.js ./ormconfig.js
 COPY --from=nodebackend /tygercaddy/backend/prod.example.env ./.env
 RUN ls
 COPY --from=nodebackend /tygercaddy/backend/build/db ./db
+COPY /docker/Caddyfile ./db
 #WORKDIR /tygercaddy/frontend
 #COPY --from=nodefrontend /tygercaddy/frontend/ ./
 #COPY --from=nodefrontend /tygercaddy/frontend/node_modules ./node_modules

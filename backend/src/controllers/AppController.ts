@@ -35,8 +35,6 @@ static newApp = async (req: Request, res: Response) => {
   app.name = name;
   app.url = url;
   app.verify_ssl = verify_ssl;
-  app.transparent = transparent;
-  app.websocket = websocket;
 
   //Validade if the parameters are ok
   const errors = await validate(app);
@@ -81,8 +79,6 @@ static editApp = async (req: Request, res: Response) => {
   newApp.name = name;
   newApp.url = url;
   newApp.verify_ssl = verify_ssl;
-  newApp.transparent = transparent;
-  newApp.websocket = websocket;
   const errors = await validate(newApp);
   if (errors.length > 0) {
     res.status(400).send(errors);
