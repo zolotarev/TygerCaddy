@@ -29,12 +29,6 @@ import {
     verify_ssl: boolean;
   
     @Column()
-    transparent: boolean;
-  
-    @Column()
-    websocket: boolean;
-  
-    @Column()
     @CreateDateColumn()
     createdAt: Date;
   

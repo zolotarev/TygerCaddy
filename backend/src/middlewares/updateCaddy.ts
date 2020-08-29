@@ -1,4 +1,7 @@
-export const checkCaddy = () => {
-    //check that caddy is available by polling the config.
-    //check that the caddyfile exsists
+const fs = require('fs')
+
+export const initialCaddyfile = () => {
+    //generate the caddyfile for the first time if entries exist but the caddyfile is not present. 
+
+
 }

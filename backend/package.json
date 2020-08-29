@@ -1,7 +1,7 @@
 {
-   "name": "node-express-sqlite-jwt-typescript-typeorm",
+   "name": "tygercaddy",
    "version": "1.0.0",
-   "description": "Awesome project developed with TypeORM.",
+   "description": "WebGUI for Caddy",
    "devDependencies": {
       "@types/node": "^8.0.29",
       "ts-node": "^3.3.0",

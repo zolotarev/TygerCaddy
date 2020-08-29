@@ -6,6 +6,7 @@ import * as bodyParser from "body-parser";
 import * as helmet from "helmet";
 import * as cors from "cors";
 import routes from "./routes";
+import { checkCaddy } from "./middlewares/checkCaddy";
 
 //Connects to the Database -> then starts the express
 
@@ -35,8 +36,8 @@ const config:any = {
     await connection.synchronize();
     // Create a new express application instance
     const app = express();
-
-    // Call midlewares
+    checkCaddy();
+    // Call middlewares
     app.use(cors());
     app.use(helmet());
     app.use(bodyParser.json());
