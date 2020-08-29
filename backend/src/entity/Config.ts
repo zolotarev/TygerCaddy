@@ -3,12 +3,15 @@ import {
     PrimaryGeneratedColumn,
     Column,
     Unique,
+    OneToOne,
+    JoinColumn,
     CreateDateColumn,
     UpdateDateColumn
   } from "typeorm";
   import { Length, IsNotEmpty } from "class-validator";
   import * as bcrypt from "bcryptjs";
-  
+  import { DNSProvider } from "./DNSProvider";
+
   @Entity()
   export class Config {
     @PrimaryGeneratedColumn()
@@ -28,10 +31,6 @@ import {
     use_dns_verification: boolean;
   
     @Column()
-    @IsNotEmpty()
-    dns_provider_name: string;
-  
-    @Column()
     dns_api_token: string;
   
     @Column()
@@ -41,5 +40,9 @@ import {
     @Column()
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @OneToOne(type => DNSProvider)
+    @JoinColumn()
+    dns_provider_name: DNSProvider;
   }
   
