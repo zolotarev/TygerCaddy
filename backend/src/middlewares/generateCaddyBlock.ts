@@ -1,3 +1,5 @@
+
+
 import { getRepository } from "typeorm";
 
 import { Address } from "../entity/Address";
@@ -25,6 +27,7 @@ export const initialGlobalConfig = async() => {
 }
 
 export const initialCaddyBlockGenerate = async () => {
+    console.log("Generating Caddyfile!")
     const config = await getConfig();
     let addressBlock = await initialGlobalConfig();
     const addressRepository = getRepository(Address);
@@ -37,7 +40,7 @@ export const initialCaddyBlockGenerate = async () => {
                     tls = "\t tls { \n  \t \t dns " + config.dns_provider_name + " " + config.dns_api_token + "\n \t } \n";
                 }
             }
-            thisBlock = address.address + " { \n" + "\t reverse_proxy " + address.app.url + " { \n \n " + "\t } \n" + tls + "} \n\n";
+            thisBlock = address.address + " { \n" + "\t reverse_proxy " + address.app.ip_address + ":" + address.app.port_number + " { \n \n " + "\t } \n" + tls + "} \n\n";
             
             addressBlock = addressBlock + thisBlock;
             thisBlock = "";
