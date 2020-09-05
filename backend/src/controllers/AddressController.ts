@@ -3,6 +3,7 @@ import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 
 import { Address } from "../entity/Address";
+import { newAddressGenerate } from "../middlewares/updateCaddy";
 
 class AddressController{
 
@@ -48,6 +49,7 @@ static newAddress = async (req: Request, res: Response) => {
   const addressRepository = getRepository(Address);
   try {
     await addressRepository.save(newAddress);
+    await newAddressGenerate();
   } catch (e) {
     res.status(409).send("Address already in use");
     return;
@@ -90,6 +92,7 @@ static editAddress = async (req: Request, res: Response) => {
   //Try to safe, if fails, that means addressname already in use
   try {
     await addressRepository.save(editAddress);
+    await newAddressGenerate();
   } catch (e) {
     res.status(409).send("Address already in use");
     return;
@@ -111,7 +114,7 @@ static deleteAddress = async (req: Request, res: Response) => {
     return;
   }
   addressRepository.delete(id);
-
+  await newAddressGenerate();
   //After all send a 204 (no content, but accepted) response
   res.status(204).send();
 };

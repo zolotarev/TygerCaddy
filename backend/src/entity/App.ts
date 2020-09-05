@@ -7,9 +7,10 @@ import {
     CreateDateColumn,
     UpdateDateColumn
   } from "typeorm";
-  import { Length, IsNotEmpty, IsFQDN } from "class-validator";
+  import { Length, IsNotEmpty, IsIP, IsPort } from "class-validator";
   import * as bcrypt from "bcryptjs";
   import {Address} from "./Address";
+import { isIPv4 } from "net";
   
   @Entity()
   @Unique(["name"])
@@ -22,9 +23,13 @@ import {
     name: string;
   
     @Column()
-    @IsFQDN()
-    url: string;
-  
+    @IsIP()
+    ip_address: string;
+
+    @Column()
+    @IsPort()
+    port_number: string;
+
     @Column()
     verify_ssl: boolean;
   
