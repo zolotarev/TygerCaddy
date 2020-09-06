@@ -2,6 +2,18 @@ import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
 import config from "../config/config";
 
+export const checkId = (req: Request) => {
+  const token = <string>req.headers["authorization"].replace('Bearer ', '');
+  let jwtPayload;
+  try {
+    jwtPayload = <any>jwt.verify(token, config.jwtSecret);
+    return jwtPayload.userId
+  } catch (error) {
+    return error
+  }
+}
+
+
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   //Get the jwt token from the head
   const token = <string>req.headers["authorization"].replace('Bearer ', '');

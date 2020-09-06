@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
-
+import { checkId } from "../middlewares/checkJwt";
 import { User } from "../entity/User";
 
 class UserController{
@@ -15,6 +15,19 @@ static listAll = async (req: Request, res: Response) => {
 
   //Send the users object
   res.send(users);
+};
+
+static getMe = async (req: Request, res: Response) => {
+  let userId = checkId(req);
+  const userRepository = getRepository(User);
+  try {
+    const user = await userRepository.findOneOrFail(userId, {
+      select: ["id", "name", "role","email"] //We dont want to send the password on response
+    });
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(404).send("User not found");
+  }
 };
 
 static getOneById = async (req: Request, res: Response) => {
