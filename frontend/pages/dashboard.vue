@@ -1,29 +1,27 @@
 <template>
-<div>
-  <v-container>
- <v-row>
-<AddressesCard />
-  <ApplicationsCard />
-
-
- </v-row>
-</v-container>
-    </div>
+  <div>
+    <v-container>
+      <v-row>
+        <AddressesCard />
+        <ApplicationsCard />
+      </v-row>
+    </v-container>
+  </div>
 </template>
 <script>
-
-import ApplicationsCard from '../components/default/dashboard/ApplicationsCard'
-import AddressesCard from '../components/default/dashboard/AddressesCard'
+import ApplicationsCard from "../components/default/dashboard/ApplicationsCard";
+import AddressesCard from "../components/default/dashboard/AddressesCard";
 export default {
   components: {
     ApplicationsCard,
-    AddressesCard
+    AddressesCard,
   },
-  layout: 'default',
-  middleware: 'auth',
+  layout: "default",
+  middleware: "auth",
 
-  computed: {
-
-  }
-}
+  computed: {},
+  mounted() {
+    this.$store.dispatch("config/getConfig");
+  },
+};
 </script>

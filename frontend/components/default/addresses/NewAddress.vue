@@ -2,9 +2,7 @@
   <div class="text-center">
     <v-dialog width="500" v-model="show">
       <v-card>
-        <v-card-title class="headline orange white--text" dark>
-          Add Address
-        </v-card-title>
+        <v-card-title class="headline orange white--text" dark>Add Address</v-card-title>
 
         <v-card-text>
           <v-container fluid>
@@ -17,8 +15,7 @@
                 v-model="formData.address"
                 :error-messages="addressErrors"
                 required
-              >
-              </v-text-field>
+              ></v-text-field>
             </v-layout>
             <v-layout row justify-space-between>
               <v-switch
@@ -72,7 +69,7 @@ import { required, url } from "vuelidate/lib/validators";
 export default {
   mixins: [validationMixin],
   validations: {
-    address: { required }
+    address: { required },
   },
 
   data() {
@@ -81,16 +78,16 @@ export default {
         address: "",
         tls: false,
         staging: false,
-        app: ""
-      }
+        app: "",
+      },
     };
   },
   props: {
-    value: Boolean
+    value: Boolean,
   },
   model: {
     prop: "value",
-    event: "showhide"
+    event: "showhide",
   },
   computed: {
     addressErrors() {
@@ -100,16 +97,16 @@ export default {
       return errors;
     },
     show: {
-      get: function() {
+      get: function () {
         return this.value;
       },
-      set: function(value) {
+      set: function (value) {
         this.$emit("showhide", value);
-      }
+      },
     },
     apps() {
       return this.$store.state.apps.apps;
-    }
+    },
   },
   methods: {
     close() {
@@ -124,16 +121,16 @@ export default {
         address: "",
         tls: false,
         staging: false,
-        app: ""
+        app: "",
       };
-      this.errors.clear();
+      this.$v.$reset();
     },
     createAdd() {
       let data = {
         address: this.formData.address,
         tls: this.formData.tls,
         staging: this.formData.staging,
-        appId: this.formData.app.id
+        appId: this.formData.app.id,
       };
 
       this.$store.dispatch("addresses/addAddress", data);
@@ -142,12 +139,12 @@ export default {
       this.close();
     },
     submit() {
-      this.$validator.validate().then(result => {
+      this.$validator.validate().then((result) => {
         if (result) {
           this.createAdd();
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>

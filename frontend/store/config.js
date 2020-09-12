@@ -26,7 +26,7 @@ export const actions = {
     commit,
     dispatch
   }, data) {
-    let res = await this.$axios.put("/config", data).then((res) => {
+    let res = await this.$axios.patch("/config", data).then((res) => {
       dispatch('getConfig');
     }).catch((error) => {
       console.log(error)
