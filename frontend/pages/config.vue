@@ -46,6 +46,7 @@ export default {
     this.$store.dispatch("dns/getDNS");
     this.showEditConfig = false;
     this.showConfigCard = true;
+    this.editConfig = Object.assign({}, this.$store.state.config.config);
   },
   methods: {
     edit() {

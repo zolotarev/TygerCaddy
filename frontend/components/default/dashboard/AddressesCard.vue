@@ -1,11 +1,6 @@
 <template>
-  <v-col cols="6">
-    <v-toolbar
-      color="orange"
-      dark
-      dense
-      :src="require('~/assets/sidebar-background.jpg')"
-    >
+  <v-col :cols="currentRoute">
+    <v-toolbar color="orange" dark dense :src="require('~/assets/sidebar-background.jpg')">
       <v-toolbar-title>Addresses</v-toolbar-title>
       <v-spacer></v-spacer>
 
@@ -83,13 +78,17 @@
             </td>
           </template>
           <template v-slot:no-results>
-            <v-alert :value="true" color="error" icon="warning">
-              Your search for "{{ search }}" found no results.
-            </v-alert>
+            <v-alert
+              :value="true"
+              color="error"
+              icon="warning"
+            >Your search for "{{ search }}" found no results.</v-alert>
           </template>
         </v-data-table>
       </div>
-      <div v-else><p>There are no addresses to display.</p></div>
+      <div v-else>
+        <p>There are no addresses to display.</p>
+      </div>
     </v-card>
     <DeleteAddress v-model="deletedialog" :item="deleteid" />
     <EditAddress v-model="editdialog" :item="editedItem" />
@@ -101,7 +100,7 @@ import EditAddress from "../addresses/EditAddress";
 export default {
   components: {
     DeleteAddress,
-    EditAddress
+    EditAddress,
   },
   data() {
     return {
@@ -114,21 +113,21 @@ export default {
           text: "ID",
           align: "left",
           sortable: false,
-          value: "id"
+          value: "id",
         },
         { text: "URL", value: "address" },
         { text: "TLS", value: "tls" },
         { text: "Staging", value: "staging" },
         { text: "Application", value: "app.name" },
-        { text: "Actions", value: "actions", sortable: false }
+        { text: "Actions", value: "actions", sortable: false },
       ],
       editedItem: {
         id: 0,
         address: "",
         tls: "",
         staging: false,
-        app: ""
-      }
+        app: "",
+      },
     };
   },
   mounted() {
@@ -143,15 +142,22 @@ export default {
       this.editedIndex = this.addresses.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.editdialog = true;
-    }
+    },
   },
   computed: {
+    currentRoute() {
+      if (this.$route.name === "dashboard") {
+        return "6";
+      } else {
+        return "12";
+      }
+    },
     loading() {
       return this.$store.state.addresses.addressLoading;
     },
     addresses() {
       return this.$store.state.addresses.addresses;
-    }
-  }
+    },
+  },
 };
 </script>

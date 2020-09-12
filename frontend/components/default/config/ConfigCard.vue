@@ -20,7 +20,7 @@
             <v-list-item-content>
               <v-list-item-title>Automatic HTTPS?</v-list-item-title>
               <v-list-item-subtitle>
-                <v-icon large dark class="orange" v-if="automatic_https">mdi-check</v-icon>
+                <v-icon large dark class="orange" v-if="config.automatic_https">mdi-check</v-icon>
                 <v-icon large dark class="orange" v-else>mdi-close</v-icon>
               </v-list-item-subtitle>
             </v-list-item-content>
@@ -30,7 +30,7 @@
             <v-list-item-content>
               <v-list-item-title>Redirect HTTPS?</v-list-item-title>
               <v-list-item-subtitle>
-                <v-icon large dark class="orange" v-if="redirect_https">mdi-check</v-icon>
+                <v-icon large dark class="orange" v-if="config.redirect_https">mdi-check</v-icon>
                 <v-icon large dark class="orange" v-else>mdi-close</v-icon>
               </v-list-item-subtitle>
             </v-list-item-content>
@@ -39,7 +39,7 @@
             <v-list-item-content>
               <v-list-item-title>Use DNS Verification?</v-list-item-title>
               <v-list-item-subtitle>
-                <v-icon large dark class="orange" v-if="use_dns_verification">mdi-check</v-icon>
+                <v-icon large dark class="orange" v-if="config.use_dns_verification">mdi-check</v-icon>
                 <v-icon large dark class="orange" v-else>mdi-close</v-icon>
               </v-list-item-subtitle>
             </v-list-item-content>

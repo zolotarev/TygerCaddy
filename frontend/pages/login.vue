@@ -14,6 +14,7 @@
                 name="email"
                 prepend-icon="mdi-account"
                 type="text"
+                color="orange"
               ></v-text-field>
 
               <v-text-field
@@ -23,6 +24,7 @@
                 name="password"
                 prepend-icon="mdi-lock"
                 type="password"
+                color="orange"
               ></v-text-field>
             </v-card-text>
             <v-card-actions>

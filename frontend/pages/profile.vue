@@ -1,56 +1,54 @@
 <template>
-  <v-flex xs12 sm12 pa-3>
-
-<v-toolbar color="deep-orange" dark>
-      <v-toolbar-title>My Profile</v-toolbar-title>
-      <v-spacer></v-spacer>
-
-
-        <v-icon large color="white">mdi-face</v-icon>
-
-    </v-toolbar>
-<v-card class="blue-grey lighten-5">
-
-
-          <v-card-text class="headline font-weight-bold">
-            <v-layout row wrap class="justify-center">
-              <v-flex xs4>
-               <strong>{{loggedInUser.username}}</strong> Profile
-
-                  <p>
-                  <strong>Id:</strong>
-      {{loggedInUser.id}}
-    </p>
-        <p>
-      <strong>First name:</strong>
-      {{loggedInUser.firstname}}
-    </p>
-        <p>
-      <strong>Last Name:</strong>
-      {{loggedInUser.lastname}}
-    </p>
-    <p>
-      <strong>Email:</strong>
-      {{loggedInUser.email}}
-    </p>
-    <strong>Roles:</strong>
-    <ul>
-      <li v-for="(role,index) in loggedInUser.roles" :key="index">{{role}}</li>
-    </ul>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
-        </v-card>
-      </v-flex>
+  <div>
+    <v-container>
+      <v-row align="center" justify="center">
+        <v-col cols="6" sm="4" md="4">
+          <v-btn v-if="showProfileCard" block dark color="orange" @click="edit()">Edit Profile</v-btn>
+          <v-btn v-if="showEditProfile" block dark color="orange" @click="edit()">View Profile</v-btn>
+        </v-col>
+        <v-col cols="6" sm="4" md="4">
+          <v-btn dark block color="orange" @click="changePassword()">Change Password</v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container>
+      <v-row>
+        <ProfileCard v-model="showProfileCard" />
+        <EditProfileCard v-model="showEditProfile" :item="editProfile" />
+      </v-row>
+    </v-container>
+  </div>
 </template>
-
 <script>
-import { mapGetters } from 'vuex'
-
+import EditProfileCard from "../components/default/profile/EditProfileCard";
+import ProfileCard from "../components/default/profile/ProfileCard";
 export default {
-   middleware: 'auth',
-  computed: {
-    ...mapGetters(['loggedInUser'])
-  }
-}
+  components: {
+    ProfileCard,
+    EditProfileCard,
+  },
+  data() {
+    return {
+      showProfileCard: true,
+      showEditProfile: false,
+      editProfile: {},
+    };
+  },
+  layout: "default",
+  middleware: "auth",
+
+  mounted() {
+    this.showEditProfile = false;
+    this.showProfileCard = true;
+  },
+  methods: {
+    edit() {
+      this.showEditProfile = !this.showEditProfile;
+      this.showProfileCard = !this.showProfileCard;
+
+      this.editProfile = Object.assign({}, this.$store.state.auth.user);
+      console.log(this.$store.state.auth.user);
+    },
+  },
+};
 </script>

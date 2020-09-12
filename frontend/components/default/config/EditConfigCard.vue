@@ -138,7 +138,7 @@ export default {
         automatic_https: this.item.automatic_https,
         redirect_https: this.item.redirect_https,
         use_dns_verification: this.item.use_dns_verification,
-        dns_provider_name: this.item.dns_provider_name,
+        dns_provider_name: this.item.dns_provider_name.id,
         dns_api_token: this.item.dns_api_token,
       };
 

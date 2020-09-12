@@ -1,11 +1,6 @@
 <template>
-  <v-col cols="6">
-    <v-toolbar
-      color="orange"
-      dark
-      dense
-      :src="require('~/assets/sidebar-background.jpg')"
-    >
+  <v-col :cols="currentRoute">
+    <v-toolbar color="orange" dark dense :src="require('~/assets/sidebar-background.jpg')">
       <v-toolbar-title>Applications</v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -30,8 +25,7 @@
               <a
                 target="_blank"
                 :href="'http://' + item.ip_address + ':' + item.port_number"
-                >{{ item.ip_address }}:{{ item.port_number }}</a
-              >
+              >{{ item.ip_address }}:{{ item.port_number }}</a>
             </td>
           </template>
           <template v-slot:item.verify_ssl="{ item }">
@@ -88,13 +82,17 @@
           </template>
 
           <template v-slot:no-results>
-            <v-alert :value="true" color="error" icon="warning">
-              Your search for "{{ search }}" found no results.
-            </v-alert>
+            <v-alert
+              :value="true"
+              color="error"
+              icon="warning"
+            >Your search for "{{ search }}" found no results.</v-alert>
           </template>
         </v-data-table>
       </div>
-      <div v-else><p>There are no apps to display.</p></div>
+      <div v-else>
+        <p>There are no apps to display.</p>
+      </div>
     </v-card>
     <DeleteApp v-model="deletedialog" :item="deleteid" />
     <EditApp v-model="editdialog" :item="editedItem" />
@@ -106,7 +104,7 @@ import EditApp from "../apps/EditApp";
 export default {
   components: {
     DeleteApp,
-    EditApp
+    EditApp,
   },
   data() {
     return {
@@ -120,14 +118,14 @@ export default {
           text: "ID",
           align: "left",
           sortable: false,
-          value: "id"
+          value: "id",
         },
         { text: "Name", value: "name" },
         { text: "IP Address", value: "ip_address" },
         { text: "Verify SSL", value: "verify_ssl" },
         { text: "Websocket", value: "websocket" },
         { text: "Transparent", value: "transparent" },
-        { text: "Actions", value: "actions", sortable: false }
+        { text: "Actions", value: "actions", sortable: false },
       ],
       editedItem: {
         id: 0,
@@ -135,8 +133,8 @@ export default {
         url: "",
         verify_ssl: false,
         websocket: false,
-        transparent: false
-      }
+        transparent: false,
+      },
     };
   },
   mounted() {
@@ -151,15 +149,22 @@ export default {
       this.editedIndex = this.apps.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.editdialog = true;
-    }
+    },
   },
   computed: {
+    currentRoute() {
+      if (this.$route.name === "dashboard") {
+        return "6";
+      } else {
+        return "12";
+      }
+    },
     loading() {
       return this.$store.state.apps.appsLoading;
     },
     apps() {
       return this.$store.state.apps.apps;
-    }
-  }
+    },
+  },
 };
 </script>
