@@ -37,16 +37,19 @@ class AuthController {
         error: 'Cannot match encrypted password'
       });
     }
+    let data = {
+      token: ""
+    };
 
     // Sing JWT, valid for 1 hour
-    const token = jwt.sign(
+    data.token = jwt.sign(
       { userId: user.id, email: user.email },
       config.jwtSecret,
       { expiresIn: "1h" }
     );
 
     // Send the jwt in the response
-    res.send(token);
+    res.send(data);
   };
 
   static changePassword = async (req: Request, res: Response) => {
