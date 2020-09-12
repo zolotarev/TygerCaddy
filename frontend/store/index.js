@@ -28,13 +28,26 @@ export const actions = {
       commit('SET_USER', res.data)
     })
   },
+
+  async changePassword({
+    commit,
+    dispatch
+  }, data) {
+    let res = await this.$axios.post("/auth/change-password", data).then((res) => {
+
+    }).catch((error) => {
+      console.log(error)
+      return error
+    })
+  },
+
   async updateUser({
     commit,
     dispatch
   }, data) {
     let res = await this.$axios.patch("/user/1", data).then((res) => {
-      dispatch('getUser');
-      commit('SET_USER', res.data)
+      this.$auth.logout();
+      this.$router.push('/login')
     }).catch((error) => {
       console.log(error)
       return error

@@ -18,7 +18,7 @@
         <v-container fluid>
           <v-layout row justify-space-between>
             <v-text-field
-              :value="item.server_name"
+              v-model="item.server_name"
               name="server_name"
               id="server_name"
               color="orange"

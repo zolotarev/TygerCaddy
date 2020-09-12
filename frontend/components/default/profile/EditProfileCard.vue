@@ -17,8 +17,15 @@
       <v-card-text>
         <v-container fluid>
           <v-layout row justify-space-between>
+            <v-alert
+              type="error"
+              dense
+              icon="mdi-account"
+            >You will be logged out upon save, and you will need to sign in again.</v-alert>
+          </v-layout>
+          <v-layout row justify-space-between>
             <v-text-field
-              :value="item.name"
+              v-model="item.name"
               name="name"
               id="name"
               color="orange"
@@ -30,7 +37,7 @@
           </v-layout>
           <v-layout row justify-space-between>
             <v-text-field
-              :value="item.email"
+              v-model="item.email"
               name="email"
               id="email"
               color="orange"
@@ -98,7 +105,7 @@ export default {
         email: this.item.email,
         role: this.item.role,
       };
-
+      console.log(data);
       this.$store.dispatch("updateUser", data);
     },
   },

@@ -15,6 +15,7 @@
       <v-row>
         <ProfileCard v-model="showProfileCard" />
         <EditProfileCard v-model="showEditProfile" :item="editProfile" />
+        <ChangePassword v-model="showChangePassword" />
       </v-row>
     </v-container>
   </div>
@@ -22,15 +23,18 @@
 <script>
 import EditProfileCard from "../components/default/profile/EditProfileCard";
 import ProfileCard from "../components/default/profile/ProfileCard";
+import ChangePassword from "../components/default/profile/ChangePassword";
 export default {
   components: {
     ProfileCard,
     EditProfileCard,
+    ChangePassword,
   },
   data() {
     return {
       showProfileCard: true,
       showEditProfile: false,
+      showChangePassword: false,
       editProfile: {},
     };
   },
@@ -42,6 +46,9 @@ export default {
     this.showProfileCard = true;
   },
   methods: {
+    changePassword() {
+      this.showChangePassword = !this.showChangePassword;
+    },
     edit() {
       this.showEditProfile = !this.showEditProfile;
       this.showProfileCard = !this.showProfileCard;
