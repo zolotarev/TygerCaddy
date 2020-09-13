@@ -23,11 +23,12 @@ RUN npm run sync
 RUN npm run migration:run
 
 
-#FROM node:alpine AS nodefrontend
-#RUN apk add --no-cache python make g++
-#WORKDIR /tygercaddy/frontend
-#COPY ./frontend ./
-#RUN npm install
+FROM node:alpine AS nodefrontend
+RUN apk add --no-cache python make g++
+WORKDIR /tygercaddy/frontend
+COPY ./frontend ./
+RUN npm install
+RUN npm run build
 
 
 FROM node:alpine AS tygercaddy
@@ -41,8 +42,9 @@ COPY --from=nodebackend /tygercaddy/backend/prod.example.env ./.env
 RUN ls
 COPY --from=nodebackend /tygercaddy/backend/build/db ./db
 COPY /docker/Caddyfile ./db
-#WORKDIR /tygercaddy/frontend
-#COPY --from=nodefrontend /tygercaddy/frontend/ ./
+
+WORKDIR /tygercaddy/frontend
+COPY --from=nodefrontend /tygercaddy/frontend/.nuxt ./
 #COPY --from=nodefrontend /tygercaddy/frontend/node_modules ./node_modules
 
 

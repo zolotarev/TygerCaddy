@@ -2,7 +2,7 @@
 printf "\n Lets get this show on the road! \n"
 TYGER_ROOT=/tygercaddy
 TYGER_BACKEND=$TYGER_ROOT/backend
-#TYGER_FRONTEND=$TYGER_ROOT/frontend
+TYGER_FRONTEND=$TYGER_ROOT/frontend
 #TYGER_DB=$TYGER_BACKEND/database.sqlite
 CADDYFILE=$TYGER_BACKEND/db/Caddyfile
 printf "\n OK, so I know where the files are stored, let me check some stuff.... \n"
@@ -34,5 +34,6 @@ fi
 #printf "\n OK, I have kicked all that off, going to sleep now, if any of the services have an issue, they will tell you directly..... \n"
 #/usr/bin/caddy run --config /db/Caddyfile &
 node $TYGER_BACKEND/index.js &
+node $TYGER_FRONTEND/index.js &
 /usr/bin/caddy run --config $CADDYFILE --adapter caddyfile
 #npm run start --prefix /tygercaddy/frontend
