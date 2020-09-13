@@ -35,6 +35,6 @@ fi
 #/usr/bin/caddy run --config /db/Caddyfile &
 node $TYGER_BACKEND/index.js &
 cd $TYGER_FRONTEND &
-nuxt start &
+npm run start &
 /usr/bin/caddy run --config $CADDYFILE --adapter caddyfile
 #npm run start --prefix /tygercaddy/frontend
