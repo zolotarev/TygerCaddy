@@ -25,7 +25,8 @@
       "reflect-metadata": "^0.1.10",
       "sqlite3": "^4.0.3",
       "ts-node": "^3.3.0",
-      "typeorm": "0.2.17"
+      "typeorm": "0.2.17",
+      "typescript": "3.3.3333"
    },
    "scripts": {
       "build": "tsc -p .",
