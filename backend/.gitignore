@@ -6,4 +6,3 @@ tmp/
 temp/
 database.sqlite
 .env
-Caddyfile
