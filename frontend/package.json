@@ -4,6 +4,7 @@
   "description": "TygerCaddy Frontend",
   "author": "morph1904 <morph1904@users.noreply.github.com>",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
