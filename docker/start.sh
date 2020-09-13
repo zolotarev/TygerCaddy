@@ -1,6 +1,6 @@
 #!/bin/bash
 #printf "\n Lets get this show on the road! \n"
-#TYGER_ROOT=/tygercaddy
+TYGER_ROOT=/tygercaddy
 TYGER_BACKEND=$TYGER_ROOT/backend
 TYGER_FRONTEND=$TYGER_ROOT/frontend
 #TYGER_DB=$TYGER_BACKEND/database.sqlite
