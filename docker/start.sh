@@ -34,7 +34,6 @@ fi
 #printf "\n OK, I have kicked all that off, going to sleep now, if any of the services have an issue, they will tell you directly..... \n"
 #/usr/bin/caddy run --config /db/Caddyfile &
 node $TYGER_BACKEND/index.js &
-cd $TYGER_FRONTEND &
-npm run start &
+npm run start --prefix /tygercaddy/frontend &
 /usr/bin/caddy run --config $CADDYFILE --adapter caddyfile
 #npm run start --prefix /tygercaddy/frontend
