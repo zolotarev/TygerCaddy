@@ -35,7 +35,7 @@ FROM node:alpine AS tygercaddy
 COPY --from=caddy /usr/bin/caddy /usr/bin/caddy
 
 WORKDIR /tygercaddy/backend
-COPY --from=nodebackend /tygercaddy/backend/build ./
+COPY --from=nodebackend /tygercaddy/backend/ ./
 COPY --from=nodebackend /tygercaddy/backend/build/node_modules ./node_modules
 COPY --from=nodebackend /tygercaddy/backend/ormconfig.js ./ormconfig.js
 COPY --from=nodebackend /tygercaddy/backend/prod.example.env ./.env
