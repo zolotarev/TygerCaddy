@@ -33,7 +33,7 @@ CADDYFILE=$TYGER_BACKEND/db/Caddyfile
 #printf "\n Last thing I am starting the frontend, this gives you a pretty front end do do what you need.... \n"
 #printf "\n OK, I have kicked all that off, going to sleep now, if any of the services have an issue, they will tell you directly..... \n"
 #/usr/bin/caddy run --config /db/Caddyfile &
-cd $TYGER_BACKEND && npm run prod
-#npm run start --prefix /$TYGER_FRONTEND/frontend &
-#/usr/bin/caddy run --config $CADDYFILE --adapter caddyfile
+cd $TYGER_BACKEND && npm run prod &
+npm run start --prefix /$TYGER_FRONTEND/frontend &
+/usr/bin/caddy run --config $CADDYFILE --adapter caddyfile
 #npm run start --prefix /tygercaddy/frontend
