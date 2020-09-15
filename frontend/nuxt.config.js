@@ -5,7 +5,7 @@ module.exports = {
   },
   plugins: [
     "~/plugins/vee-validate.js",
-   "~plugins/vuelidate.js"
+    "~plugins/vuelidate.js"
   ],
   build: {
     transpile: ["vee-validate/dist/rules", "vuelidate"],
@@ -18,20 +18,29 @@ module.exports = {
     // Simple usage
     //'@nuxtjs/vuetify',
     // With options
-    ['@nuxtjs/vuetify', { /* module options */ }]
+    ['@nuxtjs/vuetify', {
+      /* module options */
+    }]
   ],
   axios: {
-    baseURL: 'http://localhost:3000/'
+    baseURL: 'http://' + process.env.API_IP + ':' + process.env.API_PORT || 'http://localhost:3000'
   },
-  
+
   auth: {
     strategies: {
       local: {
         endpoints: {
-          login: { url: '/auth/login', method: 'post'},
-          user: { url: '/user/me', method: 'get', propertyName: ''},
+          login: {
+            url: '/auth/login',
+            method: 'post'
+          },
+          user: {
+            url: '/user/me',
+            method: 'get',
+            propertyName: ''
+          },
           refresh: false,
-          logout:false
+          logout: false
         },
         user: {
           property: '',
