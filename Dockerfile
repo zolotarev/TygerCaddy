@@ -45,6 +45,7 @@ COPY /docker/Caddyfile ./db
 
 WORKDIR /tygercaddy/frontend
 COPY --from=nodefrontend /tygercaddy/frontend/ ./
+
 #COPY --from=nodefrontend /tygercaddy/frontend/node_modules ./node_modules
 
 
