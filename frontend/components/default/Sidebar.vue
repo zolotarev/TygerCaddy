@@ -18,9 +18,9 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title>{{ loggedInUser.name }}</v-list-item-title>
+            <v-list-item-title v-if="loggedInUser">{{ loggedInUser.name }}</v-list-item-title>
             <v-list-item-subtitle>
-              <span>{{loggedInUser.email}}</span>
+              <span v-if="loggedInUser">{{loggedInUser.email}}</span>
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
