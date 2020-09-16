@@ -12,7 +12,7 @@
                 color="orange"
                 label="External Address"
                 hint="The domain or subdomain you would like to proxy e.g plex.mydomain.com"
-                v-model="formData.address"
+                v-model="address"
                 :error-messages="addressErrors"
                 required
               ></v-text-field>
@@ -24,7 +24,7 @@
                 label="Default to HTTPS?"
                 hint="Enable automatic SSL Cert signing, and redirect from HTTP to HTTPS"
                 :persistent-hint="true"
-                v-model="formData.tls"
+                v-model="tls"
               ></v-switch>
             </v-layout>
             <v-layout row justify-space-between>
@@ -34,12 +34,12 @@
                 label="Use HTTPS Staging?"
                 hint="Only works with 'Default to HTTPS', this uses the LetsEncrypt test servers to avoid rate limits during testing"
                 :persistent-hint="true"
-                v-model="formData.staging"
+                v-model="staging"
               ></v-switch>
             </v-layout>
             <v-layout row justify-space-between>
               <v-combobox
-                v-model="formData.app"
+                v-model="app"
                 :items="apps"
                 item-text="name"
                 item-value="name"
@@ -74,12 +74,10 @@ export default {
 
   data() {
     return {
-      formData: {
-        address: "",
-        tls: false,
-        staging: false,
-        app: "",
-      },
+      address: "",
+      tls: false,
+      staging: false,
+      app: "",
     };
   },
   props: {
@@ -127,10 +125,10 @@ export default {
     },
     createAdd() {
       let data = {
-        address: this.formData.address,
-        tls: this.formData.tls,
-        staging: this.formData.staging,
-        appId: this.formData.app.id,
+        address: this.address,
+        tls: this.tls,
+        staging: this.staging,
+        appId: this.app.id,
       };
 
       this.$store.dispatch("addresses/addAddress", data);
