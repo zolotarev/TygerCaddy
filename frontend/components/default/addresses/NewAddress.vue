@@ -128,7 +128,7 @@ export default {
         address: this.address,
         tls: this.tls,
         staging: this.staging,
-        appId: this.app.id,
+        app: this.app.id,
       };
 
       this.$store.dispatch("addresses/addAddress", data);

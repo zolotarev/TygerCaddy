@@ -10,3 +10,15 @@ test.test.com {
  	 } 
 } 
 
+test2.test.com { 
+	 reverse_proxy 10.10.200.1:80 { 
+ 
+ 	 } 
+} 
+
+test3.test.com { 
+	 reverse_proxy 10.10.200.30:8082 { 
+ 
+ 	 } 
+} 
+
