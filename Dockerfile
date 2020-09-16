@@ -21,6 +21,8 @@ COPY ./backend/prod.example.env /tygercaddy/backend/build/.env
 WORKDIR /tygercaddy/backend/build
 RUN npm run sync
 RUN npm run migration:run
+RUN mkdir -p /tygercaddy/backend/build/initialdb
+RUN mv /tygercaddy/backend/build/db/database.sqlite /tygercaddy/backend/build/initialdb/
 
 
 FROM node:alpine AS nodefrontend
