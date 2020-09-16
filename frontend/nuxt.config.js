@@ -3,6 +3,9 @@ module.exports = {
     port: 3001, // default: 3000
     host: '0.0.0.0' // default: localhost
   },
+  publicRuntimeConfig: {
+    baseURL: process.env.BASE_URL || 'http://localhost:3000'
+  },
   plugins: [
     "~/plugins/vee-validate.js",
     "~plugins/vuelidate.js"
@@ -23,7 +26,7 @@ module.exports = {
     }]
   ],
   axios: {
-    baseURL: 'http://' + process.env.API_IP + ':' + process.env.API_PORT || 'http://localhost:3000'
+    baseURL: process.env.baseURL || 'http://localhost:3000'
   },
 
   auth: {
