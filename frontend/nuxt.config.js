@@ -1,6 +1,3 @@
-include('./run.js');
-
-
 module.exports = {
   server: {
     port: 3001, // default: 3000
