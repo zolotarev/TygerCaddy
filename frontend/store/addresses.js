@@ -18,7 +18,7 @@ export const actions = {
     commit
   }) {
     commit('TOGGLE_ADDRESS_LOADING')
-    let res = await this.$axios.get(this.$env.TEST_VALUE + '/address').then((res) => {
+    let res = await this.$axios.get('/address').then((res) => {
       commit('SET_ADDRESSES', res.data),
         commit('TOGGLE_ADDRESS_LOADING')
     })
@@ -29,7 +29,7 @@ export const actions = {
     dispatch
   }, data) {
 
-    let res = await this.$axios.post(this.$env.TEST_VALUE + "address/", data).then((res) => {
+    let res = await this.$axios.post("address/", data).then((res) => {
       dispatch('getAddresses');
     }).catch((error) => {
       console.log(error)
@@ -40,7 +40,7 @@ export const actions = {
     commit,
     dispatch
   }, data) {
-    let res = await this.$axios.patch(this.$env.TEST_VALUE + "address/" + data.id + "/", data).then((res) => {
+    let res = await this.$axios.patch("address/" + data.id + "/", data).then((res) => {
       dispatch('getAddresses');
     }).catch((error) => {
       console.log(error)
@@ -52,7 +52,7 @@ export const actions = {
     dispatch
   }, data) {
 
-    let res = await this.$axios.delete(this.$env.TEST_VALUE + "address/" + data.id).then((res) => {
+    let res = await this.$axios.delete("address/" + data.id).then((res) => {
       dispatch('getAddresses');
     }).catch((error) => {
       console.log(error)
