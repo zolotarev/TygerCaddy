@@ -6,6 +6,9 @@ module.exports = {
     port: 3001, // default: 3000
     host: '0.0.0.0' // default: localhost
   },
+  publicRuntimeConfig: {
+    baseURL: process.env.BASE_URL || 'http://localhost:3000'
+  },
   plugins: [
     "~/plugins/vee-validate.js",
     "~plugins/vuelidate.js"
