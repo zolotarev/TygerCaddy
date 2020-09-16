@@ -10,7 +10,7 @@ if [ -e $CADDYFILE ]
 then 
 printf "\n Caddyfile is readable! \n"
 else
-echo "{http_port 80 https_port 443 }" > $CADDYFILE
+echo "{ }" > $CADDYFILE
 fi
 #if [ -e $TYGER_DB ]
 #then
