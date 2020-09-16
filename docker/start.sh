@@ -6,12 +6,12 @@ TYGER_FRONTEND=$TYGER_ROOT/frontend
 #TYGER_DB=$TYGER_BACKEND/database.sqlite
 CADDYFILE=$TYGER_BACKEND/db/Caddyfile
 #printf "\n OK, so I know where the files are stored, let me check some stuff.... \n"
-#if [ -e $CADDYFILE ]
-#then 
-#printf "\n Caddyfile is readable! \n"
-#else
-#echo "{ \n \t http_port 80 \n \t https_port 443 \n"; > $CADDYFILE
-#fi
+if [ -e $CADDYFILE ]
+then 
+printf "\n Caddyfile is readable! \n"
+else
+echo "{ \n \t http_port 80 \n \t https_port 443 \n"; > $CADDYFILE
+fi
 #if [ -e $TYGER_DB ]
 #then
 #printf "\n I've checked to see if you have a db, that means that I've seen you before, and I can see it! Hello Again! \n"
