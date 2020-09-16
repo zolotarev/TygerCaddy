@@ -33,7 +33,7 @@ fi
 #printf "\n Last thing I am starting the frontend, this gives you a pretty front end do do what you need.... \n"
 #printf "\n OK, I have kicked all that off, going to sleep now, if any of the services have an issue, they will tell you directly..... \n"
 #/usr/bin/caddy run --config /db/Caddyfile &
-cd $TYGER_BACKEND && npm run prod &
+cd $TYGER_BACKEND && node ./index.js &
 npm run start --prefix $TYGER_FRONTEND &
 sleep 10 &
 /usr/bin/caddy run --config $CADDYFILE --adapter caddyfile

@@ -17,7 +17,7 @@ RUN npm install
 RUN npm run build
 COPY ./backend/ormconfig.js ./build/
 COPY ./backend/prod.example.env /tygercaddy/backend/build/.env
-COPY ./backend/prod.example.env /tygercaddy/backend/.env
+#COPY ./backend/prod.example.env /tygercaddy/backend/.env
 WORKDIR /tygercaddy/backend/build
 RUN npm run sync
 RUN npm run migration:run
@@ -35,7 +35,7 @@ FROM node:alpine AS tygercaddy
 COPY --from=caddy /usr/bin/caddy /usr/bin/caddy
 
 WORKDIR /tygercaddy/backend
-COPY --from=nodebackend /tygercaddy/backend/ ./
+COPY --from=nodebackend /tygercaddy/backend/build ./
 COPY --from=nodebackend /tygercaddy/backend/build/node_modules ./node_modules
 COPY --from=nodebackend /tygercaddy/backend/ormconfig.js ./ormconfig.js
 COPY --from=nodebackend /tygercaddy/backend/prod.example.env ./.env
@@ -54,7 +54,7 @@ COPY /docker/checkresponse.sh /checkresponse.sh
 #COPY /docker/caddyconfig.json /caddyconfig.json
 RUN chmod +x /start.sh
 
-EXPOSE 3000 8080 80 443
+EXPOSE 3000 3001 80 443
 
 ENTRYPOINT ["sh", "/start.sh"]
 
