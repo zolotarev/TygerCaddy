@@ -15,14 +15,18 @@ import Footer from "../components/default/Footer";
 export default {
   components: {
     Sidebar,
-    Footer
+    Footer,
   },
   props: {
-    source: String
+    source: String,
   },
-
+  mounted() {
+    if (!this.$auth.loggedIn) {
+      this.$router.push("login");
+    }
+  },
   data: () => ({
-    drawer: null
-  })
+    drawer: null,
+  }),
 };
 </script>

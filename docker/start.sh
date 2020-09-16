@@ -35,5 +35,6 @@ CADDYFILE=$TYGER_BACKEND/db/Caddyfile
 #/usr/bin/caddy run --config /db/Caddyfile &
 cd $TYGER_BACKEND && npm run prod &
 npm run start --prefix $TYGER_FRONTEND &
+sleep 10 &
 /usr/bin/caddy run --config $CADDYFILE --adapter caddyfile
 #npm run start --prefix /tygercaddy/frontend
