@@ -17,7 +17,7 @@ export const actions = {
     commit
   }) {
     commit('TOGGLE_CONFIG_LOADING')
-    let res = await this.$axios.get('/config').then((res) => {
+    let res = await this.$axios.get(this.$env.TEST_VALUE + '/config').then((res) => {
       commit('SET_CONFIG', res.data),
         commit('TOGGLE_CONFIG_LOADING')
     })
@@ -26,7 +26,7 @@ export const actions = {
     commit,
     dispatch
   }, data) {
-    let res = await this.$axios.patch("/config", data).then((res) => {
+    let res = await this.$axios.patch(this.$env.TEST_VALUE + "/config", data).then((res) => {
       dispatch('getConfig');
     }).catch((error) => {
       console.log(error)

@@ -6,9 +6,6 @@ module.exports = {
     port: 3001, // default: 3000
     host: '0.0.0.0' // default: localhost
   },
-  publicRuntimeConfig: {
-    baseURL: process.env.BASE_URL || 'http://localhost:3000'
-  },
   plugins: [
     "~/plugins/vee-validate.js",
     "~plugins/vuelidate.js"
@@ -19,6 +16,13 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
+    ['nuxt-env', {
+      keys: [{
+          key: 'BASE_API_URL',
+          default: 'http://localhost:3000'
+        } // Specify a default value
+      ]
+    }]
   ],
   buildModules: [
     // Simple usage
@@ -28,9 +32,6 @@ module.exports = {
       /* module options */
     }]
   ],
-  axios: {
-    baseURL: baseApiUrl
-  },
 
   auth: {
     strategies: {

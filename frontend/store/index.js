@@ -24,7 +24,7 @@ export const actions = {
     commit
   }) {
 
-    let res = await this.$axios.get('/user/1').then((res) => {
+    let res = await this.$axios.get(this.$env.TEST_VALUE + '/user/1').then((res) => {
       commit('SET_USER', res.data)
     })
   },
@@ -33,7 +33,7 @@ export const actions = {
     commit,
     dispatch
   }, data) {
-    let res = await this.$axios.post("/auth/change-password", data).then((res) => {
+    let res = await this.$axios.post(this.$env.TEST_VALUE + "/auth/change-password", data).then((res) => {
 
     }).catch((error) => {
       console.log(error)
@@ -45,7 +45,7 @@ export const actions = {
     commit,
     dispatch
   }, data) {
-    let res = await this.$axios.patch("/user/1", data).then((res) => {
+    let res = await this.$axios.patch(this.$env.TEST_VALUE + "/user/1", data).then((res) => {
       this.$auth.logout();
       this.$router.push('/login')
     }).catch((error) => {
