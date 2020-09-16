@@ -17,7 +17,7 @@ export const actions = {
     commit
   }) {
     commit('TOGGLE_APPS_LOADING')
-    let res = await this.$axios.get('/app').then((res) => {
+    let res = await this.$axios.get(this.$env.TEST_VALUE + '/app').then((res) => {
       commit('SET_APPS', res.data),
         commit('TOGGLE_APPS_LOADING')
     })
@@ -27,7 +27,7 @@ export const actions = {
     dispatch
   }, data) {
 
-    let res = await this.$axios.post("app/", data).then((res) => {
+    let res = await this.$axios.post(this.$env.TEST_VALUE + "app/", data).then((res) => {
       dispatch('getApps');
     }).catch((error) => {
       console.log(error)
@@ -38,7 +38,7 @@ export const actions = {
     commit,
     dispatch
   }, data) {
-    let res = await this.$axios.patch("app/" + data.id + "/", data).then((res) => {
+    let res = await this.$axios.patch(this.$env.TEST_VALUE + "app/" + data.id + "/", data).then((res) => {
       dispatch('getApps');
     }).catch((error) => {
       console.log(error)
@@ -50,7 +50,7 @@ export const actions = {
     dispatch
   }, data) {
 
-    let res = await this.$axios.delete("app/" + data.id).then((res) => {
+    let res = await this.$axios.delete(this.$env.TEST_VALUE + "app/" + data.id).then((res) => {
       dispatch('getApps');
     }).catch((error) => {
       console.log(error)
