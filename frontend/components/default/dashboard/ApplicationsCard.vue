@@ -154,9 +154,9 @@ export default {
   computed: {
     currentRoute() {
       if (this.$route.name === "dashboard") {
-        return "6";
+        return "md6";
       } else {
-        return "12";
+        return "xs12";
       }
     },
     loading() {

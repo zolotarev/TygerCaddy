@@ -139,11 +139,12 @@ export default {
       this.close();
     },
     submit() {
-      this.$validator.validate().then((result) => {
-        if (result) {
-          this.createAdd();
-        }
-      });
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+      } else {
+        // do your submit logic here
+        this.createAdd();
+      }
     },
   },
 };
