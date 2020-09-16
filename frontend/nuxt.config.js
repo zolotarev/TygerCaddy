@@ -26,7 +26,7 @@ module.exports = {
     }]
   ],
   axios: {
-    baseURL: process.env.baseURL || 'http://localhost:3000'
+    baseURL: this.publicRuntimeConfig.baseURL
   },
 
   auth: {
