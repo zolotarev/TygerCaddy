@@ -17,7 +17,7 @@ export const actions = {
     commit
   }) {
     commit('TOGGLE_DNS_LOADING')
-    let res = await this.$axios.get(this.$env.TEST_VALUE + '/dns').then((res) => {
+    let res = await this.$axios.get('/dns').then((res) => {
       commit('SET_DNS', res.data),
         commit('TOGGLE_DNS_LOADING')
     })

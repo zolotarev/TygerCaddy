@@ -5,7 +5,8 @@ module.exports = {
   },
   plugins: [
     "~/plugins/vee-validate.js",
-    "~plugins/vuelidate.js"
+    "~plugins/vuelidate.js",
+    '~/plugins/axios.js',
   ],
   build: {
     transpile: ["vee-validate/dist/rules", "vuelidate"],
