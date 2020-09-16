@@ -1,3 +1,6 @@
+include('./run.js');
+
+
 module.exports = {
   server: {
     port: 3001, // default: 3000
@@ -23,7 +26,7 @@ module.exports = {
     }]
   ],
   axios: {
-    baseURL: 'http://' + process.env.API_IP + ':' + process.env.API_PORT || 'http://localhost:3000'
+    baseURL: baseApiUrl
   },
 
   auth: {
