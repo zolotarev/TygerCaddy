@@ -18,6 +18,8 @@ export const initialGlobalConfig = async () => {
     configBlock = configBlock + "\n \t auto_https disable_redirects \n } \n";
   } else if (config.redirect_https && config.automatic_https) {
     configBlock = "\n \t auto_https on \n } \n ";
+  } else if (!config.automatic_https) {
+    configBlock = configBlock + "\n \t auto_https off \n } \n";
   }
 
   return configBlock;
