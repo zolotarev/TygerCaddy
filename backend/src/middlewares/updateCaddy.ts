@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { spawn } = require("child_process");
 require("dotenv").config();
 import { getConfig, initialGlobalConfig } from "./generateCaddyBlock";
 import { getRepository } from "typeorm";
@@ -10,11 +11,18 @@ import { Config } from "../entity/Config";
 export const writeCaddyfile = async (content: string) => {
   try {
     await fs.writeFile(process.env.CADDYFILE_PATH, content, () => {
+      reloadCaddy();
       return "Caddyfile written successfully!";
     });
   } catch (error) {
     return error;
   }
+};
+
+export const reloadCaddy = async () => {
+  const child = spawn("caddy reload");
+  console.log("Caddy Reloaded");
+  return "Caddy Reloaded";
 };
 export const newAddressGenerate = async () => {
   console.log("Generating Caddyfile!");
