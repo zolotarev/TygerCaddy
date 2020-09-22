@@ -47,13 +47,15 @@
           <v-list-item two-line>
             <v-list-item-content>
               <v-list-item-title>DNS Provider Name:</v-list-item-title>
-              <v-list-item-subtitle>{{config.dns_provider_name.name}}</v-list-item-subtitle>
+              <v-list-item-subtitle v-if="config.dns_provider_name">{{config.dns_provider_name.name}}</v-list-item-subtitle>
+              <v-list-item-subtitle v-else>No Provider Set!</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item two-line>
             <v-list-item-content>
               <v-list-item-title>DNS API Token:</v-list-item-title>
-              <v-list-item-subtitle>{{config.dns_api_token}}</v-list-item-subtitle>
+              <v-list-item-subtitle v-if="config.dns_provider_token">{{config.dns_api_token}}</v-list-item-subtitle>
+              <v-list-item-subtitle v-else>No Token Set!</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-container>
