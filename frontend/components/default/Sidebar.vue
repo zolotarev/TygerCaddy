@@ -84,7 +84,7 @@
           <template v-slot:activator>
             <v-list-item-title>Utility</v-list-item-title>
           </template>
-          <v-list-item link>
+          <v-list-item link to="/utility">
             <v-list-item-icon>
               <v-icon>mdi-earth-plus</v-icon>
             </v-list-item-icon>
