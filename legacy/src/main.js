@@ -1,7 +1,7 @@
 import Vue from 'vue';
-import './plugins/vuetify';
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
 import App from './App.vue';
-import 'vuetify/dist/vuetify.min.css';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VueAuth from '@websanova/vue-auth';
@@ -16,7 +16,7 @@ if(process.env.NODE_ENV == "development"){
 }
 
 Vue.use(VeeValidate);
-
+Vue.use(Vuetify);
 Vue.router = router;
 Vue.config.productionTip = false;
 Vue.prototype.$eventHub = new Vue();
@@ -70,6 +70,7 @@ Vue.use(VueAuth, {
 new Vue({
     router,
     VueAxios,
+    vuetify: new Vuetify(),
     store,
     render: h => h(App),
 }).$mount('#app');

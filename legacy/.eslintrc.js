@@ -5,10 +5,16 @@ module.exports = {
   },
   
   'extends': [
-    'plugin:vue/essential',
+    'plugin:vue/base',
     'eslint:recommended'
   ],
+  plugins:[
+    'vuetify'
+  ],
   rules: {
+    'vuetify/no-deprecated-classes': 'error',
+    'vuetify/grid-unknown-attributes': 'error',
+    'vuetify/no-legacy-grid': 'error',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   },

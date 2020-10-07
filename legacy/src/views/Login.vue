@@ -3,7 +3,7 @@
     <div class="context">
         <v-container class="fill-height" fluid>
     <v-layout align-center justify-center>
-      <v-flex xs4 sm4 pa-3>
+      <v-flex xs12 sm4 pa-4>
         <v-card elevation="12">
           <v-toolbar color="orange" dark :src="require('../assets/sidebar-background.jpg')">
             <v-toolbar-title>TygerCaddy Login</v-toolbar-title>

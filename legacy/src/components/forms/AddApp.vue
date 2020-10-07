@@ -50,7 +50,7 @@
              
                    <v-switch
               color="orange"
-              class="px-3"
+              class="px-4"
                 hint="If true, the proxy will check for a valid SSL certificate from the App"
                 label="SSL Verification on Application?"
                 v-model="verify_ssl"

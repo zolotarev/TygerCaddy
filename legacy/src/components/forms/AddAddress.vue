@@ -21,7 +21,7 @@
             <v-layout row justify-space-between>
               <v-switch
                 color="orange"
-                class="px-3"
+                class="px-4"
                 label="Default to HTTPS?"
                 hint="Enable automatic SSL Cert signing, and redirect from HTTP to HTTPS"
                 :persistent-hint="true"
@@ -31,7 +31,7 @@
             <v-layout row justify-space-between>
               <v-switch
                 color="orange"
-                class="px-3"
+                class="px-4"
                 label="Use HTTPS Staging?"
                 hint="Only works with 'Default to HTTPS', this uses the LetsEncrypt test servers to avoid rate limits during testing"
                 :persistent-hint="true"

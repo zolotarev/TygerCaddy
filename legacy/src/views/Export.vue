@@ -2,7 +2,7 @@
   <v-container>
     <h2 class="blue-grey--text darken-5 pa-2">Backup and Restore</h2>
     <v-layout row wrap>
-      <v-flex xs12 pa-3>
+      <v-flex xs12 pa-4>
         <export-panel></export-panel>
       </v-flex>
     </v-layout>

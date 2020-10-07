@@ -41,8 +41,9 @@
 
     <v-toolbar color="orange" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>
-        <v-img :src="require('@/assets/TygerLogo.png')" height="47px" width="190px"></v-img>
+      <v-toolbar-title class="appTitle">
+        TygerCaddy
+        <!-- <v-img :src="require('@/assets/TygerLogo.png')" height="47px" width="190px"></v-img> -->
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
@@ -108,3 +109,8 @@ export default {
   }
 };
 </script>
+<style>
+.appTitle {
+  font-family: 'Carter One', cursive;
+}
+</style>

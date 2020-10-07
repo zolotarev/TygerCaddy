@@ -1,7 +1,7 @@
 <template>
 <div>
         <v-layout row wrap hidden-sm-and-down>
-      <v-flex xs4 pa-3>
+      <v-flex xs4 pa-4>
         <v-card class="mx-auto" color="blue-grey darken-3" dark max-width="400">
           <v-card-title>
             <v-icon large left>dns</v-icon>
@@ -24,7 +24,7 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex xs4 pa-3>
+      <v-flex xs4 pa-4>
         <v-card class="mx-auto" color="blue-grey darken-3" dark max-width="400">
           <v-card-title>
             <v-icon large left>dns</v-icon>
@@ -47,7 +47,7 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex xs4 pa-3>
+      <v-flex xs4 pa-4>
         <v-card class="mx-auto full-height" color="blue-grey darken-3" dark max-width="400">
           <v-card-title>
             <v-icon large left>dns</v-icon>
@@ -62,7 +62,7 @@
       </v-flex>
     </v-layout>
         <v-layout row wrap hidden-md-and-up justify-center>
-      <v-flex xs12 pa-3>
+      <v-flex xs12 pa-4>
         <v-card class="mx-auto full-height" color="blue-grey darken-3" dark>
           <v-card-title>
             <v-icon large left>dns</v-icon>

@@ -23,13 +23,13 @@
         v-model="search"
         append-icon="search"
         label="Search"
-        single-line
+        single-select="singleSelect"
         hide-details
       ></v-text-field>
         <v-btn round color="orange" dark @click.stop="addAddressForm=true"><v-icon>add</v-icon> Add Address</v-btn>
       </v-card-title>
       <v-data-table
-      :headers="headers"
+      :headers="computedHeaders"
       :items="addresses"
       :loading="loading"
       :search="search"
@@ -38,35 +38,35 @@
       class="elevation-1"
     >
 <template slot="items" slot-scope="props">
-        <td>{{ props.item.id }}</td>
+        <td v-if="!$vuetify.breakpoint.smAndDown">{{ props.item.id }}</td>
         <td>
           <a @click="detailItem(props.item)"> {{props.item.address}} </a>
           <!--<v-btn round small color="primary" dark @click.stop="detailItem(props.item)">{{ props.item.address }}</v-btn></td>-->
-        <td>
+        <td v-if="!$vuetify.breakpoint.smAndDown">
           <v-icon medium v-if="props.item.tls">check</v-icon>
           <v-icon medium v-else>close</v-icon>
         </td>
-        <td>
+        <td v-if="!$vuetify.breakpoint.smAndDown">
           <v-icon medium v-if="props.item.staging">check</v-icon>
           <v-icon medium v-else>close</v-icon>
         </td>
         <td>{{ props.item.app.name }}</td>
         
-        <td class="justify-center layout px-0">
-          <v-tooltip top> 
-            <v-btn icon class="mr-0" color="orange" slot="activator" @click="urlproxy(props.item)" disabled> 
+        <td>
+          <v-tooltip top > 
+            <v-btn icon class="mr-0" small  color="orange" slot="activator" @click="urlproxy(props.item)" disabled> 
               <v-icon>domain_disabled</v-icon> 
             </v-btn> 
               <span>Add URL proxy (Coming soon!)</span> 
             </v-tooltip> 
             <v-tooltip top> 
-              <v-btn icon class="mr-0" dark color="orange" @click="editItem(props.item)" slot="activator"> 
+              <v-btn icon class="mr-0" small  dark color="orange" @click="editItem(props.item)" slot="activator"> 
                 <v-icon>edit</v-icon> 
               </v-btn> 
               <span>Edit Address</span> 
             </v-tooltip>
             <v-tooltip top> 
-              <v-btn icon class="mr-0" dark color="orange" @click="deleteItem(props.item)" slot="activator"> 
+              <v-btn icon class="mr-0" small  dark color="orange" @click="deleteItem(props.item)" slot="activator"> 
                 <v-icon>delete</v-icon> 
               </v-btn> 
               <span>Delete Address</span> 
@@ -110,13 +110,14 @@ export default {
             text: 'Address ID',
             align: 'left',
             sortable: false,
-            value: 'id'
+            value: 'id',
+            hide: 'smAndDown'
           },
-          { text: "URL", value: "address" },
-        { text: "TLS", value: "tls" },
-        { text: "Staging", value: "staging" },
-        { text: "Application", value: "app.name" },
-        { text: "Actions", value: "actions", sortable: false },
+          { text: "URL", value: "address", align:"left" },
+        { text: "TLS", value: "tls", hide: 'smAndDown', align:"left" },
+        { text: "Staging", value: "staging", hide: 'smAndDown', align:"left" },
+        { text: "Application", value: "app.name", align:"left" },
+        { text: "Actions", width:"20", value: "actions", align:"left", sortable: false },
         ],
       editedItem: {
         id: 0,
@@ -192,7 +193,10 @@ export default {
       addresses: 'showAddresses', 
       addressCount: 'showAddressCount',
       apps: 'showApps',
-    })
+    }),
+    computedHeaders () {
+      return this.headers.filter(h => !h.hide || !this.$vuetify.breakpoint[h.hide])  
+    }
   },
 
   mounted() {

@@ -84,16 +84,16 @@
           label="Select your DNS provider for this domain:"
         ></v-combobox>
              
-            <v-switch color="primary" class="px-3" label="Use HTTPS?" v-model="formData.https"></v-switch>
+            <v-switch color="primary" class="px-4" label="Use HTTPS?" v-model="formData.https"></v-switch>
                         <v-switch
               color="primary"
-              class="px-3"
+              class="px-4"
               label="Use DNS Challenge for HTTPS?"
               v-model="formData.dns_challenge"
             ></v-switch>
             <v-switch
               color="primary"
-              class="px-3"
+              class="px-4"
               label="Redirect all to HTTPS?"
               v-model="formData.redirectHttps"
             ></v-switch>
@@ -112,19 +112,19 @@
           <v-stepper-content step="3">
             <v-switch
               color="primary"
-              class="px-3"
+              class="px-4"
               label="Skip SSL Verification on Backend?"
               v-model="formData.insecure_skip_verify"
             ></v-switch>
             <v-switch
               color="primary"
-              class="px-3"
+              class="px-4"
               label="Enable Websockets?"
               v-model="formData.websockets"
             ></v-switch>
             <v-switch
               color="primary"
-              class="px-3"
+              class="px-4"
               label="Transparent Mode?"
               v-model="formData.transparent"
             ></v-switch>

@@ -27,7 +27,7 @@
       </v-card-title>
 
       <v-data-table 
-        :headers="headers" 
+        :headers="computedHeaders"
         :items="apps" 
         :loading="loading" 
         :search="search"
@@ -35,15 +35,15 @@
         :pagination.sync="pagination"
         class="elevation-1 orange">
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.id }}</td>
+          <td v-if="!$vuetify.breakpoint.smAndDown">{{ props.item.id }}</td>
           <td>{{ props.item.name }}</td>
-          <td>
+          <td v-if="!$vuetify.breakpoint.smAndDown">
             <a target="_blank" :href="'http://' + props.item.ip_address + ':' + props.item.port_number">{{ props.item.ip_address }}</a>
           </td>
-          <td>
+          <td v-if="!$vuetify.breakpoint.smAndDown">
             {{ props.item.port_number }}
           </td>
-          <td><v-icon medium v-if="props.item.verify_ssl">check</v-icon>
+          <td v-if="!$vuetify.breakpoint.smAndDown"><v-icon medium v-if="props.item.verify_ssl">check</v-icon>
           <v-icon medium v-else>close</v-icon></td>
          
           <td class="justify-center layout px-0">
@@ -94,12 +94,13 @@ export default {
           text: "App ID",
           align: "left",
           sortable: false,
-          value: "name"
+          value: "name",
+          hide: 'smAndDown'
         },
         { text: "Name", value: "name" },
-        { text: "IP Address", value: "ip_address" },
-        { text: "Port", value: "port_number" },
-        { text: "Verify SSL", value: "verify_ssl" },
+        { text: "IP Address", value: "ip_address", hide: 'smAndDown' },
+        { text: "Port", value: "port_number", hide: 'smAndDown' },
+        { text: "Verify SSL", value: "verify_ssl", hide: 'smAndDown' },
         { text: "Actions", value: "actions", sortable: false },
       ],
       editedItem: {
@@ -145,7 +146,10 @@ export default {
     ...mapGetters({
       apps: 'showApps', 
       appCount: 'showAppCount'
-    })
+    }),
+    computedHeaders () {
+      return this.headers.filter(h => !h.hide || !this.$vuetify.breakpoint[h.hide])  
+    }
   },
   mounted() {
     this.$store.dispatch("getApps");

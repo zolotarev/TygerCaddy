@@ -2,7 +2,7 @@
   <v-container>
     <h2 class="blue-grey--text darken-5 pa-2">Addresses</h2>
     <v-layout row wrap>
-      <v-flex xs12 pa-3>
+      <v-flex xs12 pa-4>
         <addresses-panel></addresses-panel>
       </v-flex>
     </v-layout>

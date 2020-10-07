@@ -2,10 +2,10 @@
   <v-container>
     <h2 class="blue-grey--text darken-5 pa-2">Server Logs</h2>
     <v-layout row wrap>
-      <v-flex xs12 pa-3>
+      <v-flex xs12 pa-4>
         <CaddyPanel></CaddyPanel>
       </v-flex>
-            <v-flex xs12 sm12 pa-3>
+            <v-flex xs12 sm12 pa-4>
         <uwsgiPanel></uwsgiPanel>
       </v-flex>
     </v-layout>

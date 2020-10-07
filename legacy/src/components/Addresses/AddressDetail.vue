@@ -46,14 +46,14 @@
           <a @click="detailItem(props.item)"> {{props.item.address}} </a>
         <td>{{ props.item.proxy_to }}</td>
         <td class="justify-center layout px-0">
-            <v-tooltip top> 
-              <v-btn icon class="mr-0" color="primary" @click="editEndpoint(props.item)" slot="activator"> 
+            <v-tooltip top v-slot:activator="{ on }"> 
+              <v-btn icon class="mr-0" color="primary" @click="editEndpoint(props.item)" v-on="on"> 
                 <v-icon>edit</v-icon> 
               </v-btn> 
               <span>Edit Endpoint</span> 
             </v-tooltip>
-            <v-tooltip top> 
-              <v-btn icon class="mr-0" color="primary" @click="deleteEndpoint(props.item)" slot="activator"> 
+            <v-tooltip top v-on="on""> 
+              <v-btn icon class="mr-0" color="primary" @click="deleteEndpoint(props.item)" v-on="on"> 
                 <v-icon>delete</v-icon> 
               </v-btn> 
               <span>Delete Endpoint</span> 
