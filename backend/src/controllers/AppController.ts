@@ -48,7 +48,7 @@ class AppController {
     try {
       await appRepository.save(app);
     } catch (e) {
-      res.status(409).send("App already in use");
+      res.status(409).send({error:"App already in use"});
       return;
     }
 
