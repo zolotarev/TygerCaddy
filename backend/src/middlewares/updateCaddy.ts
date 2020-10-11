@@ -11,7 +11,7 @@ import { Config } from "../entity/Config";
 export const writeCaddyfile = async (content: string) => {
   try {
     await fs.writeFile(process.env.CADDYFILE_PATH, content, () => {
-      //reloadCaddy();
+      reloadCaddy();
       return "Caddyfile written successfully!";
     });
   } catch (error) {
@@ -20,7 +20,7 @@ export const writeCaddyfile = async (content: string) => {
 };
 
 export const reloadCaddy = async () => {
-  const child = spawn("caddy reload");
+  const child = spawn("caddy reload --config /tygercaddy/backend/db/Caddyfile");
   console.log("Caddy Reloaded");
   return "Caddy Reloaded";
 };
