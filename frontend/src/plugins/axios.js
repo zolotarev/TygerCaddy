@@ -3,7 +3,7 @@ import axios from 'axios';
 import VueAxios from 'vue-axios'
 
 import store from '../store/index'
-
+import getEnv from '@/utils/env'
 
 Vue.prototype.$http = axios;
 
@@ -12,7 +12,14 @@ if (token) {
   Vue.prototype.$http.defaults.headers.common['Authorization'] = token
 }
 
-Vue.prototype.$http.defaults.baseURL = 'http://localhost:3000/'
+const API_URL = getEnv('VUE_APP_API_URL')
+
+if (API_URL){
+  Vue.prototype.$http.defaults.baseURL = API_URL
+}else {
+  Vue.prototype.$http.defaults.baseURL = 'http://localhost:3000/'
+}
+
 
 Vue.prototype.$http.interceptors.response.use(function (response) {
   return response;
