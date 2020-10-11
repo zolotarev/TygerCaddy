@@ -12,7 +12,7 @@ CADDYFILE=$TYGER_BACKEND/db/Caddyfile
 JSON_STRING='window.configs = { \
   "API_URL":"'"${VUE_APP_API_URL}"'", \
 }'
-sed -i "s@// CONFIGURATIONS_PLACEHOLDER@${JSON_STRING}@" $TYGER_FRONTEND/index.html
+sed -i "s@// CONFIGURATIONS_PLACEHOLDER@${JSON_STRING}@" $TYGER_FRONTEND/dist/index.html
 exec "$@"
 
 
