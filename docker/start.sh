@@ -13,7 +13,8 @@ JSON_STRING='window.configs = { \
   "API_URL":"'"${VUE_APP_API_URL}"'", \
 }'
 sed -i "s@// CONFIGURATIONS_PLACEHOLDER@${JSON_STRING}@" $TYGER_FRONTEND/dist/index.html
-exec "$@"
+
+cat $TYGER_FRONTEND/dist/index.html
 
 
 #printf "\n OK, so I know where the files are stored, let me check some stuff.... \n"
