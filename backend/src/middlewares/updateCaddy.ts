@@ -11,7 +11,7 @@ import { Config } from "../entity/Config";
 export const writeCaddyfile = async (content: string) => {
   try {
     await fs.writeFile(process.env.CADDYFILE_PATH, content, () => {
-      reloadCaddy();
+      //reloadCaddy();
       return "Caddyfile written successfully!";
     });
   } catch (error) {
