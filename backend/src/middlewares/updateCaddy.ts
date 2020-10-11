@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { spawn } = require("child_process");
+const { exec } = require("child_process");
 require("dotenv").config();
 import { getConfig, initialGlobalConfig } from "./generateCaddyBlock";
 import { getRepository } from "typeorm";
@@ -20,7 +20,8 @@ export const writeCaddyfile = async (content: string) => {
 };
 
 export const reloadCaddy = async () => {
-  const child = spawn("caddy reload --config /tygercaddy/backend/db/Caddyfile");
+ // const child = exec("caddy", ['reload', '--config /tygercaddy/backend/db/Caddyfile']);
+  const child = exec("caddy reload --config /tygercaddy/backend/db/Caddyfile");
   console.log("Caddy Reloaded");
   return "Caddy Reloaded";
 };
