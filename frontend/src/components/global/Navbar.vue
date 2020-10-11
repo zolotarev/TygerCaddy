@@ -10,7 +10,7 @@
 
                 <v-list-item-content>
                     <v-list-item-title>{{email}}</v-list-item-title>
-                    <v-list-item-subtitle>Logged In</v-list-item-subtitle>
+                    <v-list-item-subtitle>Logged In - {{API}}</v-list-item-subtitle>
                 </v-list-item-content>
             </v-list-item>
         </template>
@@ -44,9 +44,11 @@
 </template>
 
 <script>
+import getEnv from '@/utils/env'
 export default {
     data: () => ({
         drawer: true,
+        API: getEnv('VUE_APP_API_URL'),
         links: [{
                 route: "/",
                 text: "Home",
