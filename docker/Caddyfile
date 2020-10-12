@@ -4,7 +4,9 @@
 }
 
 :{$FRONTEND_PORT} {
-    file_server {
-        root /tygercaddy/frontend/dist
+        root * /tygercaddy/frontend/dist
+        encode gzip zstd
+        try_files {path} {path}/ /index.html
+        file_server
     }
 }
