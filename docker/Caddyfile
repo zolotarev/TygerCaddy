@@ -2,3 +2,9 @@
     http_port 80 
     https_port 443
 }
+
+:{$FRONTEND_PORT} {
+    file_server {
+        root /tygercaddy/frontend/dist
+    }
+}

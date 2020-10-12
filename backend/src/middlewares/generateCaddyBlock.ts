@@ -22,6 +22,8 @@ export const initialGlobalConfig = async () => {
     configBlock = configBlock + "\n \t auto_https off \n } \n";
   }
 
+  configBlock = configBlock + "\n:{$FRONTEND_PORT} { \n \t file_server { \n \t \t root /tygercaddy/frontend/dist \n \t } \n }"
+
   return configBlock;
 };
 
