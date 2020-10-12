@@ -47,5 +47,5 @@ printf "\n OK, I have kicked all that off, going to sleep now, if any of the ser
 #/usr/bin/caddy run --config /db/Caddyfile &
 cd $TYGER_BACKEND && node ./index.js && sleep 10 &
 /usr/bin/caddy run --config $CADDYFILE --adapter caddyfile &
-npm run serve --prefix $TYGER_FRONTEND
+#npm run serve --prefix $TYGER_FRONTEND
 #npm run start --prefix /tygercaddy/frontend
