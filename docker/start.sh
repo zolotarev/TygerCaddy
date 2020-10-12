@@ -14,7 +14,7 @@ JSON_STRING='window.configs = { \
 }'
 sed -i "s@// CONFIGURATIONS_PLACEHOLDER@${JSON_STRING}@" $TYGER_FRONTEND/dist/index.html
 
-cat $TYGER_FRONTEND/dist/index.html
+#cat $TYGER_FRONTEND/dist/index.html
 
 
 #printf "\n OK, so I know where the files are stored, let me check some stuff.... \n"
