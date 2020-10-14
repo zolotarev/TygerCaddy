@@ -1,4 +1,5 @@
-import axios from 'axios'
+//import axios from 'axios'
+//import Vue from 'vue'
 
 export const auth = {
     state: {
@@ -27,13 +28,13 @@ export const auth = {
       login({commit}, user){
         return new Promise((resolve, reject) => {
           commit('auth_request')
-          axios({url: 'http://localhost:3000/auth/login', data: user, method: 'POST' })
+          this._vm.$http({url: '/auth/login', data: user, method:'post'})
           .then(resp => {
             const token = resp.data.token
             //const user = resp.data.user
             localStorage.setItem('token', 'Bearer ' + token)
             localStorage.setItem('email', user.email)
-            axios.defaults.headers.common['Authorization'] = token
+            this._vm.$http.defaults.headers.common['Authorization'] = token
             commit('setSnack', { snack: "Logged in! Welcome " + user.email, color: "info" })
             commit('auth_success', token, user)
            
@@ -51,7 +52,7 @@ export const auth = {
         commit('logout')
         localStorage.clear()
         commit('setSnack', { snack: "You have been logged out. ", color: "info" })
-        delete axios.defaults.headers.common['Authorization']
+        delete this._vm.$http.defaults.headers.common['Authorization']
         resolve()
       })
     }
