@@ -17,7 +17,9 @@ if(API_URL){
   URL = "http://localhost:3000"
 }
 
-
+axios.defaults.baseURL = URL;
+axios.defaults.headers.common['Authorization'] = token;
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 const apiInstance = axios.create({
   baseURL: URL,
   headers:{
