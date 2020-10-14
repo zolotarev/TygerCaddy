@@ -7,7 +7,7 @@ import Apps from "../views/Apps.vue";
 import Addresses from "../views/Addresses.vue";
 import Backup from "../views/Backup.vue";
 import Login from "../views/Login.vue";
-
+import Profile from "../views/Profile.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -42,6 +42,11 @@ const routes = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile
   },
   {
     path: "/login",

@@ -8,10 +8,18 @@ import "./plugins/vee-validate";
 import "./plugins/axios";
 import SnackBar from "./plugins/snack";
 
+import VueFilterDateFormat from '@vuejs-community/vue-filter-date-format';
+import VueFilterDateParse from '@vuejs-community/vue-filter-date-parse';
+
+
+
 Vue.component('validation-provider', ValidationProvider);
 Vue.component('validation-observer', ValidationObserver);
 
 Vue.use(SnackBar);
+Vue.use(VueFilterDateFormat);
+Vue.use(VueFilterDateParse);
+
 Vue.config.productionTip = false;
 
 

@@ -9,8 +9,9 @@
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                    <v-list-item-title>{{email}}</v-list-item-title>
-                    <v-list-item-subtitle>Logged In - {{API}}</v-list-item-subtitle>
+                    
+                        <v-list-item-title>Welcome: <small>{{currentUser.name}}</small></v-list-item-title>
+                            <v-list-item-subtitle><v-btn block link :to="'profile'">Profile</v-btn></v-list-item-subtitle>                   
                 </v-list-item-content>
             </v-list-item>
         </template>
@@ -45,6 +46,7 @@
 
 <script>
 import getEnv from '@/utils/env'
+import { mapGetters } from 'vuex'
 export default {
     data: () => ({
         drawer: true,
@@ -77,9 +79,9 @@ export default {
         ]
     }),
     computed: {
-        email() {
-            return localStorage.getItem('email')
-        }
+       ...mapGetters({
+            currentUser: 'currentUser'
+        })
     },
     created() {
 
