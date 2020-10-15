@@ -25,6 +25,7 @@ class AddressController {
     const addressRepository = getRepository(Address);
     try {
       const address = await addressRepository.findOneOrFail(id);
+      res.send(address)
     } catch (error) {
       res.status(404).send("Address not found");
     }

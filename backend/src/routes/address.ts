@@ -5,27 +5,27 @@ import { checkRole } from "../middlewares/checkRole";
 
 const router = Router();
 
-//Get all users
+//Get all addresses
 router.get("/", [checkJwt, checkRole(["ADMIN"])], AddressController.listAll);
 
-// Get one user
+// Get one address
 router.get(
   "/:id([0-9]+)",
   [checkJwt, checkRole(["ADMIN"])],
   AddressController.getOneById
 );
 
-//Create a new user
+//Create a new address
 router.post("/", [checkJwt, checkRole(["ADMIN"])], AddressController.newAddress);
 
-//Edit one user
+//Edit one address
 router.patch(
   "/:id([0-9]+)",
   [checkJwt, checkRole(["ADMIN"])],
   AddressController.editAddress
 );
 
-//Delete one user
+//Delete one address
 router.delete(
   "/:id([0-9]+)",
   [checkJwt, checkRole(["ADMIN"])],

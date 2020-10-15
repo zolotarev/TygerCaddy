@@ -5,27 +5,32 @@ import { checkRole } from "../middlewares/checkRole";
 
 const router = Router();
 
-//Get all users
+//Get all endpoints
 router.get("/", [checkJwt, checkRole(["ADMIN"])], EndpointController.listAll);
 
-// Get one user
+// Get one endpoint
 router.get(
   "/:id([0-9]+)",
   [checkJwt, checkRole(["ADMIN"])],
   EndpointController.getOneById
 );
+router.get(
+  "/address/:id([0-9]+)",
+  [checkJwt, checkRole(["ADMIN"])],
+  EndpointController.getByAddressId
+);
 
-//Create a new user
+//Create a new endpoint
 router.post("/", [checkJwt, checkRole(["ADMIN"])], EndpointController.newEndpoint);
 
-//Edit one user
+//Edit one endpoint
 router.patch(
   "/:id([0-9]+)",
   [checkJwt, checkRole(["ADMIN"])],
   EndpointController.editEndpoint
 );
 
-//Delete one user
+//Delete one endpoint
 router.delete(
   "/:id([0-9]+)",
   [checkJwt, checkRole(["ADMIN"])],

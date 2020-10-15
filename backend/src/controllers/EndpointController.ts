@@ -10,7 +10,7 @@ class EndpointController {
     //Get Endpoints from database
     const endpointRepository = getRepository(Endpoint);
     const endpoints = await endpointRepository.find({
-      relations: ["address", "app"],
+      relations: ["app"],
     });
 
     //Send the endpoints object
@@ -24,12 +24,32 @@ class EndpointController {
     //Get the endpoint from database
     const endpointRepository = getRepository(Endpoint);
     try {
-      const endpoint = await endpointRepository.findOneOrFail(id);
+      const endpoint = await endpointRepository.findOneOrFail(id, {relations:['app', 'address']});
+      res.send(endpoint)
     } catch (error) {
       res.status(404).send("Endpoint not found");
     }
   };
 
+  static getByAddressId = async (req: Request, res: Response) => {
+      //Get the ID from the url
+      const id: string = req.params.id;
+
+      //Get the endpoint from database
+      const endpointRepository = getRepository(Endpoint);
+      try {
+        const endpoint = await endpointRepository.find(
+          {
+            where:{address: {id:id} },
+            relations:['app', 'address'],
+            
+          }
+          );
+        res.send(endpoint)
+      } catch (error) {
+        res.status(404).send("Endpoint not found");
+      }
+  };
   static newEndpoint = async (req: Request, res: Response) => {
     //Get parameters from the body
     let { endpoint, address, app } = req.body;
@@ -44,9 +64,10 @@ class EndpointController {
       res.status(400).send(errors);
       return;
     }
+    const endpointRepository = getRepository(Endpoint);  
 
-    //Try to save. If fails, the addressname is already in use
-    const endpointRepository = getRepository(Endpoint);
+    //Try to save. If fails, the endpoint is already in use
+    
     try {
       await endpointRepository.save(newEndpoint);
       await newAddressGenerate();

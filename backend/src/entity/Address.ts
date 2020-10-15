@@ -38,6 +38,8 @@ export class Address {
 
   @ManyToOne(type => App, App => App.address)
     app: App;
-  @OneToMany(type => Endpoint, Endpoint => Endpoint.address)
-    endpoints: Endpoint[];
+
+  @OneToMany(() => Endpoint, endpoint => endpoint.address)
+  endpoint: Endpoint[];
+
 }

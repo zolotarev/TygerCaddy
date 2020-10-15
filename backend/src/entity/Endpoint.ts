@@ -26,11 +26,11 @@ import {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @ManyToOne(type => Address, Address => Address.endpoints)
-    address: Address;
-
     @OneToOne(type => App)
     @JoinColumn()
     app:App
+
+    @ManyToOne(() => Address, address => address.endpoint)
+    address: Address;
   }
   

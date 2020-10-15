@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios'
-
 import store from '../store/index'
 import getEnv from '@/utils/env'
 
@@ -20,6 +19,16 @@ if(API_URL){
 axios.defaults.baseURL = URL;
 axios.defaults.headers.common['Authorization'] = token;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  if (401 === error.response.status) {
+    store.commit('setSnack', {snack: "It looks like your token expired!", color: "error"})
+    store.dispatch('logout')
+  } else {
+      return Promise.reject(error);
+  }
+});
 const apiInstance = axios.create({
   baseURL: URL,
   headers:{
@@ -27,16 +36,7 @@ const apiInstance = axios.create({
   }
 })
 
-apiInstance.interceptors.response.use(function (response) {
-  return response;
-}, function (error) {
-  if (401 === error.response.status) {
-    store.commit('setSnack', {snack: "It looks like your token expired!", color: "error"})
-          window.location = '/login';
-  } else {
-      return Promise.reject(error);
-  }
-});
+
 
 Vue.prototype.$http = apiInstance;
 
