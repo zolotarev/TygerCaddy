@@ -7,8 +7,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn
 } from "typeorm";
-import { Length, IsFQDN} from "class-validator";
+import { Length, IsFQDN, IsFirebasePushId} from "class-validator";
 import {App} from "./App";
+import {Endpoint} from "./Endpoint";
 
 @Entity()
 @Unique(["address"])
@@ -36,5 +37,6 @@ export class Address {
 
   @ManyToOne(type => App, App => App.address)
     app: App;
-
+  @ManyToOne(type => Endpoint, Endpoint => Endpoint.address)
+    endpoint: Endpoint;
 }
