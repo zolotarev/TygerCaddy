@@ -10,15 +10,4 @@
  	 encode gzip zstd 
  	 try_files {path} {path}/ /index.html 
  	 file_server 
- }test.test.com { 
-	 reverse_proxy 10.10.200.11:32400 { 
- 
- 	 } 
-} 
-
-test2.test.com { 
-	 reverse_proxy 10.10.200.24:9000 { 
- 
- 	 } 
-} 
-
+ }

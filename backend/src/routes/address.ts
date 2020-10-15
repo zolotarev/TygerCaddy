@@ -32,4 +32,12 @@ router.delete(
   AddressController.deleteAddress
 );
 
+//Regen Caddyfile
+
+router.get(
+  "/generate",
+  [checkJwt, checkRole(["ADMIN"])],
+  AddressController.generateCaddyfile
+);
+
 export default router;
