@@ -2,5 +2,17 @@
  	 http_port 80 
  	 https_port 443 
 
- 	 auto_https on disable_redirects 
+ 	 auto_https disable_redirects 
  } 
+:{$FRONTEND_PORT} { 
+ 	 root * /tygercaddy/frontend/dist 
+ 	 root * /tygercaddy/frontend/dist 
+ 	 encode gzip zstd 
+ 	 try_files {path} {path}/ /index.html 
+ 	 file_server 
+ }ples.test.com { 
+	 reverse_proxy 10.10.200.11:32400 { 
+ 
+ 	 } 
+} 
+

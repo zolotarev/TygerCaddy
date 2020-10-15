@@ -10,7 +10,7 @@ class EndpointController {
     //Get Endpoints from database
     const endpointRepository = getRepository(Endpoint);
     const endpoints = await endpointRepository.find({
-      relations: ["address"],
+      relations: ["address", "app"],
     });
 
     //Send the endpoints object
@@ -32,10 +32,11 @@ class EndpointController {
 
   static newEndpoint = async (req: Request, res: Response) => {
     //Get parameters from the body
-    let { endpoint, address } = req.body;
+    let { endpoint, address, app } = req.body;
     let newEndpoint = new Endpoint();
     newEndpoint.address = address;
     newEndpoint.endpoint = endpoint;
+    newEndpoint.app = app;
 
     //Validade if the parameters are ok
     const errors = await validate(newEndpoint);
@@ -50,6 +51,7 @@ class EndpointController {
       await endpointRepository.save(newEndpoint);
       await newAddressGenerate();
     } catch (e) {
+        console.log(e)
       res.status(409).send("Endpoint already in use");
       return;
     }
@@ -63,7 +65,7 @@ class EndpointController {
     const id = req.params.id;
 
     //Get values from the body
-    let { endpoint, address } = req.body;
+    let { endpoint, address, app } = req.body;
     //Try to find address on database
     const endpointRepository = getRepository(Endpoint);
     let editEndpoint;
@@ -78,6 +80,7 @@ class EndpointController {
     //Validate the new values on model
     editEndpoint.address = address;
     editEndpoint.endpoint = endpoint;
+    editEndpoint.app = app;
     const errors = await validate(editEndpoint);
     if (errors.length > 0) {
       res.status(400).send(errors);

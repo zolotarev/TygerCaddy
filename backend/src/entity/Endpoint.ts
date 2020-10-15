@@ -2,12 +2,14 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    OneToMany,
+    ManyToOne,
+    OneToOne,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    JoinColumn
   } from "typeorm";
   import {Address} from "./Address";
-  
+  import {App} from "./App";
   @Entity()
   export class Endpoint {
     @PrimaryGeneratedColumn()
@@ -24,7 +26,11 @@ import {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToMany(type => Address, Address => Address.endpoint)
+    @ManyToOne(type => Address, Address => Address.endpoints)
     address: Address;
+
+    @OneToOne(type => App)
+    @JoinColumn()
+    app:App
   }
   
