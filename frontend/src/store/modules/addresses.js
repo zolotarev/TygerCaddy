@@ -44,6 +44,12 @@ export const addresses = {
           commit('setSnack', { snack: "There was an error! Please check your data and try again", color: "error" })
         });
     },
+    generate({commit}){
+      axios.get('address/generate')
+      .then(()=>{
+        commit('setSnack', { snack: "Generate command sent to backend", color: "warning" })
+      })
+    }
   },
   mutations: {
     GET_ADDS( state , data) {

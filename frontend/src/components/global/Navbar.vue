@@ -9,9 +9,11 @@
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                    
-                        <v-list-item-title>Welcome: <small>{{currentUser.name}}</small></v-list-item-title>
-                            <v-list-item-subtitle><v-btn block link :to="'profile'">Profile</v-btn></v-list-item-subtitle>                   
+
+                    <v-list-item-title>Welcome: <small>{{currentUser.name}}</small></v-list-item-title>
+                    <v-list-item-subtitle>
+                        <v-btn block link :to="'profile'">Profile</v-btn>
+                    </v-list-item-subtitle>
                 </v-list-item-content>
             </v-list-item>
         </template>
@@ -40,13 +42,19 @@
             <v-icon>mdi-lock</v-icon>
             <div class="d-none d-lg-block">logout</div>
         </v-btn>
+        <v-btn dark tile text class="orange" @click="GenerateCaddyfile">
+            <!-- <v-icon>mdi-lock</v-icon> -->
+            <div class="d-none d-lg-block">Generate</div>
+        </v-btn>
     </v-app-bar>
 </div>
 </template>
 
 <script>
 import getEnv from '@/utils/env'
-import { mapGetters } from 'vuex'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data: () => ({
         drawer: true,
@@ -79,7 +87,7 @@ export default {
         ]
     }),
     computed: {
-       ...mapGetters({
+        ...mapGetters({
             currentUser: 'currentUser'
         })
     },
@@ -92,6 +100,9 @@ export default {
             this.$store.dispatch('logout')
             this.$router.push('Login')
         },
+        GenerateCaddyfile() {
+            this.$store.dispatch('generate')
+        }
 
     }
 };

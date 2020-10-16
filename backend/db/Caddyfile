@@ -10,4 +10,13 @@
  	 encode gzip zstd 
  	 try_files {path} {path}/ /index.html 
  	 file_server 
- }
+ } 
+sonarr.test.com { 
+	 reverse_proxy 10.10.200.24:9000 { 
+ 
+ 	 } 
+	 reverse_proxy /test 10.10.200.24:9000 { 
+ 
+ 	} 
+ } 
+
