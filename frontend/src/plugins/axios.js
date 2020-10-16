@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import axios from 'axios';
-import VueAxios from 'vue-axios';
-//import router from '../router/index';
-import store from '../store/index';
-import getEnv from '@/utils/env';
+import VueAxios from 'vue-axios'
+import store from '../store/index'
+import getEnv from '@/utils/env'
 
 
 const API_URL = getEnv('VUE_APP_API_URL')
@@ -30,6 +29,14 @@ axios.interceptors.response.use(function (response) {
       return Promise.reject(error);
   }
 });
+const apiInstance = axios.create({
+  baseURL: URL,
+  headers:{
+    'Authorization' : token
+  }
+})
+
+
 
 
 const apiInstance = axios.create({

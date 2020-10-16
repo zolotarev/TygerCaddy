@@ -2,7 +2,7 @@
 
     <v-dialog v-model="show" max-width="500px">
         <v-card>
-          <v-card-title class="primary" dark flat>
+          <v-card-title class="orange" dark flat>
             <span class="headline white--text">Delete Application - {{ item.name }}</span>
           </v-card-title>
 
@@ -18,8 +18,8 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="accent darken-1" @click="deleteclose">Cancel</v-btn>
-            <v-btn color="error darken-1" @click="deleteapp">Delete</v-btn>
+            <v-btn color="grey darken-1" @click="deleteclose">Cancel</v-btn>
+            <v-btn color="orange darken-1" @click="deleteapp">Delete</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
