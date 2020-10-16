@@ -5,6 +5,7 @@ import config from "./config";
 import DNS from "./dns";
 import app from "./app";
 import address from "./address";
+import endpoint from "./endpoint";
 
 const routes = Router();
 
@@ -14,5 +15,6 @@ routes.use("/config", config);
 routes.use("/app", app);
 routes.use("/address", address);
 routes.use("/dns", DNS);
+routes.use("/endpoint", endpoint);
 
 export default routes;

@@ -8,10 +8,8 @@ export const endpoints = {
 
   actions: {
     getEndpoints({ commit }, data) {
-      axios.get("endpoint/?address="+ data.id).then(({ data }) => {
-        if (data) {
-          commit('GET_ENDPOINTS', data)
-        }
+      axios.get("endpoint/address/"+ data.id).then(function( response ){
+                  commit('GET_ENDPOINTS', response.data)
       })
         .catch(() => {
           commit('setSnack', {snack: "Could not communicate with the backend!", color: 'error'})
@@ -22,7 +20,6 @@ export const endpoints = {
       axios
         .post("endpoint/", data)
         .then(({ data }) => {
-          //dispatch('getEndpoints')
           commit('setSnack', {snack: "Endpoint " + data.endpoint + " was created!", color: 'success'})
         })
         .catch(() => {
@@ -34,7 +31,7 @@ export const endpoints = {
       axios.patch("endpoint/" + data.id + "/", data)
         .then(() => {
           let addr = {
-            id: data.addrid
+            id: data.address
           }
           dispatch('getEndpoints', addr)
           commit('setSnack', {snack: "Endpoint " + data.endpoint + " was updated!", color: 'success'})
@@ -54,7 +51,7 @@ export const endpoints = {
   },
   mutations: {
     GET_ENDPOINTS(state, data) {
-      state.endpoints = data.results;
+      state.endpoints = data;
     },
   },
   getters: {
