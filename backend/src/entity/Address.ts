@@ -5,10 +5,12 @@ import {
   Unique,
   ManyToOne,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  OneToMany
 } from "typeorm";
-import { Length, IsFQDN} from "class-validator";
+import { Length, IsFQDN, IsFirebasePushId} from "class-validator";
 import {App} from "./App";
+import {Endpoint} from "./Endpoint";
 
 @Entity()
 @Unique(["address"])
@@ -36,5 +38,8 @@ export class Address {
 
   @ManyToOne(type => App, App => App.address)
     app: App;
+
+  @OneToMany(() => Endpoint, endpoint => endpoint.address)
+  endpoint: Endpoint[];
 
 }

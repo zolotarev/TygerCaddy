@@ -10,7 +10,8 @@ import {
   import { Length, IsNotEmpty, IsIP, IsPort } from "class-validator";
   import * as bcrypt from "bcryptjs";
   import {Address} from "./Address";
-import { isIPv4 } from "net";
+  import {Endpoint} from "./Endpoint";
+  import { isIPv4 } from "net";
   
   @Entity()
   @Unique(["name"])
@@ -40,9 +41,8 @@ import { isIPv4 } from "net";
     @Column()
     @UpdateDateColumn()
     updatedAt: Date;
-  
+
     @OneToMany(type => Address, Address => Address.app)
       address: Address;
-  
   }
   

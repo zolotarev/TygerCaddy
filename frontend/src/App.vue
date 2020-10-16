@@ -9,6 +9,8 @@
 import AppLayout from './layouts/AppLayout'
 import SimpleLayout from './layouts/SimpleLayout'
 import Snackbar from './components/global/Snackbar'
+
+import getEnv from '@/utils/env'
 export default {
     name: "App",
 
@@ -34,7 +36,7 @@ export default {
                 throw err;
             });
         });
-
+        console.log("API Location: " + getEnv('VUE_APP_API_URL'))
     },
     data: () => ({
 

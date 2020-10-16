@@ -6,6 +6,13 @@ import { Address } from "../entity/Address";
 import { newAddressGenerate } from "../middlewares/updateCaddy";
 
 class AddressController {
+
+  static generateCaddyfile = async (req: Request, res: Response) =>{
+    let generate = await newAddressGenerate();
+    console.log(generate);
+    res.send(generate)
+  };
+
   static listAll = async (req: Request, res: Response) => {
     //Get addresses from database
     const addressRepository = getRepository(Address);
@@ -25,6 +32,7 @@ class AddressController {
     const addressRepository = getRepository(Address);
     try {
       const address = await addressRepository.findOneOrFail(id);
+      res.send(address)
     } catch (error) {
       res.status(404).send("Address not found");
     }

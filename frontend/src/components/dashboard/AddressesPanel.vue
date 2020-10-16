@@ -3,8 +3,8 @@
     <AddAddress v-model="addAddressForm"/>
     <AddressDelete v-model="deletedialog" :item="deleteid"/>
     <AddressEdit v-model="editdialog" :item="editedItem"/>
-    <!-- <AddressDetail v-model="detaildialog" :item="editedItem"/>
-    <AddressURLProxy v-model="urldialog" :item="editedItem" /> -->
+    <AddressDetail v-model="detaildialog" :item="editedItem"/>
+    <AddressNewEndpoint v-model="urldialog" :item="editedItem" />
 <v-card flat class="blue-grey lighten-5">
     <v-toolbar color="orange" dark flat>
       <v-toolbar-title>Addresses</v-toolbar-title>
@@ -74,9 +74,17 @@
  <template
         v-slot:[`item.actions`]="{ item }"
       >
+                <v-tooltip top> 
+            <template v-slot:activator="{ on }">
+            <v-btn icon class="mr-0" color="orange" v-on="on" @click="detailItem(item)"> 
+              <v-icon>mdi-clipboard-list</v-icon> 
+            </v-btn> 
+            </template>
+              <span>View Details</span> 
+            </v-tooltip> 
           <v-tooltip top> 
             <template v-slot:activator="{ on }">
-            <v-btn icon class="mr-0" color="orange" disabled v-on="on" @click="urlproxy(props.item)"> 
+            <v-btn icon class="mr-0" color="orange" v-on="on" @click="urlproxy(item)"> 
               <v-icon>mdi-domain-off</v-icon> 
             </v-btn> 
             </template>
@@ -111,12 +119,13 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import AddAddress from "../forms/AddAddress";
+
+import AddAddress from "../Addresses/AddAddress";
 
 import AddressDelete from "../Addresses/AddressDelete";
 import AddressEdit from "../Addresses/AddressEdit";
-// import AddressDetail from "../Addresses/AddressDetail";
-// import AddressURLProxy from "../Addresses/AddressURLProxy";
+import AddressDetail from "../Addresses/AddressDetail";
+import AddressNewEndpoint from "../Endpoints/AddressNewEndpoint";
 
 export default {
   data() {
@@ -161,8 +170,8 @@ export default {
     AddAddress,
     AddressDelete,
     AddressEdit,
-    // AddressDetail,
-    // AddressURLProxy
+    AddressDetail,
+    AddressNewEndpoint
   },
   methods: {
     close () {
@@ -225,9 +234,7 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch('getAddresses')
-    this.$store.dispatch('getDNS')
-    
+    this.$store.dispatch('getAddresses')   
     this.loading = false;
     
   },

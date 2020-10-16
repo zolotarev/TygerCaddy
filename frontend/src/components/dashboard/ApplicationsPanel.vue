@@ -101,7 +101,7 @@
 import { mapGetters } from "vuex";
 import AppsDelete from "@/components/Apps/AppsDelete";
 import AppsEdit from "@/components/Apps/AppsEdit";
-import AddApp from "@/components/forms/AddApp";
+import AddApp from "@/components/Apps/AddApp";
 export default {
   data() {
     return {
