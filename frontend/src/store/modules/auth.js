@@ -1,5 +1,6 @@
 //import axios from 'axios'
 //import Vue from 'vue'
+import router from '../../router/index.js'
 
 export const auth = {
     state: {
@@ -11,21 +12,24 @@ export const auth = {
       auth_request(state){
         state.status = 'loading'
       },
-      auth_success(state, token, user){
+      auth_success(state, token){
         state.status = 'success'
         state.token = token
-        state.user = user
       },
       auth_error(state){
         state.status = 'error'
       },
+      setUser(state, user){
+        state.user = user
+      },
       logout(state){
         state.status = ''
         state.token = ''
+        state.user = {}
       },
     },
     actions: {
-      login({commit}, user){
+      login({commit, dispatch}, user){
         return new Promise((resolve, reject) => {
           commit('auth_request')
           this._vm.$http({url: '/auth/login', data: user, method:'post'})
@@ -36,17 +40,44 @@ export const auth = {
             localStorage.setItem('email', user.email)
             this._vm.$http.defaults.headers.common['Authorization'] = token
             commit('setSnack', { snack: "Logged in! Welcome " + user.email, color: "info" })
-            commit('auth_success', token, user)
-           
+            commit('auth_success', token)  
+            dispatch('getUser');
             resolve(resp)
           })
           .catch(err => {
             commit('auth_error')
+            commit('setSnack', { snack: "Oh dear, that didn't work. Check your Email and Password.", color: "error" })
             localStorage.clear()
             reject(err)
           })
         })
     },
+    getUser({commit}){
+      return new Promise((resolve, reject) => {
+      this._vm.$http({url:'/user/me/', method:'get'}).then(data => {
+        commit('setUser', data.data)
+        console.log(data.data)
+        resolve(data)
+      }).catch(err => {
+      reject(err)
+    })
+    })
+  },
+  updateUser({commit, dispatch}, data){
+    return new Promise((resolve, reject) => {
+    this._vm.$http({url:'/user/' + data.id, data: data, method:'patch'}).then(() => {
+      commit('setSnack', { snack: "Profile Changed! Please login again.", color: "success" })
+      dispatch('logout');
+      router.push('login')
+      resolve()
+    })
+    .catch(err => {
+      commit('setSnack', { snack: "Oh dear, that didn't work. Did you enter your current password correctly?", color: "error" })
+      localStorage.clear()
+      reject(err)
+    })
+  })
+},
     logout({commit}){
       return new Promise((resolve) => {
         commit('logout')
@@ -55,11 +86,28 @@ export const auth = {
         delete this._vm.$http.defaults.headers.common['Authorization']
         resolve()
       })
-    }
+    },
+    updatePassword({commit, dispatch}, data){
+      return new Promise((resolve, reject) => {
+        this._vm.$http({url: '/auth/change-password', data: data, method:'post'})
+        .then(resp => {
+          commit('setSnack', { snack: "Password Changed! Please login again.", color: "success" })
+          dispatch('logout');
+          router.push('login')
+          resolve(resp)
+        })
+        .catch(err => {
+          commit('setSnack', { snack: "Oh dear, that didn't work. Did you enter your current password correctly?", color: "error" })
+          localStorage.clear()
+          reject(err)
+        })
+      })
+  },
   },
     getters : {
       isLoggedIn: state => !!state.token,
       authStatus: state => state.status,
+      currentUser: state => state.user,
     }
   }
 

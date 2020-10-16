@@ -38,6 +38,16 @@ const apiInstance = axios.create({
 
 
 
+
+const apiInstance = axios.create({
+  baseURL: URL,
+  headers:{
+    'Authorization' : token
+  }
+})
+
+
+
 Vue.prototype.$http = apiInstance;
 
 Vue.use(VueAxios, axios);
