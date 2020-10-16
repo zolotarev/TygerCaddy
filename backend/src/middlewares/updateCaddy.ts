@@ -86,11 +86,7 @@ export const newAddressGenerate = async () => {
       });
 
   try {
-<<<<<<< HEAD
     let writefile = writeCaddyfile(addressBlock);
-=======
-    let writefile = await writeCaddyfile(addressBlock);
->>>>>>> d70556ecc6b535f7d5ca26e2cdd559077fdb11d3
     console.log(addressBlock)
     return writefile;
   } catch (error) {
