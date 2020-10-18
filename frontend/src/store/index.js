@@ -5,14 +5,14 @@ import auth from './modules/auth';
 import layout from './modules/layout';
 import snackbar from './modules/snackbar';
 
-import addresses from'./modules/addresses';
-import apps from'./modules/apps';
-import dns from'./modules/dns';
-import endpoint from'./modules/endpoint';
-import backup from'./modules/export';
-import logs from'./modules/logs';
-import utility from'./modules/utility';
-
+import addresses from './modules/addresses';
+import apps from './modules/apps';
+import dns from './modules/dns';
+import endpoint from './modules/endpoint';
+import backup from './modules/export';
+import logs from './modules/logs';
+import utility from './modules/utility';
+import settings from './modules/settings';
 
 Vue.use(Vuex);
 
@@ -30,6 +30,7 @@ export default new Vuex.Store({
     endpoint,
     backup,
     logs,
-    utility
+    utility,
+    settings
   }
 });

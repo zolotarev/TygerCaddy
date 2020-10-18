@@ -83,6 +83,11 @@ export default {
                 route: "restart",
                 text: "Restart Proxy",
                 icon: "mdi-timelapse"
+            },
+            {
+                route: "config",
+                text: "Config",
+                icon: "mdi-timelapse"
             }
         ]
     }),

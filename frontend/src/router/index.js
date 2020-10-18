@@ -6,6 +6,7 @@ import Dashboard from "../views/Dashboard.vue";
 import Apps from "../views/Apps.vue";
 import Addresses from "../views/Addresses.vue";
 import Backup from "../views/Backup.vue";
+import Config from "../views/Config.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
 Vue.use(VueRouter);
@@ -39,6 +40,14 @@ const routes = [
     path: "/backup",
     name: "Backup",
     component: Backup,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/config",
+    name: "Config",
+    component: Config,
     meta: {
       requiresAuth: true
     }
