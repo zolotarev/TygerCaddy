@@ -1,7 +1,7 @@
-//import axios from 'axios'
+import axios from 'axios'
 //import Vue from 'vue'
 import router from '../../router/index.js'
-
+//import apiInstance from'../../plugins/axios'
 export const auth = {
     state: {
       status: '',
@@ -35,10 +35,10 @@ export const auth = {
           this._vm.$http({url: '/auth/login', data: user, method:'post'})
           .then(resp => {
             const token = resp.data.token
-            //const user = resp.data.user
-            localStorage.setItem('token', 'Bearer ' + token)
+            commit('auth_success', token)
+            localStorage.token = 'Bearer ' + token
             localStorage.setItem('email', user.email)
-            this._vm.$http.defaults.headers.common['Authorization'] = token
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
             commit('setSnack', { snack: "Logged in! Welcome " + user.email, color: "info" })
             commit('auth_success', token)  
             dispatch('getUser');
@@ -56,7 +56,6 @@ export const auth = {
       return new Promise((resolve, reject) => {
       this._vm.$http({url:'/user/me/', method:'get'}).then(data => {
         commit('setUser', data.data)
-        console.log(data.data)
         resolve(data)
       }).catch(err => {
       reject(err)

@@ -1,7 +1,3 @@
-
-import axios from 'axios';
-
-
 export const dns = {
     state:{
         dns: [],
@@ -9,7 +5,7 @@ export const dns = {
   
     actions: {
         getDNS({ commit }) {
-            axios.get("dns/").then(({
+          this._vm.$http.get("dns/").then(({
               data
             }) => {
               if (data) {

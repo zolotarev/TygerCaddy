@@ -31,14 +31,10 @@
                             <validation-provider v-slot="{ errors }" name="use_dns_verification" rules="required">
                                 <v-switch color="orange" class="px-3" label="Use DNS Verification?" v-model="item.use_dns_verification" :error-messages="errors"></v-switch>
                             </validation-provider>
-                            <validation-provider v-slot="{ errors }" name="dns_provider_name" rules="required">
-                                <v-text-field color="orange" name="dns_provider_name" label="DNS Provider Name" v-model="item.dns_provider_name" :error-messages="errors" required>
+                                <v-text-field color="orange" name="dns_provider_name" label="DNS Provider Name" v-model="item.dns_provider_name">
                                 </v-text-field>
-                            </validation-provider>
-                            <validation-provider v-slot="{ errors }" name="dns_api_token" rules="required">
-                                <v-text-field color="orange" name="dns_api_token" label="DNS API Token" v-model="item.dns_api_token" :error-messages="errors" required>
+                                <v-text-field color="orange" name="dns_api_token" label="DNS API Token" v-model="item.dns_api_token">
                                 </v-text-field>
-                            </validation-provider>
                         </v-card-text>
 
                         <v-card-actions>
@@ -56,14 +52,31 @@
 <script>
 export default {
     data() {
-        return {};
+        return {
+            data:{}
+        };
 
     },
     props: {
         item: Object
     },
     components: {},
-    methods: {},
+    methods: {
+        resetForm(){
+            this.data = {}
+        },
+
+        onSubmit(){
+            this.data.server_name = this.item.server_name;
+            this.data.automatic_https = this.item.automatic_https;
+            this.data.redirect_https = this.item.redirect_https;
+            this.data.use_dns_verification = this.item.use_dns_verification;
+            this.data.dns_provider_name = this.item.dns_provider_name;
+            this.data.dns_api_token = this.item.dns_api_token;
+            this.$store.dispatch('updateConfig', this.data)
+            this.resetForm();
+        },
+    },
 
 };
 </script>

@@ -1,8 +1,3 @@
-
-import axios from 'axios';
-
-
-
 export const backup = {
   state:{
     backup: {}
@@ -10,7 +5,7 @@ export const backup = {
 
   actions: {
     getBackupData( { commit } ){
-      axios.get("export/").then( function( response ){
+      this._vm.$http.get("export/").then( function( response ){
           console.log(response)
         commit('GET_BACKUP', response.data)
       })

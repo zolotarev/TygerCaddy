@@ -1,7 +1,3 @@
-
-import axios from 'axios';
-
-
 export const logs = {
     state:{
         caddylogs: [],
@@ -10,7 +6,7 @@ export const logs = {
   
     actions: {
         getCaddyLogs({ commit }) {
-            axios.get("logs/caddy/").then(({
+          this._vm.$http.get("logs/caddy/").then(({
               data
             }) => {
               if (data) {
@@ -26,7 +22,7 @@ export const logs = {
               })
           },
           getuWSGILogs({ commit }) {
-            axios.get("logs/uwsgi/").then(({
+            this._vm.$http.get("logs/uwsgi/").then(({
               data
             }) => {
               if (data) {

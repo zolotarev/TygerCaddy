@@ -1,6 +1,4 @@
 
-import axios from 'axios';
-
 export const apps = {
   state:{
     apps: [],
@@ -9,7 +7,7 @@ export const apps = {
 
   actions: {
     getApps({ commit }) {
-      axios.get("app/").then(({ data }) => {
+      this._vm.$http.get("app/").then(({ data }) => {
         if (data) {
           commit('GET_APPS', data)
         }
@@ -19,7 +17,7 @@ export const apps = {
         })
     },
     addApp({ commit, dispatch }, data) {
-      axios
+      this._vm.$http
         .post("app/", data.app)
         .then(({ data }) => {
           dispatch('getApps')
@@ -31,7 +29,7 @@ export const apps = {
         });
     },
     updateApp({ commit, dispatch }, data) {
-      axios.patch("app/" + data.id + "/", data)
+      this._vm.$http.patch("app/" + data.id + "/", data)
         .then(() => {
           dispatch('getApps')
           commit('setSnack', {snack: "App " + data.name + " (" + data.url + ")" + " was updated!", color: 'success'})
@@ -39,7 +37,7 @@ export const apps = {
     },
     deleteApp({ commit, dispatch }, data) {
       let app = data
-      axios.delete("app/" + data.id + "/", data)
+      this._vm.$http.delete("app/" + data.id + "/", data)
         .then(() => {
           dispatch('getApps')
           commit('setSnack', { snack: "App " + app.name + " (" + app.url + ")" + " was deleted!", color: "warning" })

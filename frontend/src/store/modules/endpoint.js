@@ -1,6 +1,3 @@
-import axios from 'axios';
-
-
 export const endpoints = {
   state:{
     endpoints: []
@@ -8,7 +5,7 @@ export const endpoints = {
 
   actions: {
     getEndpoints({ commit }, data) {
-      axios.get("endpoint/address/"+ data.id).then(function( response ){
+      this._vm.$http.get("endpoint/address/"+ data.id).then(function( response ){
                   commit('GET_ENDPOINTS', response.data)
       })
         .catch(() => {
@@ -17,7 +14,7 @@ export const endpoints = {
     },
     
     addEndpoint({ commit }, data) {
-      axios
+      this._vm.$http
         .post("endpoint/", data)
         .then(({ data }) => {
           commit('setSnack', {snack: "Endpoint " + data.endpoint + " was created!", color: 'success'})
@@ -28,7 +25,7 @@ export const endpoints = {
     },
     updateEndpoint({ commit, dispatch }, data) {
       console.log(data)
-      axios.patch("endpoint/" + data.id + "/", data)
+      this._vm.$http.patch("endpoint/" + data.id + "/", data)
         .then(() => {
           let addr = {
             id: data.address
@@ -39,7 +36,7 @@ export const endpoints = {
     },
     deleteEndpoint({ commit, dispatch }, data) {
       console.log(data)
-      axios.delete("endpoint/" + data.id + "/")
+      this._vm.$http.delete("endpoint/" + data.id + "/")
         .then(() => {
           let addr = {
             id: data.addrid

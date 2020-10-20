@@ -43,7 +43,7 @@
             <div class="d-none d-lg-block">logout</div>
         </v-btn>
         <v-btn dark tile text class="orange" @click="GenerateCaddyfile">
-            <!-- <v-icon>mdi-lock</v-icon> -->
+            <v-icon>mdi-autorenew</v-icon>
             <div class="d-none d-lg-block">Generate</div>
         </v-btn>
     </v-app-bar>
@@ -76,19 +76,20 @@ export default {
             },
             {
                 route: "backup",
-                text: "Export Config",
+                text: "Backup/Restore",
                 icon: "mdi-application-export"
+            },
+                        {
+                route: "config",
+                text: "Config",
+                icon: "mdi-timelapse"
             },
             {
                 route: "restart",
                 text: "Restart Proxy",
-                icon: "mdi-timelapse"
+                icon: "mdi-autorenew"
             },
-            {
-                route: "config",
-                text: "Config",
-                icon: "mdi-timelapse"
-            }
+
         ]
     }),
     computed: {
@@ -98,6 +99,9 @@ export default {
     },
     created() {
 
+    },
+    mounted(){
+        this.$store.dispatch('getUser')
     },
     methods: {
         logout() {

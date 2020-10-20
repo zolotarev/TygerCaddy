@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export const utility = {
   state: {
     cpu: 0,
@@ -14,7 +12,7 @@ export const utility = {
 
   actions: {
     reloadProxy({ commit }) {
-      axios.get("/addresses/reload/").then(({ data }) => {
+      this._vm.$http.get("/addresses/reload/").then(({ data }) => {
         if (data) {
             commit('setSnack', {snack: "Proxy was reloaded!", color: 'success'})
         }
@@ -25,7 +23,7 @@ export const utility = {
     },
 
     getStats({ commit }) {
-      axios.get("/stats/").then(({ data }) => {
+      this._vm.$http.get("/stats/").then(({ data }) => {
         if (data) {
           commit('setStats', data)
         }

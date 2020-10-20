@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export const settings = {
   state:{
     settings: {}
@@ -7,7 +5,7 @@ export const settings = {
 
   actions: {
     getConfig( { commit } ){
-      axios.get("config/").then( function( response ){
+      this._vm.$http.get("config/").then( function( response ){
         commit('GET_SETTINGS', response.data)
       })
       .catch(function(){
@@ -15,7 +13,7 @@ export const settings = {
       });
     },
     updateConfig( { commit, dispatch }, data ){
-      axios.patch("config/1/", data).then(() => {
+      this._vm.$http.patch("config/", data).then(() => {
           dispatch('getConfig');
           commit('setSnack', {snack: "Config was updated!", color: "success" })
         })

@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export const addresses = {
   state:{
     addresses: [],
@@ -8,7 +6,7 @@ export const addresses = {
 
   actions: {
     getAddresses( { commit } ){
-      axios.get("address/").then( function( response ){
+      this._vm.$http.get("address/").then( function( response ){
         commit('GET_ADDS', response.data)
       })
       .catch(function(){
@@ -18,7 +16,7 @@ export const addresses = {
     
     addAddress({ commit, dispatch }, data) {
       let address = data
-      axios.post("address/", data)
+      this._vm.$http.post("address/", data)
         .then(() => {
           dispatch('getAddresses');
           commit('setSnack', { snack: "New proxy created from " + address.address, color: "success" })
@@ -28,14 +26,14 @@ export const addresses = {
         });
     },
     updateAddress( { commit, dispatch }, data ){
-      axios.patch("address/" + data.id + "/", data).then(({ data }) => {
+      this._vm.$http.patch("address/" + data.id + "/", data).then(({ data }) => {
           dispatch('getAddresses');
           commit('setSnack', {snack: "Address " + data.address + " was updated!", color: "success" })
         })
     },
     deleteAddress({ commit, dispatch }, data) {
       const add = data
-      axios.delete("address/" + data.id + "/", data)
+      this._vm.$http.delete("address/" + data.id + "/", data)
         .then(() => {
           dispatch('getAddresses');
           commit('setSnack', { snack: "Address " + add.address + " (" + add.app.name + ")" + " was deleted!", color: "warning" })
@@ -45,7 +43,7 @@ export const addresses = {
         });
     },
     generate({commit}){
-      axios.get('address/generate')
+      this._vm.$http.get('address/generate')
       .then(()=>{
         commit('setSnack', { snack: "Generate command sent to backend", color: "warning" })
       })
