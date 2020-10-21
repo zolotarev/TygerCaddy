@@ -6,7 +6,7 @@ import DNS from "./dns";
 import app from "./app";
 import address from "./address";
 import endpoint from "./endpoint";
-
+import backup from "./backup";
 const routes = Router();
 
 routes.use("/auth", auth);
@@ -16,5 +16,5 @@ routes.use("/app", app);
 routes.use("/address", address);
 routes.use("/dns", DNS);
 routes.use("/endpoint", endpoint);
-
+routes.use("/backup", backup);
 export default routes;

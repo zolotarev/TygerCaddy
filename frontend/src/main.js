@@ -29,9 +29,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
+  console.log(error.response.status)
   if (401 === error.response.status) {
     store.commit('setSnack', {snack: "It looks like your token expired!", color: "error"})
-    //store.dispatch('logout')
+    store.dispatch('logout')
   } else {
       return Promise.reject(error);
   }
