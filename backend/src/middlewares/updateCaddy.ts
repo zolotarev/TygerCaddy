@@ -48,15 +48,6 @@ export const newAddressGenerate = async () => {
         let tls = "";
         if (address.tls) {
           console.log("Address uses tls..")
-          if (config.use_dns_verification) {
-            console.log("Config set to use DNS verification...")
-            tls =
-              "\t tls { \n  \t \t dns " +
-              config.dns_provider_name +
-              " " +
-              config.dns_api_token +
-              "\n \t } \n";
-          }
         }
         console.log("Getting endpoints for the address. ")
         let endpoints = await endpointRepository.find(
@@ -112,7 +103,7 @@ export const newAddressGenerate = async () => {
           thisBlock = "";
           }).then(()=>{
             let writefile = writeCaddyfile(addressBlock);
-            console.log(writefile)
+            //console.log(writefile)
           })
       });
 });

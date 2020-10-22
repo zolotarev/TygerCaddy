@@ -4,6 +4,9 @@
 
  	 auto_https disable_redirects 
  } 
+tls { 
+ 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+ 	 } 
 :{$FRONTEND_PORT} { 
  	 root * /tygercaddy/frontend/dist 
  	 root * /tygercaddy/frontend/dist 
@@ -19,44 +22,58 @@ plex.bytesense.biz {
 
 down.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9002 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 hydra.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9014 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 jackett.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9007 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 movies.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9003 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
-plexstats.bytesense.biz { 
-	 reverse_proxy 10.10.200.24:9013 { 
- 
- 	 } 
+connect.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9011 { 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 requests.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9005 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 tv.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9004 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 	 reverse_proxy /plex 10.10.200.11:32400 { 
  
  	} 
@@ -64,73 +81,97 @@ tv.bytesense.biz {
 
 proxy.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9091 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 center.bytesense.biz { 
 	 reverse_proxy 10.10.200.36:80 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 server.bytesense.biz { 
 	 reverse_proxy 10.10.200.20:80 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 apps.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9030 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 gitlab.bytesense.biz { 
 	 reverse_proxy 10.10.200.81:80 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 registry.bytesense.biz { 
 	 reverse_proxy 10.10.200.73:5000 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 status.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9040 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 api.bytesense.tech { 
 	 reverse_proxy 10.10.200.73:8080 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 code.bytesense.tech { 
 	 reverse_proxy 10.10.200.73:8443 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 docker.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9000 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
+} 
+
+plexstats.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9013 { 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
 deluge.bytesense.biz { 
 	 reverse_proxy 10.10.200.24:9020 { 
- 
- 	 } 
-} 
-
-connect.bytesense.biz { 
-	 reverse_proxy 10.10.200.24:9011 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 
+}	 } 
 } 
 
