@@ -31,10 +31,9 @@
                             <validation-provider v-slot="{ errors }" name="use_dns_verification" rules="required">
                                 <v-switch color="orange" class="px-3" label="Use DNS Verification?" v-model="item.use_dns_verification" :error-messages="errors"></v-switch>
                             </validation-provider>
-                                <v-text-field color="orange" name="dns_provider_name" label="DNS Provider Name" v-model="item.dns_provider_name">
-                                </v-text-field>
-                                <v-text-field color="orange" name="dns_api_token" label="DNS API Token" v-model="item.dns_api_token">
-                                </v-text-field>
+                            <v-combobox v-model="item.dns_provider_name" color="orange" :items="dns" item-text="name" item-value="name" label="Select a DNS provider:"></v-combobox>
+                            <v-text-field color="orange" name="dns_api_token" label="DNS API Token" v-model="item.dns_api_token">
+                            </v-text-field>
                         </v-card-text>
 
                         <v-card-actions>
@@ -50,23 +49,32 @@
 </template>
 
 <script>
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
         return {
-            data:{}
+            data: {}
         };
 
     },
     props: {
         item: Object
     },
+
     components: {},
+    computed: {
+        ...mapGetters({
+            dns: 'showDNS'
+        })
+    },
     methods: {
-        resetForm(){
+        resetForm() {
             this.data = {}
         },
 
-        onSubmit(){
+        onSubmit() {
             this.data.server_name = this.item.server_name;
             this.data.automatic_https = this.item.automatic_https;
             this.data.redirect_https = this.item.redirect_https;

@@ -34,6 +34,7 @@ export default {
     },
     mounted() {
         this.$store.dispatch('getConfig')
+        this.$store.dispatch('getDnsProviders')
     }
 };
 </script>

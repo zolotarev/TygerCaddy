@@ -7,7 +7,6 @@ import snackbar from './modules/snackbar';
 
 import addresses from './modules/addresses';
 import apps from './modules/apps';
-import dns from './modules/dns';
 import endpoint from './modules/endpoint';
 import backup from './modules/export';
 import logs from './modules/logs';
@@ -26,7 +25,6 @@ export default new Vuex.Store({
     snackbar,
     addresses,
     apps,
-    dns,
     endpoint,
     backup,
     logs,

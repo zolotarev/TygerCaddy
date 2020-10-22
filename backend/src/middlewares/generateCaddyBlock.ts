@@ -27,6 +27,9 @@ export const initialGlobalConfig = async () => {
     console.log("Set the Auto HTTPS Off")
   }
 
+  if (config.use_dns_verification && config.dns_provider_name && config.dns_api_token){
+    configBlock = configBlock + "tls { \n \t dns " + config.dns_provider_name + " " + config.dns_api_token 
+  }
   configBlock = configBlock + ":{$FRONTEND_PORT} { \n \t root * /tygercaddy/frontend/dist \n \t root * /tygercaddy/frontend/dist \n \t encode gzip zstd \n \t try_files {path} {path}/ /index.html \n \t file_server \n } \n";
   console.log("Config Block Generated...")
   return configBlock;
