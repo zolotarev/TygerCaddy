@@ -75,7 +75,20 @@ export const newAddressGenerate = async () => {
                 endpointsBlock = endpointsBlock + "\t reverse_proxy " + endpoints.endpoint + " " + endpoints.app.ip_address + ":" + endpoints.app.port_number + " { \n \n \t} \n "
               })
             }
-          thisBlock =
+
+            if (!address.app.verify_ssl){
+              thisBlock =
+              address.address +
+              " { \n" +
+              "\t reverse_proxy " +
+              address.app.ip_address +
+              ":" +
+              address.app.port_number +
+              " { \n " +
+              "\t \t transport http { \n \t \t \t tls_insecure_skip_verify \n \t \t \n}" +
+              "\t } \n" 
+            }else {
+              thisBlock =
             address.address +
             " { \n" +
             "\t reverse_proxy " +
@@ -84,7 +97,7 @@ export const newAddressGenerate = async () => {
             address.app.port_number +
             " { \n \n " +
             "\t } \n" 
-  
+            }
             if(endpointsBlock){
               thisBlock = thisBlock + endpointsBlock +  tls +
               "} \n\n";
