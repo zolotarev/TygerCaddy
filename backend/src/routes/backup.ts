@@ -17,7 +17,8 @@ const router = Router();
 
 //Create a new address
 router.post("/tyger2/restore", [checkJwt, checkRole(["ADMIN"])], BackupController.tyger2Restore);
-
+router.post("/tygercaddy/restore", [checkJwt, checkRole(["ADMIN"])], BackupController.tygercaddyRestore);
+router.get("/export", [checkJwt, checkRole(["ADMIN"])], BackupController.exportBackup);
 //Edit one address
 // router.patch(
 //   "/:id([0-9]+)",

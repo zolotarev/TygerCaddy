@@ -11,12 +11,126 @@
  	 try_files {path} {path}/ /index.html 
  	 file_server 
  } 
-sonarr.test.com { 
-	 reverse_proxy 10.10.200.24:9000 { 
+plex.bytesense.biz { 
+	 reverse_proxy 10.10.200.11:32400 { 
  
  	 } 
-	 reverse_proxy /test 10.10.200.24:9000 { 
+} 
+
+down.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9002 { 
+ 
+ 	 } 
+} 
+
+hydra.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9014 { 
+ 
+ 	 } 
+} 
+
+jackett.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9007 { 
+ 
+ 	 } 
+} 
+
+movies.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9003 { 
+ 
+ 	 } 
+} 
+
+plexstats.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9013 { 
+ 
+ 	 } 
+} 
+
+requests.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9005 { 
+ 
+ 	 } 
+} 
+
+tv.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9004 { 
+ 
+ 	 } 
+	 reverse_proxy /plex 10.10.200.11:32400 { 
  
  	} 
  } 
+
+proxy.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9091 { 
+ 
+ 	 } 
+} 
+
+center.bytesense.biz { 
+	 reverse_proxy 10.10.200.36:80 { 
+ 
+ 	 } 
+} 
+
+server.bytesense.biz { 
+	 reverse_proxy 10.10.200.20:80 { 
+ 
+ 	 } 
+} 
+
+apps.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9030 { 
+ 
+ 	 } 
+} 
+
+gitlab.bytesense.biz { 
+	 reverse_proxy 10.10.200.81:80 { 
+ 
+ 	 } 
+} 
+
+registry.bytesense.biz { 
+	 reverse_proxy 10.10.200.73:5000 { 
+ 
+ 	 } 
+} 
+
+status.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9040 { 
+ 
+ 	 } 
+} 
+
+api.bytesense.tech { 
+	 reverse_proxy 10.10.200.73:8080 { 
+ 
+ 	 } 
+} 
+
+code.bytesense.tech { 
+	 reverse_proxy 10.10.200.73:8443 { 
+ 
+ 	 } 
+} 
+
+docker.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9000 { 
+ 
+ 	 } 
+} 
+
+deluge.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9020 { 
+ 
+ 	 } 
+} 
+
+connect.bytesense.biz { 
+	 reverse_proxy 10.10.200.24:9011 { 
+ 
+ 	 } 
+} 
 

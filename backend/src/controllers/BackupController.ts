@@ -70,14 +70,15 @@ class BackupController {
         if (endpoints){
           endpoints.forEach(endpoint => {
           const addressName = endpoint.address__address
-          const appName = endpoint.app__name
+          const appName = endpoint.proxy_to__name
           let newAddressID = storedAddresses.find(function(storedAddress){
             return storedAddress.address === addressName
           })
-
+          console.log(newAddressID)
           let newAppId = storedApps.find(function(storedApp){
             return storedApp.name === appName
           })
+          console.log(newAppId)
             let currentEndpoint = {
               address: newAddressID.id,
               endpoint: endpoint.endpoint,
@@ -93,7 +94,51 @@ class BackupController {
         }
         res.status(201).send("Backup Restored");
       }
+  }
+  static tygercaddyRestore = async (req: Request, res: Response) => {
+    let { addresses, apps, endpoints } = req.body.backup;
+
+    if(apps){
+      await getConnection().createQueryBuilder().insert().into(App)
+      .values(
+        apps
+      )
+      .execute()
     }
+    if(addresses){
+      await getConnection().createQueryBuilder().insert().into(Address)
+      .values(
+        addresses
+      )
+      .execute()
+    }
+    if(endpoints){
+      await getConnection().createQueryBuilder().insert().into(Endpoint)
+      .values(
+        endpoints
+      )
+      .execute()
+    }
+  }
+  static exportBackup = async (req: Request, res: Response) => {
+    const appRepository = getRepository(App);
+    const addressRepository = getRepository(Address);
+    const endpointRepository = getRepository(Endpoint);
+    let output = {};
+
+    let addresses = await addressRepository.find({ relations: ["app"] });
+    let apps = await appRepository.find(); 
+    let endpoints = await endpointRepository.find({ relations: ["app", "address"] });
+    
+    output = {
+      addresses: addresses,
+      apps: apps, 
+      endpoints: endpoints
+    }
+
+    res.status(200).send(output)
+    
+  }
 }
 
 export default BackupController;
