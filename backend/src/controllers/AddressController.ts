@@ -3,12 +3,12 @@ import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 
 import { Address } from "../entity/Address";
-import { newAddressGenerate } from "../middlewares/updateCaddy";
+import { rebuildCaddyfile } from "../middlewares/caddy";
 
 class AddressController {
 
   static generateCaddyfile = async (req: Request, res: Response) =>{
-    let generate = await newAddressGenerate();
+    let generate = await rebuildCaddyfile();
     console.log(generate);
     res.send(generate)
   };
@@ -58,7 +58,7 @@ class AddressController {
     const addressRepository = getRepository(Address);
     try {
       await addressRepository.save(newAddress);
-      await newAddressGenerate();
+      await rebuildCaddyfile();
     } catch (e) {
       res.status(409).send("Address already in use");
       return;
@@ -99,7 +99,7 @@ class AddressController {
     //Try to safe, if fails, that means addressname already in use
     try {
       await addressRepository.save(editAddress);
-      await newAddressGenerate();
+      await rebuildCaddyfile();
     } catch (e) {
       res.status(409).send("Address already in use");
       return;
@@ -121,7 +121,7 @@ class AddressController {
       return;
     }
     addressRepository.delete(id);
-    await newAddressGenerate();
+    await rebuildCaddyfile();
     //After all send a 204 (no content, but accepted) response
     res.status(204).send();
   };

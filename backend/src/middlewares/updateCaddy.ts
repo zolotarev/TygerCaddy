@@ -14,7 +14,7 @@ export const writeCaddyfile = async (content: string) => {
     console.log("Writing new Caddyfile...")
     await fs.writeFile(process.env.CADDYFILE_PATH, content, () => {
 
-      //reloadCaddy();
+      reloadCaddy();
       return "Caddyfile written successfully!";
     });
   } catch (error) {
@@ -22,12 +22,12 @@ export const writeCaddyfile = async (content: string) => {
   }
 };
 
-// export const reloadCaddy = async () => {
+export const reloadCaddy = async () => {
 //  // const child = exec("caddy", ['reload', '--config /tygercaddy/backend/db/Caddyfile']);
-//   const child = exec("caddy reload --config /tygercaddy/backend/db/Caddyfile");
-//   console.log("Caddy Reloaded");
-//   return "Caddy Reloaded";
-// };
+   const child = exec("caddy reload --config /tygercaddy/backend/db/Caddyfile");
+   console.log("Caddy Reloaded");
+   return "Caddy Reloaded";
+};
 export const newAddressGenerate = async () => {
   console.log("Generating Caddyfile!");
 
@@ -98,7 +98,7 @@ export const newAddressGenerate = async () => {
             }
             console.log("Block Generation completed")
           addressBlock = addressBlock + thisBlock;
-          console.log(addressBlock)
+          //console.log(addressBlock)
           endpointsBlock = "";
           thisBlock = "";
           }).then(()=>{

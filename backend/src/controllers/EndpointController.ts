@@ -3,7 +3,7 @@ import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 
 import { Endpoint } from "../entity/Endpoint";
-import { newAddressGenerate } from "../middlewares/updateCaddy";
+import { rebuildCaddyfile } from "../middlewares/caddy";
 
 class EndpointController {
   static listAll = async (req: Request, res: Response) => {
@@ -70,7 +70,7 @@ class EndpointController {
     
     try {
       await endpointRepository.save(newEndpoint);
-      await newAddressGenerate();
+      await rebuildCaddyfile();
     } catch (e) {
         console.log(e)
       res.status(409).send("Endpoint already in use");
@@ -111,7 +111,7 @@ class EndpointController {
     //Try to safe, if fails, that means addressname already in use
     try {
       await endpointRepository.save(editEndpoint);
-      await newAddressGenerate();
+      await rebuildCaddyfile();
     } catch (e) {
       res.status(409).send("Endpoint already in use");
       return;
@@ -133,7 +133,7 @@ class EndpointController {
       return;
     }
     endpointRepository.delete(id);
-    await newAddressGenerate();
+    await rebuildCaddyfile();
     //After all send a 204 (no content, but accepted) response
     res.status(204).send();
   };

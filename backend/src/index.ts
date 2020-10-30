@@ -6,7 +6,7 @@ import * as bodyParser from "body-parser";
 import * as helmet from "helmet";
 import * as cors from "cors";
 import routes from "./routes";
-import { checkCaddy } from "./middlewares/checkCaddy";
+import { checkCaddy } from "./middlewares/caddy";
 
 //Connects to the Database -> then starts the express
 

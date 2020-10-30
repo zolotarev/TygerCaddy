@@ -1,4 +1,4 @@
-import { newAddressGenerate } from "../middlewares/updateCaddy";
+import { rebuildCaddyfile } from "../middlewares/caddy";
 const fs = require('fs');
 export const checkCaddy = async () => {
     //check that caddy is available by polling the config.
@@ -7,7 +7,7 @@ export const checkCaddy = async () => {
     if (fs.existsSync(process.env.CADDYFILE_PATH)) {
         return 'Caddyfile exists!';
       }else {
-        await newAddressGenerate()
+        await rebuildCaddyfile()
         return 'Caddyfile Missing!';
       }
             

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
+import { rebuildCaddyfile } from "../middlewares/caddy";
 
 import { Config } from "../entity/Config";
 
@@ -40,6 +41,7 @@ class ConfigController {
     let config;
     try {
       config = await configRepository.findOneOrFail(id);
+      
     } catch (error) {
       //If not found, send a 404 response
       res.status(404).send("Config not found");
@@ -62,6 +64,7 @@ class ConfigController {
 
     try {
       await configRepository.save(config);
+      rebuildCaddyfile();
     } catch (e) {
       console.log(e);
       res.status(409).send("Config already in use");
