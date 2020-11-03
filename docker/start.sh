@@ -1,20 +1,15 @@
 #!/bin/bash
-
 #printf "\n Lets get this show on the road! \n"
 TYGER_ROOT=/tygercaddy
 TYGER_BACKEND=$TYGER_ROOT/backend
 TYGER_FRONTEND=$TYGER_ROOT/frontend
 TYGER_DB=$TYGER_BACKEND/db/database.sqlite
 CADDYFILE=$TYGER_BACKEND/db/Caddyfile
-
 JSON_STRING='window.configs = { \
   "VUE_APP_API_URL":"'"${VUE_APP_API_URL}"'", \
 }'
 sed -i "s@// CONFIGURATIONS_PLACEHOLDER@${JSON_STRING}@" $TYGER_FRONTEND/dist/index.html
-
 #cat $TYGER_FRONTEND/dist/index.html
-
-
 #printf "\n OK, so I know where the files are stored, let me check some stuff.... \n"
 if [ -e $CADDYFILE ]
 then
