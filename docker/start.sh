@@ -56,6 +56,6 @@ fi
 printf "\n OK, I have kicked all that off, going to sleep now, if any of the services have an issue, they will tell you directly..... \n"
 #/usr/bin/caddy run --config /db/Caddyfile &
 cd $TYGER_BACKEND && node ./index.js && sleep 10 &
-/usr/bin/caddy run --config $CADDYFILE --adapter caddyfile
+/usr/bin/caddy run --config $CADDYFILE --adapter caddyfile --watch
 #npm run serve --prefix $TYGER_FRONTEND
 #npm run start --prefix /tygercaddy/frontend
