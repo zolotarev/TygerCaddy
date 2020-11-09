@@ -92,7 +92,7 @@ if (config.automatic_https) {
     configBlock = configBlock + "\n \t auto_https off \n } \n";
     console.log("Set the Auto HTTPS Off")
 }
-configBlock = configBlock + ":$FRONTEND_PORT { \n \t root * /tygercaddy/frontend/dist \n \t root * /tygercaddy/frontend/dist \n \t encode gzip zstd \n \t try_files {path} {path}/ /index.html \n \t file_server \n } \n";
+configBlock = configBlock + ":{$FRONTEND_PORT} { \n \t root * /tygercaddy/frontend/dist \n \t root * /tygercaddy/frontend/dist \n \t encode gzip zstd \n \t try_files {path} {path}/ /index.html \n \t file_server \n } \n";
 console.log("Config Block Generated...")
 return configBlock;
 };
