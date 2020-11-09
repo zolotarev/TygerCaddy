@@ -146,7 +146,7 @@ export const generateTlsBlock = async (address) => {
     if (config.use_dns_verification && config.dns_api_token && config.dns_provider_name){
         tlsBlock =
             " \t tls { \n" +
-            "\t \t \t issuer acme { \n"
+            "\t \t \t issuer acme { \n"+
             "\t \t \t \t dns " + config.dns_provider_name.name + " " + config.dns_api_token + "\n "+
             "\t \t \t \t resolvers 8.8.8.8 \n" +
             "\t \t \t } /n"
