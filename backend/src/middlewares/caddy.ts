@@ -1,10 +1,10 @@
 const fs = require('fs');
-const { exec } = require("child_process");
 import { getRepository } from "typeorm";
 import { Config } from "../entity/Config";
 import { User } from "../entity/User";
 import { Address } from "../entity/Address";
 import { Endpoint } from "../entity/Endpoint";
+import { stderr } from "process";
 
 export const checkCaddy = async () => {
     //check that caddy is available by polling the config.
@@ -47,11 +47,20 @@ const userRepository = getRepository(User)
 const admin = await userRepository.findOne({where:{id:1}});
 return admin
 };
+
 export const writeCaddyfile = async (content: string) => {
     try {
       console.log("Writing new Caddyfile...")
       await fs.writeFile(process.env.CADDYFILE_PATH, content, () => {
-        //const child = exec("caddy reload --config /tygercaddy/backend/db/Caddyfile");
+          const execFile = require("child_process").execFile;
+        const child = execFile("caddy", ['reload', '--config /tygercaddy/backend/db/Caddyfile'], (e, stdout ,stderr) =>{
+            if (e instanceof Error) {
+                console.error(e);
+                throw e;
+            }
+            console.log('stdout ', stdout)
+            console.log('stderr ', stderr)
+        });
         
       });
       console.log("Caddyfile written successfully!")
@@ -60,6 +69,7 @@ export const writeCaddyfile = async (content: string) => {
       return error;
     }
 };
+
 export const initialGlobalConfig = async () => {
 console.log("Starting Global Block")
 let configBlock = "{ \n \t http_port 80 \n \t https_port 443 \n";
