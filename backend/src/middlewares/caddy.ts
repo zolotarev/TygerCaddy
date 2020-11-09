@@ -147,6 +147,7 @@ export const generateTlsBlock = async (address) => {
         tlsBlock =
             " \t tls { \n" +
             "\t \t dns " + config.dns_provider_name.name + " " + config.dns_api_token + "\n "+
+            "\t \t resolvers 8.8.8.8 \n" +
             "\t }" 
       } else {
         tlsBlock = ""
