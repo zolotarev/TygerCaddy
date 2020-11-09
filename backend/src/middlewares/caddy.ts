@@ -53,7 +53,7 @@ export const writeCaddyfile = async (content: string) => {
       console.log("Writing new Caddyfile...")
       await fs.writeFile(process.env.CADDYFILE_PATH, content, () => {
           const execFile = require("child_process").execFile;
-        const child = execFile("caddy", ['reload', '--config /tygercaddy/backend/db/Caddyfile'], (e, stdout ,stderr) =>{
+        const child = execFile("caddy", ['reload --config /tygercaddy/backend/db/Caddyfile'], (e, stdout ,stderr) =>{
             if (e instanceof Error) {
                 console.error(e);
                 throw e;
