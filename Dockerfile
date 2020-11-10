@@ -20,8 +20,8 @@ COPY ./backend/prod.example.env /tygercaddy/backend/build/.env
 WORKDIR /tygercaddy/backend/build
 RUN npm run sync
 RUN npm run migration:run
-#RUN mkdir -p /tygercaddy/backend/build/initialdb
-#RUN mv /tygercaddy/backend/build/db/database.sqlite /tygercaddy/backend/build/initialdb/
+RUN mkdir -p /tygercaddy/backend/build/initialdb
+RUN mv /tygercaddy/backend/build/db/database.sqlite /tygercaddy/backend/build/initialdb/
 
 
 FROM node:alpine AS nodefrontend
@@ -35,8 +35,10 @@ RUN npm install && \
 FROM node:alpine AS tygercaddy
 COPY --from=caddy /usr/bin/caddy /usr/bin/caddy
 
+
 WORKDIR /tygercaddy/backend
 COPY --from=nodebackend /tygercaddy/backend/build ./
+#COPY --from=nodebackend /tygercaddy/backend/initialdb ./initialdb
 #COPY --from=nodebackend /tygercaddy/backend/build/node_modules ./node_modules
 COPY --from=nodebackend /tygercaddy/backend/ormconfig.js ./ormconfig.js
 COPY --from=nodebackend /tygercaddy/backend/prod.example.env ./.env
