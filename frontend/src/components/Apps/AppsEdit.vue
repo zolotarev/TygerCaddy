@@ -56,7 +56,9 @@
                    <v-switch
               color="orange"
               class="px-3"
-              label="Skip SSL Verification on Backend?"
+              label="Verify SSL on the backend?"
+              hint="If your backend does not use HTTPS leave this ON"
+              persistent-hint
               v-model="item.verify_ssl"
             ></v-switch>
             </v-card-text>

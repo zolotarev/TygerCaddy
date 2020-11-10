@@ -21,7 +21,15 @@
                         <v-text-field name="port_number" color="orange" v-model="formData.port_number" :error-messages="errors" required label="Port Number">
                         </v-text-field>
                     </validation-provider>
-                    <v-switch color="orange" class="px-3" label="Skip SSL Verification on Backend?" v-model="formData.verify_ssl"></v-switch>
+                    <v-switch 
+                        color="orange" 
+                        class="px-3" 
+                        label="Skip SSL Verification on Backend?" 
+                        v-model="formData.verify_ssl"               
+                        hint="If your backend does not use HTTPS leave this ON"
+                        input-value="true"
+                        persistent-hint>
+                    </v-switch>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
