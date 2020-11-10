@@ -26,8 +26,7 @@ echo "{
 
  	 auto_https disable_redirects 
  } 
-:{$FRONTEND_PORT} { 
- 	 root * /tygercaddy/frontend/dist 
+:$FRONTEND_PORT { 
  	 root * /tygercaddy/frontend/dist 
  	 encode gzip zstd 
  	 try_files {path} {path}/ /index.html 
