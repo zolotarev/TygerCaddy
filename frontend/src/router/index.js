@@ -9,6 +9,7 @@ import Backup from "../views/Backup.vue";
 import Config from "../views/Config.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
+import InitialUser from "../views/InitialUser.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -16,6 +17,22 @@ const routes = [
     path: "/",
     name: "Dashboard",
     component: Dashboard,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "",
+    name: "Home",
+    component: Dashboard,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/initialUser",
+    name: "InitialUser",
+    component: InitialUser,
     meta: {
       requiresAuth: true
     }
@@ -55,7 +72,10 @@ const routes = [
   {
     path: "/profile",
     name: "Profile",
-    component: Profile
+    component: Profile,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/login",
@@ -77,8 +97,15 @@ router.beforeEach((to, from, next) => {
   }
   if(to.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters.isLoggedIn) {
-      next()
-      return
+      if(localStorage.email == "admin@admin.com" && to.name !== "InitialUser"){
+        console.log(localStorage.email)
+        console.log(to)
+        router.push('/initialUser')
+        return
+      }else {
+        next()
+        return
+      }
     }
     next('/login')
   } else {

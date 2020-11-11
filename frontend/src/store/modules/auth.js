@@ -35,13 +35,12 @@ export const auth = {
           this._vm.$http({url: '/auth/login', data: user, method:'post'})
           .then(resp => {
             const token = resp.data.token
-            commit('auth_success', token)
-            localStorage.token = 'Bearer ' + token
-            localStorage.setItem('email', user.email)
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-            commit('setSnack', { snack: "Logged in! Welcome " + user.email, color: "info" })
             commit('auth_success', token)  
             dispatch('getUser');
+            localStorage.token = 'Bearer ' + token
+            localStorage.setItem('email', user.email)
+            commit('setSnack', { snack: "Logged in! Welcome " + user.email, color: "info" })
             resolve(resp)
           })
           .catch(err => {
@@ -51,6 +50,21 @@ export const auth = {
             reject(err)
           })
         })
+    },
+    initialUser({commit, dispatch}, user){
+      return new Promise((resolve, reject)=>{
+        this._vm.$http({url: '/auth/initialuser', data: user, method:'post'})
+        .then(response => {
+          console.log(response)
+          commit('setSnack', { snack: "Initial User updated, please login with your new details", color: "success" })
+          dispatch('logout');
+          resolve(response)
+        }).catch(err => {
+          commit('auth_error');
+          commit('setSnack', { snack: "Oh dear, that didn't work. Check your Email and Password.", color: "error" })
+          reject(err)
+        })
+      })
     },
     getUser({commit}){
       return new Promise((resolve, reject) => {

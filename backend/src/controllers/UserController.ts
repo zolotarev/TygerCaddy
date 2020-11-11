@@ -130,7 +130,49 @@ class UserController {
     //After all send a 204 (no content, but accepted) response
     res.status(204).send();
   };
+  static initialUser = async (req: Request, res: Response) => {
+    //Get the ID from the url
+    const id = "1";
 
+    //Get values from the body
+    const { name, oldPassword, newPassword, email } = req.body;
+    //Try to find user on database
+    const userRepository = getRepository(User);
+    let user: User;
+    try {
+      user = await userRepository.findOneOrFail(id);
+    } catch (error) {
+      //If not found, send a 404 response
+      res.status(404).send("User not found");
+      return;
+    }
+    // Check if old password matches
+    if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
+      res.status(401).send();
+      return;
+    }
+    console.log(user.checkIfUnencryptedPasswordIsValid(oldPassword))
+    //Validate the new values on model
+    user.name = name;
+    user.email = email;
+    user.password = newPassword;
+
+    const errors = await validate(user);
+    if (errors.length > 0) {
+      res.status(400).send(errors);
+      return;
+    }
+
+    user.hashPassword();
+    try {
+      userRepository.save(user);
+    } catch(e) {
+      console.log(e)
+    }
+    
+    //After all send a 204 (no content, but accepted) response
+    res.status(204).send();
+  };
   static deleteUser = async (req: Request, res: Response) => {
     //Get the ID from the url
     const id = req.params.id;
