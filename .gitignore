@@ -117,5 +117,6 @@ dist
 
 node_modules
 *.sqlite
-src/db/dev.db.sqlite
+backend/db/database.sqlite
+backend/db/Caddyfile
 Caddyfile
