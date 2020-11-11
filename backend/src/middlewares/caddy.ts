@@ -18,6 +18,26 @@ export const checkCaddy = async () => {
       }
             
 };
+
+export const checkLogDir = async (address) => {
+    var directory = "/tygercaddy/backend/db/logs/" + address +"/"
+
+    if (fs.existsSync(directory)) {
+        console.log('Log Directory exists!');
+        return "Log Directory exists!"
+    } else {
+        console.log('Directory not found. Creating it now. ');
+        fs.mkdir(directory, function(err) {
+            if (err) {
+              console.log(err)
+            } else {
+              console.log("New directory successfully created.")
+              return "New directory successfully created."
+            }
+        })
+    }
+};
+
 export const getConfig = async () => {
     const configRepository = getRepository(Config);
     const config = await configRepository.findOne({where:{id:1}, relations:['dns_provider_name']});
@@ -52,15 +72,6 @@ export const writeCaddyfile = async (content: string) => {
     try {
       console.log("Writing new Caddyfile...")
       await fs.writeFile(process.env.CADDYFILE_PATH, content, () => {
-          //const execFile = require("child_process").execFile;
-        //const child = execFile("caddy", ['reload --config /tygercaddy/backend/db/Caddyfile'], (e, stdout ,stderr) =>{
-        //    if (e instanceof Error) {
-        //        console.error(e);
-        //        throw e;
-        //    }
-        //    console.log('stdout ', stdout)
-       //    console.log('stderr ', stderr)
-       // });
         
       });
       console.log("Caddyfile written successfully!")
@@ -156,6 +167,13 @@ export const generateTlsBlock = async (address) => {
       }
     return tlsBlock
 };
+
+export const generateLogPart = async (address) => {
+    var log = "\n \t \t log {" +"\n \t \t \t output file /tygercaddy/backend/db/logs/" + address.address + ".json \n"+ "\n \t \t \t format json \n "+ "\t \t } \n";
+
+    return log
+};
+
 export const rebuildCaddyfile = async () => {
     //Log process starting
     console.log("Generating Caddyfile!");
@@ -178,6 +196,10 @@ export const rebuildCaddyfile = async () => {
 
     //Start Processing each Address Block
     for (const address of addresses){
+
+        //check if log directory exists, if not create it
+        await checkLogDir(address.address)
+
         if (address.tls) {
             console.log("Address uses tls..")
         }
@@ -198,8 +220,12 @@ export const rebuildCaddyfile = async () => {
         //If DNS Verification is used, add the TLS block.
         let tlsBlock = await generateTlsBlock(address);
         
+        //Add the log details
+
+        let logBlock = await generateLogPart(address);
+
         //Write Address to CaddyFileString
-        CaddyFileString = CaddyFileString + proxyBlock + endpointsBlock + tlsBlock + "\n} \n"
+        CaddyFileString = CaddyFileString + proxyBlock + endpointsBlock + tlsBlock + logBlock + "\n} \n"
     };
 
     //Send generated string to Caddyfile Writer
