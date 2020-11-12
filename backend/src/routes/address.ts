@@ -32,6 +32,13 @@ router.delete(
   AddressController.deleteAddress
 );
 
+//Get Logs
+router.get(
+  "/logs/:id([0-9]+)",
+  [checkJwt, checkRole(["ADMIN"])],
+  AddressController.getLogForAddress
+);
+
 //Regen Caddyfile
 
 router.get(

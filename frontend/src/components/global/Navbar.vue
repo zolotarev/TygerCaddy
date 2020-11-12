@@ -79,10 +79,15 @@ export default {
                 text: "Backup/Restore",
                 icon: "mdi-application-export"
             },
-                        {
+            {
                 route: "config",
                 text: "Config",
                 icon: "mdi-timelapse"
+            },
+            {
+                route: "logs",
+                text: "Logs",
+                icon: "mdi-text-box-search-outline"
             },
             {
                 route: "restart",

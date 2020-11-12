@@ -2,9 +2,26 @@ export const logs = {
     state:{
         caddylogs: [],
         uwsgilogs: [],
+        currentlog:[]
     },
   
     actions: {
+      getCurrentLog({ commit }, addressId) {
+        this._vm.$http.get("address/logs/" + addressId).then(({
+            data
+          }) => {
+            if (data) {
+                commit('LOAD_CURRENT_LOG', data)
+              
+            }
+          })
+            .catch(() => {
+              commit('setSnack', {
+             snack: "Could not communicate with the backend!",
+             color: "error"
+              })
+            })
+        },
         getCaddyLogs({ commit }) {
           this._vm.$http.get("logs/caddy/").then(({
               data
@@ -39,6 +56,9 @@ export const logs = {
           },
     },
     mutations: {
+      LOAD_CURRENT_LOG(state,data){
+        state.currentlog = data
+      },
         GET_CADDY_LOGS(state, data) {
             state.caddylogs = data;
           },
@@ -47,6 +67,9 @@ export const logs = {
           },
     },
     getters: {
+      CurrentLogGetter(state){
+        return state.currentlog
+      },
       showCaddyLogs(state){
           return state.caddylogs
        },
