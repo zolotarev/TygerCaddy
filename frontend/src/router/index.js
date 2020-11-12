@@ -10,6 +10,7 @@ import Config from "../views/Config.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
 import InitialUser from "../views/InitialUser.vue";
+import Logs from "../views/Logs.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -65,6 +66,14 @@ const routes = [
     path: "/config",
     name: "Config",
     component: Config,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/logs",
+    name: "Logs",
+    component: Logs,
     meta: {
       requiresAuth: true
     }

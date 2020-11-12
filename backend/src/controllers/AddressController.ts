@@ -12,7 +12,22 @@ class AddressController {
     console.log(generate);
     res.send(generate)
   };
-
+  static getLogForAddress = async (req: Request, res: Response) =>{
+    //Get the ID from the url
+    const id: string = req.params.id;
+    const addressRepository = getRepository(Address);
+    var fs = require('fs');
+    try {
+      const address = await addressRepository.findOneOrFail(id);
+      console.log(address)
+      var logfile = require('/tygercaddy/backend/db/logs/' + address.address + '.json');
+      console.log(logfile)
+      res.send(logfile)
+    } catch (error) {
+      res.status(404).send("Address not found");
+    }
+    
+  };
   static listAll = async (req: Request, res: Response) => {
     //Get addresses from database
     const addressRepository = getRepository(Address);
