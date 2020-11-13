@@ -28,7 +28,7 @@ class AddressController {
       result = ndjsonToJsonText(log)
       res.send(result)
     } catch (error) {
-      res.status(404).send("Address not found");
+      res.status(404).send(error);
     } 
     
   };
