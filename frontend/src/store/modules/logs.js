@@ -16,8 +16,9 @@ export const logs = {
             commit('SET_LOG_LOADING', false);
           })
             .catch(() => {
+              commit('SET_LOG_LOADING', false);
               commit('setSnack', {
-             snack: "Could not communicate with the backend!",
+             snack: "Sorry there was a problem getting the logs!",
              color: "error"
               })
             })

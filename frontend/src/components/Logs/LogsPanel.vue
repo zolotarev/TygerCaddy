@@ -12,7 +12,8 @@
       no-gutters
     >
       <v-col class="d-none d-lg-block">
-        <h2 class="blue-grey--text darken-4">Logs</h2>
+        <h2 v-if="selectedDomain" class="blue-grey--text darken-4">Logs for: {{selectedDomain.address}}</h2>
+        <h2 v-else class="blue-grey--text darken-4">Logs</h2>
       </v-col>
       <v-col>
 <v-combobox
@@ -29,14 +30,16 @@
       </v-col>
 
         <v-col class="text-right">
-                            <v-btn rounded color="orange" :dark="!disabled" @click.stop="exportLog()" :disabled="disabled">
+                            <v-btn rounded color="orange" :dark="exportCheck()" @click.stop="exportLog()" :disabled="exportCheck()">
                                 <v-icon dark>mdi-file-download</v-icon>
                                 <div class="d-none d-lg-block">Download Logs</div>
                             </v-btn>
                         </v-col>
+                        {{exportCheck()}}
     </v-row>
 
       </v-card-title>
+
       <v-data-table
       dense
         :headers="headers" 
@@ -51,6 +54,7 @@
         }"
       class="elevation-1"
     >
+              <v-progress-linear v-show="loading" slot="progress" color="orange" indeterminate></v-progress-linear>
      <template
         v-slot:[`item.ts`]="{ item }"
       >
@@ -107,6 +111,13 @@ export default {
       this.disabled = true
         await this.$store.dispatch('getCurrentLog', event.id)
         this.disabled = false
+    },
+    exportCheck() {
+      if (this.currentLog && !this.loading){
+        return true
+      }else{
+        return false
+      }
     },
     itemRowBackground: function (item) {
       return item.level === "error" ? 'red lighten-4' : 'style-2'
