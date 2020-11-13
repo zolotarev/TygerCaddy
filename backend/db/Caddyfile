@@ -15,17 +15,24 @@
  } 
 plex.bytesense.biz { 
 	 reverse_proxy 10.10.200.11:32400 { 
- 
- 	 } 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 } 
+	 } 
+	 reverse_proxy /tv 10.10.200.24:9004 { 
+ 	 	 transport http { 
+ 	 	 	 tls_insecure_skip_verify 
+ 	 	 } 
+	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
  	 	 log {
  	 	 	 output file /tygercaddy/backend/db/logs/plex.bytesense.biz.json 
-
+			combined 
  	 	 	 format json 
  	 	 } 
 
@@ -38,7 +45,7 @@ connect.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -57,7 +64,7 @@ deluge.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -76,7 +83,7 @@ docker.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -95,7 +102,7 @@ down.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -114,7 +121,7 @@ hydra.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -133,7 +140,7 @@ jackett.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -152,7 +159,7 @@ movies.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -171,7 +178,7 @@ plexstats.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -190,7 +197,7 @@ requests.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -207,12 +214,9 @@ tv.bytesense.biz {
  	 	 	 tls_insecure_skip_verify 
  	 	 } 
 	 } 
-	 reverse_proxy /plex 10.10.200.11:32400 { 
- 
- 	} 
-  	 tls { 
+ 	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -231,7 +235,7 @@ proxy.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -250,7 +254,7 @@ center.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -269,7 +273,7 @@ server.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -288,7 +292,7 @@ apps.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -307,7 +311,7 @@ gitlab.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -326,7 +330,7 @@ registry.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -345,7 +349,7 @@ status.bytesense.biz {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -364,7 +368,7 @@ api.bytesense.tech {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }
@@ -383,7 +387,7 @@ code.bytesense.tech {
 	 } 
  	 tls { 
 	 	 	 issuer acme { 
-	 	 	 	 dns cloudflare KqH8rnskcQim0jbI5B0rIYvarq6OuWw5WLS9s2x6
+	 	 	 	 dns cloudflare C9HhmeGw07_s6NvonM2z4xlataHgc7hJgbEcIW1y
  	 	 	 	 resolvers 8.8.8.8 
 	 	 	 } 
 	 }

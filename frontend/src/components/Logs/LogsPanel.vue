@@ -12,7 +12,8 @@
       no-gutters
     >
       <v-col class="d-none d-lg-block">
-        <h2 class="blue-grey--text darken-4">Logs</h2>
+        <h2 v-if="selectedDomain" class="blue-grey--text darken-4">Logs for: {{selectedDomain.address}}</h2>
+        <h2 v-else class="blue-grey--text darken-4">Logs</h2>
       </v-col>
       <v-col>
 <v-combobox
@@ -27,76 +28,39 @@
           dense
         ></v-combobox>
       </v-col>
-      <v-col class="text-right">
-      </v-col>
+
+        <v-col class="text-right">
+                            <v-btn rounded color="orange" :dark="exportCheck()" @click.stop="exportLog()" :disabled="exportCheck()">
+                                <v-icon dark>mdi-file-download</v-icon>
+                                <div class="d-none d-lg-block">Download Logs</div>
+                            </v-btn>
+                        </v-col>
+                        {{exportCheck()}}
     </v-row>
 
       </v-card-title>
+
       <v-data-table
+      dense
         :headers="headers" 
         :items="currentLog" 
         :loading="loading" 
+        loading-text="Loading logs... Please wait"
         :search="search"
         :options="options"
+        :item-class="itemRowBackground"
         :footer-props="{
           itemsPerPageOptions: itemsPerPageOptions
         }"
       class="elevation-1"
     >
- <template
-        v-slot:[`item.tls`]="{ item }"
+              <v-progress-linear v-show="loading" slot="progress" color="orange" indeterminate></v-progress-linear>
+     <template
+        v-slot:[`item.ts`]="{ item }"
       >
-        <v-icon medium v-if="item.tls">mdi-check</v-icon>
-          <v-icon medium v-else>mdi-close</v-icon>
-      </template>
- <template
-        v-slot:[`item.staging`]="{ item }"
-      >
-        <v-icon medium v-if="item.staging">mdi-check</v-icon>
-          <v-icon medium v-else>mdi-close</v-icon>
-      </template>
+        {{ item.ts | formatUnix }}
 
-         <template
-        v-slot:[`item.app`]="{ item }"
-      >
-        {{ item.app.name }}
       </template>
- <template
-        v-slot:[`item.actions`]="{ item }"
-      >
-                <v-tooltip top> 
-            <template v-slot:activator="{ on }">
-            <v-btn icon class="mr-0" color="orange" v-on="on" @click="detailItem(item)"> 
-              <v-icon>mdi-clipboard-list</v-icon> 
-            </v-btn> 
-            </template>
-              <span>View Details</span> 
-            </v-tooltip> 
-          <v-tooltip top> 
-            <template v-slot:activator="{ on }">
-            <v-btn icon class="mr-0" color="orange" v-on="on" @click="urlproxy(item)"> 
-              <v-icon>mdi-domain-off</v-icon> 
-            </v-btn> 
-            </template>
-              <span>Add URL proxy</span> 
-            </v-tooltip> 
-            <v-tooltip top> 
-              <template v-slot:activator="{ on }">
-              <v-btn icon class="mr-0" color="orange" @click="editItem(item)" v-on="on"> 
-                <v-icon>mdi-pencil</v-icon> 
-              </v-btn> 
-              </template>
-              <span>Edit Address</span> 
-            </v-tooltip>
-            <v-tooltip top> 
-              <template v-slot:activator="{ on }">
-              <v-btn icon class="mr-0" color="orange" @click="deleteItem(item)" v-on="on"> 
-                <v-icon>mdi-delete</v-icon> 
-              </v-btn> 
-              </template>
-              <span>Delete Address</span> 
-            </v-tooltip>
- </template>
 
       <template v-slot:no-results>
         <v-alert :value="true" color="error" icon="warning">
@@ -113,40 +77,79 @@ export default {
   data() {
     return {
         selectedDomain:"",
-        options:{rowsPerPage: 30 },
-        itemsPerPageOptions: [10, 20, 30, 40, 50, 100],
-        loading: false,
+        options:{rowsPerPage: 50 },
+        itemsPerPageOptions: [50, 100, 150, 200],
+        disabled: true,
         search: '',
         headers: [
           {
-            text: 'ID',
+            text: 'Timestamp',
             align: 'left',
             sortable: false,
-            value: 'id'
+            value: 'ts'
           },
-          { text: 'Address', value: 'address' },
-          { text: 'TLS', value: 'tls' },
-          { text: 'Staging', value: 'staging' },
-          { text: 'Application', value: 'app' },
-          { text: 'Actions', value: 'actions', sortable: false }
+          { text: 'Level', value: 'level' },
+          { text: 'Status', value: 'status' },
+          { text: 'Remote Address', value: 'request.remote_addr' },
+          { text: 'Method', value: 'request.method' },
+          { text: 'User-Agent', value: 'request.headers.User-Agent', sortable: false }
         ],
     };
   },
   components:{
   },
+  filters:{
+    formatUnix: function (value) {
+      var moment = require('moment');
+    if (value) {
+      return moment.unix(value).format('DD-MM-YYYY HH:mm:ss')
+    }
+  }
+  },
   methods: {
     async loadLogfile(event){
-        this.loading = true;
-        console.log(event)
-        console.log("Address " + event.id + " with name: " + event.address + " Selected")
+      this.disabled = true
         await this.$store.dispatch('getCurrentLog', event.id)
-        this.loading = false; 
-    }
+        this.disabled = false
+    },
+    exportCheck() {
+      if (this.currentLog && !this.loading){
+        return true
+      }else{
+        return false
+      }
+    },
+    itemRowBackground: function (item) {
+      return item.level === "error" ? 'red lighten-4' : 'style-2'
+    },
+    exportLog() {
+            let content = JSON.stringify(this.currentLog)
+            if (content === null) {
+                this.$store.dispatch('setSnack', {
+                    snack: "There was a problem getting the log data.",
+                    color: "error"
+                });
+                return;
+            }
+
+            const blob = new Blob([content], {
+                type: `application/json`
+            });
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = this.selectedDomain.address + '-export.json';
+            link.click();
+            this.$store.dispatch('fireSnack', {
+                snack: "Your log export has completed.",
+                color: "success"
+            });
+        },
   },
   computed: {
       ...mapGetters({
       addresses: 'showAddresses', 
-      currentLog: 'CurrentLogGetter'
+      currentLog: 'CurrentLogGetter',
+      loading: 'getLogLoading'
     })
   },
 
