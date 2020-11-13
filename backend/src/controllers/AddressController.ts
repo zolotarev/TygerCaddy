@@ -4,7 +4,7 @@ import { validate } from "class-validator";
 
 import { Address } from "../entity/Address";
 import { rebuildCaddyfile } from "../middlewares/caddy";
-
+import { ndjsonToJsonText } from "ndjson-to-json-text";
 class AddressController {
 
   static generateCaddyfile = async (req: Request, res: Response) =>{
@@ -17,15 +17,19 @@ class AddressController {
     const id: string = req.params.id;
     const addressRepository = getRepository(Address);
     var fs = require('fs');
-    try {
+    const path = require("path");
+    var result: any;
+      
+     try {
       const address = await addressRepository.findOneOrFail(id);
-      console.log(address)
-      var logfile = require('/tygercaddy/backend/db/logs/' + address.address + '.json');
-      console.log(logfile)
-      res.send(logfile)
+      var result: any;
+      var log = fs.readFileSync(path.resolve(__dirname, '../../db/logs/' + address.address + '.json'), 'UTF8')
+
+      result = ndjsonToJsonText(log)
+      res.send(result)
     } catch (error) {
       res.status(404).send("Address not found");
-    }
+    } 
     
   };
   static listAll = async (req: Request, res: Response) => {
