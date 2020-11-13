@@ -20,7 +20,8 @@ export const checkCaddy = async () => {
 };
 
 export const checkLogDir = async (address) => {
-    var directory = "/tygercaddy/backend/db/logs/" + address +"/"
+
+    var directory = "/tygercaddy/backend/db/logs/"
 
     if (fs.existsSync(directory)) {
         console.log('Log Directory exists!');
