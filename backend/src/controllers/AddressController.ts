@@ -23,7 +23,7 @@ class AddressController {
      try {
       const address = await addressRepository.findOneOrFail(id);
       var result: any;
-      var log = fs.readFileSync(path.resolve(__dirname, '../../db/logs/' + address.address + '.json'), 'UTF8')
+      var log = fs.readFileSync(path.resolve(__dirname, '../../backend/db/logs/' + address.address + '.json'), 'UTF8')
 
       result = ndjsonToJsonText(log)
       res.send(result)
