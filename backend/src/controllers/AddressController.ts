@@ -18,12 +18,13 @@ class AddressController {
     const addressRepository = getRepository(Address);
     var fs = require('fs');
     const path = require("path");
+    const logPath = process.env.LOG_PATH
     var result: any;
       
      try {
       const address = await addressRepository.findOneOrFail(id);
       var result: any;
-      var log = fs.readFileSync(path.resolve(__dirname, '../../backend/db/logs/' + address.address + '.json'), 'UTF8')
+      var log = fs.readFileSync(path.resolve(__dirname, logPath + address.address + '.json'), 'UTF8')
 
       result = ndjsonToJsonText(log)
       res.send(result)
