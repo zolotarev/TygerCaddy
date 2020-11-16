@@ -35,7 +35,7 @@
                                 <div class="d-none d-lg-block">Download Logs</div>
                             </v-btn>
                         </v-col>
-                        {{exportCheck()}}
+                   
     </v-row>
 
       </v-card-title>
@@ -114,9 +114,9 @@ export default {
     },
     exportCheck() {
       if (this.currentLog && !this.loading){
-        return true
-      }else{
         return false
+      }else{
+        return true
       }
     },
     itemRowBackground: function (item) {
