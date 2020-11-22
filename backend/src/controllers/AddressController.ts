@@ -4,7 +4,7 @@ import { validate } from "class-validator";
 
 import { Address } from "../entity/Address";
 import { rebuildCaddyfile } from "../middlewares/caddy";
-
+import { ndjsonToJsonText } from "ndjson-to-json-text";
 class AddressController {
 
   static generateCaddyfile = async (req: Request, res: Response) =>{
@@ -12,7 +12,27 @@ class AddressController {
     console.log(generate);
     res.send(generate)
   };
+  static getLogForAddress = async (req: Request, res: Response) =>{
+    //Get the ID from the url
+    const id: string = req.params.id;
+    const addressRepository = getRepository(Address);
+    var fs = require('fs');
+    const path = require("path");
+    const logPath = process.env.LOG_PATH
+    var result: any;
+      
+     try {
+      const address = await addressRepository.findOneOrFail(id);
+      var result: any;
+      var log = fs.readFileSync(path.resolve(__dirname, logPath + address.address + '.json'), 'UTF8')
 
+      result = ndjsonToJsonText(log)
+      res.send(result)
+    } catch (error) {
+      res.status(404).send(error);
+    } 
+    
+  };
   static listAll = async (req: Request, res: Response) => {
     //Get addresses from database
     const addressRepository = getRepository(Address);
