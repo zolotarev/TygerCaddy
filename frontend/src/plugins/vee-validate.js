@@ -32,7 +32,7 @@ extend('domain', {
   validate(value){
     if (value){
       //eslint-disable-next-line
-      return /^([a-z0-9]+\.)*[a-z0-9]+\.[a-z]+/.test(value)
+      return /^([a-z0-9]+\.)*[a-z0-9-]+\.[a-z]+/.test(value)
     }
   }
 });
