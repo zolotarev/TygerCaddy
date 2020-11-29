@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
-
+import { rebuildCaddyfile } from "../middlewares/caddy";
 import { App } from "../entity/App";
-import { newAddressGenerate } from "../middlewares/updateCaddy";
 class AppController {
   static listAll = async (req: Request, res: Response) => {
     //Get apps from database
@@ -92,7 +91,7 @@ class AppController {
       await appRepository.save(newApp);
       if (newApp.address.length !== 0) {
         console.log("New Caddyfile Needed!");
-        await newAddressGenerate();
+        await rebuildCaddyfile();
       }
     } catch (e) {
       res.status(409).send("App already in use");
