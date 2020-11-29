@@ -8,12 +8,17 @@ class UserController {
   static listAll = async (req: Request, res: Response) => {
     //Get users from database
     const userRepository = getRepository(User);
-    const users = await userRepository.find({
-      select: ["id", "name", "role"], //We dont want to send the passwords on response
-    });
-
-    //Send the users object
-    res.send(users);
+    try {
+      const users = await userRepository.find({
+        select: ["id", "name", "role"], //We dont want to send the passwords on response
+      });
+  
+      //Send the users object
+      res.send(users);
+    } catch {
+      res.status(404).send("User not found");
+    }
+    
   };
 
   static getMe = async (req: Request, res: Response) => {
