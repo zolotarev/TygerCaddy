@@ -7,7 +7,7 @@ import * as helmet from "helmet";
 import * as cors from "cors";
 import routes from "./routes";
 import { checkCaddy } from "./middlewares/caddy";
-
+const fileUpload = require('express-fileupload');
 //Connects to the Database -> then starts the express
 
 const config:any = {
@@ -47,6 +47,7 @@ const config:any = {
     //Set all routes from routes folder
     app.use("/", routes);
 
+    app.use(fileUpload())
     app.listen(3000, () => {
       console.log("Server started on port 3000!");
     });
