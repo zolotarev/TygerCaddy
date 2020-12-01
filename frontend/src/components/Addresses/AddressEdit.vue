@@ -36,6 +36,12 @@
               label="Use HTTPS Staging?"
               v-model="item.staging"
             ></v-switch>
+                              <v-switch
+              color="orange"
+              class="px-3"
+              label="Force HTTP Challenge?"
+              v-model="item.forceHTTPChallenge"
+            ></v-switch>
             <validation-provider
                   v-slot="{ errors }"
                   name="app"
@@ -105,6 +111,7 @@ export default {
           tls: this.item.tls,
           staging: this.item.staging,
           appId: this.item.app.id,
+          forceHTTPChallenge: this.item.forceHTTPChallenge
       }
         this.$store.dispatch('updateAddress', data)
         this.close()

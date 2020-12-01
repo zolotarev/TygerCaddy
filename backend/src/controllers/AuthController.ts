@@ -49,7 +49,7 @@ class AuthController {
     );
 
     // Send the jwt in the response
-    res.send(data);
+    return res.send(data);
   };
 
   static changePassword = async (req: Request, res: Response) => {
@@ -59,7 +59,7 @@ class AuthController {
     // Get parameters from the body
     const { oldPassword, newPassword } = req.body;
     if (!(oldPassword && newPassword)) {
-      res.status(400).send();
+      return res.status(400).send();
     }
 
     // Get user from the database
@@ -68,27 +68,25 @@ class AuthController {
     try {
       user = await userRepository.findOneOrFail(id);
     } catch (id) {
-      res.status(401).send();
+      return res.status(401).send();
     }
 
     // Check if old password matches
     if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
-      res.status(401).send();
-      return;
+      return res.status(401).send();
     }
 
     // Validate the model (Password length)
     user.password = newPassword;
     const errors = await validate(user);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
     }
     // Hash the new password and save
     user.hashPassword();
     userRepository.save(user);
 
-    res.status(204).send();
+    return res.status(204).send();
   };
 }
 

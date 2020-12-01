@@ -65,7 +65,12 @@
         <v-icon medium v-if="item.staging">mdi-check</v-icon>
           <v-icon medium v-else>mdi-close</v-icon>
       </template>
-
+<template
+        v-slot:[`item.forceHTTPChallenge`]="{ item }"
+      >
+        <v-icon medium v-if="item.forceHTTPChallenge">mdi-check</v-icon>
+          <v-icon medium v-else>mdi-close</v-icon>
+      </template>
          <template
         v-slot:[`item.app`]="{ item }"
       >
@@ -152,6 +157,7 @@ export default {
           { text: 'Address', value: 'address' },
           { text: 'TLS', value: 'tls' },
           { text: 'Staging', value: 'staging' },
+          { text: 'Force HTTP Challenge', value: 'forceHTTPChallenge' },
           { text: 'Application', value: 'app' },
           { text: 'Actions', value: 'actions', sortable: false }
         ],

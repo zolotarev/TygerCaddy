@@ -36,6 +36,12 @@
               label="Use HTTPS Staging?"
               v-model="formData.staging"
             ></v-switch>
+            <v-switch
+              color="orange"
+              class="px-3"
+              label="Force HTTP Challenge"
+              v-model="formData.forceHTTPChallenge"
+            ></v-switch>
             <validation-provider
                   v-slot="{ errors }"
                   name="app"
@@ -77,6 +83,7 @@ export default {
         tls: false,
         staging: false,
         app: "",
+        forceHTTPChallenge:false
       },
       
     };
@@ -115,6 +122,7 @@ export default {
               tls: false,
               staging: false,
               app: "",
+              forceHTTPChallenge:false
             }
     },
     onSubmit() { 
@@ -123,6 +131,7 @@ export default {
           tls: this.formData.tls,
           staging: this.formData.staging,
           app: this.formData.app.id,
+          forceHTTPChallenge: this.formData.forceHTTPChallenge
       }
       
       this.$store.dispatch('addAddress', data)

@@ -109,8 +109,7 @@ router.beforeEach((to, from, next) => {
       if(localStorage.email == "admin@admin.com" && to.name !== "InitialUser"){
         console.log(localStorage.email)
         console.log(to)
-        router.push('/initialUser')
-        return
+        return router.push('/initialUser')
       }else {
         next()
         return

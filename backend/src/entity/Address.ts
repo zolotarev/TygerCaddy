@@ -28,6 +28,9 @@ export class Address {
   @Column()
   staging: boolean;
 
+  @Column({ default: false })
+  forceHTTPChallenge: boolean;
+
   @Column()
   @CreateDateColumn()
   createdAt: Date;

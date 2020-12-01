@@ -10,9 +10,9 @@ class DNSController {
     const DNSRepository = getRepository(DNSProvider);
     try {
       const DNS = await DNSRepository.find();
-      res.send(DNS);
+      return res.send(DNS);
     } catch (error) {
-      res.status(404).send("DNS Providers not found");
+      return res.status(404).send("DNS Providers not found");
     }
   };
 }

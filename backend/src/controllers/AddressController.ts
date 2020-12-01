@@ -10,7 +10,7 @@ class AddressController {
   static generateCaddyfile = async (req: Request, res: Response) =>{
     let generate = await rebuildCaddyfile();
     console.log(generate);
-    res.send(generate)
+    return res.send(generate)
   };
   static getLogForAddress = async (req: Request, res: Response) =>{
     //Get the ID from the url
@@ -27,9 +27,9 @@ class AddressController {
       var log = fs.readFileSync(path.resolve(__dirname, logPath + address.address + '.json'), 'UTF8')
 
       result = ndjsonToJsonText(log)
-      res.send(result)
+      return res.send(result)
     } catch (error) {
-      res.status(404).send(error);
+      return res.status(404).send(error);
     } 
     
   };
@@ -41,7 +41,7 @@ class AddressController {
     });
 
     //Send the addresses object
-    res.send(addresses);
+    return res.send(addresses);
   };
 
   static getOneById = async (req: Request, res: Response) => {
@@ -52,26 +52,26 @@ class AddressController {
     const addressRepository = getRepository(Address);
     try {
       const address = await addressRepository.findOneOrFail(id);
-      res.send(address)
+      return res.send(address)
     } catch (error) {
-      res.status(404).send("Address not found");
+      return res.status(404).send("Address not found");
     }
   };
 
   static newAddress = async (req: Request, res: Response) => {
     //Get parameters from the body
-    let { address, tls, staging, app } = req.body;
+    let { address, tls, staging, app, forceHTTPChallenge } = req.body;
     let newAddress = new Address();
     newAddress.address = address;
     newAddress.tls = tls;
     newAddress.staging = staging;
     newAddress.app = app;
+    newAddress.forceHTTPChallenge = forceHTTPChallenge
 
     //Validade if the parameters are ok
     const errors = await validate(newAddress);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
     }
 
     //Try to save. If fails, the addressname is already in use
@@ -80,12 +80,11 @@ class AddressController {
       await addressRepository.save(newAddress);
       await rebuildCaddyfile();
     } catch (e) {
-      res.status(409).send("Address already in use");
-      return;
+      return res.status(409).send("Address already in use");
     }
 
     //If all ok, send 201 response
-    res.status(201).send("Address created");
+    return res.status(201).send("Address created");
   };
 
   static editAddress = async (req: Request, res: Response) => {
@@ -93,7 +92,7 @@ class AddressController {
     const id = req.params.id;
 
     //Get values from the body
-    let { address, tls, staging, appId } = req.body;
+    let { address, tls, staging, appId, forceHTTPChallenge } = req.body;
     //Try to find address on database
     const addressRepository = getRepository(Address);
     let editAddress;
@@ -101,8 +100,8 @@ class AddressController {
       editAddress = await addressRepository.findOneOrFail(id);
     } catch (error) {
       //If not found, send a 404 response
-      res.status(404).send("Address not found");
-      return;
+      return res.status(404).send("Address not found");
+ 
     }
 
     //Validate the new values on model
@@ -110,10 +109,10 @@ class AddressController {
     editAddress.tls = tls;
     editAddress.staging = staging;
     editAddress.app = appId;
+    editAddress.forceHTTPChallenge = forceHTTPChallenge
     const errors = await validate(editAddress);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
     }
 
     //Try to safe, if fails, that means addressname already in use
@@ -121,11 +120,10 @@ class AddressController {
       await addressRepository.save(editAddress);
       await rebuildCaddyfile();
     } catch (e) {
-      res.status(409).send("Address already in use");
-      return;
+      return res.status(409).send("Address already in use");
     }
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+    return res.status(204).send();
   };
 
   static deleteAddress = async (req: Request, res: Response) => {
@@ -137,13 +135,12 @@ class AddressController {
     try {
       address = await addressRepository.findOneOrFail(id);
     } catch (error) {
-      res.status(404).send("Address not found");
-      return;
+      return res.status(404).send("Address not found");
     }
     addressRepository.delete(id);
     await rebuildCaddyfile();
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+    return res.status(204).send();
   };
 }
 

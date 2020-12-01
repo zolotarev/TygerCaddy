@@ -33,7 +33,9 @@ const config:any = {
     console.log("Running environment for " + process.env.NODE_ENV)
     createConnection(config)
   .then(async connection => {
+    await connection.query('PRAGMA foreign_keys=OFF');
     await connection.synchronize();
+    await connection.query('PRAGMA foreign_keys=ON');
     // Create a new express application instance
     const app = express();
     checkCaddy();

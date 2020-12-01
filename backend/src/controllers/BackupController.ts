@@ -54,7 +54,8 @@ class BackupController {
             address: address.address,
             tls: address.tls,
             staging: address.staging,
-            app: newAppID.id
+            app: newAppID.id,
+            forceHTTPChallenge: 0
          }
          newAddresses.push(currentAddress)
         });
@@ -92,7 +93,7 @@ class BackupController {
           )
           .execute()
         }
-        res.status(201).send("Backup Restored");
+        return res.status(201).send("Backup Restored");
       }
   }
   static tygercaddyRestore = async (req: Request, res: Response) => {
@@ -136,7 +137,7 @@ class BackupController {
       endpoints: endpoints
     }
 
-    res.status(200).send(output)
+    return res.status(200).send(output)
     
   }
 }

@@ -14,7 +14,7 @@ class EndpointController {
     });
 
     //Send the endpoints object
-    res.send(endpoints);
+    return res.send(endpoints);
   };
 
   static getOneById = async (req: Request, res: Response) => {
@@ -25,9 +25,9 @@ class EndpointController {
     const endpointRepository = getRepository(Endpoint);
     try {
       const endpoint = await endpointRepository.findOneOrFail(id, {relations:['app', 'address']});
-      res.send(endpoint)
+      return res.send(endpoint)
     } catch (error) {
-      res.status(404).send("Endpoint not found");
+      return res.status(404).send("Endpoint not found");
     }
   };
 
@@ -45,9 +45,9 @@ class EndpointController {
             
           }
           );
-        res.send(endpoint)
+          return res.send(endpoint)
       } catch (error) {
-        res.status(404).send("Endpoint not found");
+        return res.status(404).send("Endpoint not found");
       }
   };
   static newEndpoint = async (req: Request, res: Response) => {
@@ -61,8 +61,7 @@ class EndpointController {
     //Validade if the parameters are ok
     const errors = await validate(newEndpoint);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
     }
     const endpointRepository = getRepository(Endpoint);  
 
@@ -73,12 +72,11 @@ class EndpointController {
       await rebuildCaddyfile();
     } catch (e) {
         console.log(e)
-      res.status(409).send("Endpoint already in use");
-      return;
+        return res.status(409).send("Endpoint already in use");
     }
 
     //If all ok, send 201 response
-    res.status(201).send("Endpoint created");
+    return res.status(201).send("Endpoint created");
   };
 
   static editEndpoint = async (req: Request, res: Response) => {
@@ -94,8 +92,7 @@ class EndpointController {
         editEndpoint = await endpointRepository.findOneOrFail(id);
     } catch (error) {
       //If not found, send a 404 response
-      res.status(404).send("Endpoint not found");
-      return;
+      return res.status(404).send("Endpoint not found");
     }
 
     //Validate the new values on model
@@ -104,8 +101,7 @@ class EndpointController {
     editEndpoint.app = app;
     const errors = await validate(editEndpoint);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
     }
 
     //Try to safe, if fails, that means addressname already in use
@@ -113,11 +109,10 @@ class EndpointController {
       await endpointRepository.save(editEndpoint);
       await rebuildCaddyfile();
     } catch (e) {
-      res.status(409).send("Endpoint already in use");
-      return;
+      return res.status(409).send("Endpoint already in use");
     }
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+    return res.status(204).send();
   };
 
   static deleteEndpoint = async (req: Request, res: Response) => {
@@ -129,13 +124,12 @@ class EndpointController {
     try {
         endpoint = await endpointRepository.findOneOrFail(id);
     } catch (error) {
-      res.status(404).send("Endpoint not found");
-      return;
+      return res.status(404).send("Endpoint not found");
     }
     endpointRepository.delete(id);
     await rebuildCaddyfile();
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+    return res.status(204).send();
   };
 }
 

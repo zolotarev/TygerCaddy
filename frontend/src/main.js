@@ -24,20 +24,23 @@ if(API_URL){
 }
 
 axios.defaults.baseURL = URL;
-axios.defaults.headers.common['Authorization'] = token;
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.interceptors.response.use(function (response) {
-  return response;
-}, function (error) {
-  console.log(error.response.status)
-  if (401 === error.response.status) {
-    store.commit('setSnack', {snack: "It looks like your token expired!", color: "error"})
-    store.dispatch('logout')
-  } else {
-      return Promise.reject(error);
-  }
-});
+if (token){
+  axios.defaults.headers.common['Authorization'] = token;
+}
 
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.interceptors.response.use(function (response){
+  return Promise.resolve(response);
+}, function (err){
+  if (401 === err.response.status) {
+    store.dispatch('logout')
+    store.commit('setSnack', {snack: "It looks like your token expired!", color: "error"})
+  } else {
+      return Promise.reject(err);
+  }
+    
+  }
+);
 
 Vue.component('validation-provider', ValidationProvider);
 Vue.component('validation-observer', ValidationObserver);

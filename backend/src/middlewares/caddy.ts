@@ -156,13 +156,24 @@ export const generateTlsBlock = async (address) => {
     let config = await getConfig();
 
     if (config.use_dns_verification && config.dns_api_token && config.dns_provider_name){
-        tlsBlock =
+        if(address.forceHTTPChallenge){
+            tlsBlock =
+            " \t tls { \n" +
+            "\t \t \t issuer acme { \n"+
+            "\t \t \t \t disable_tlsalpn_challenge \n "+
+            "\t \t \t \t resolvers 8.8.8.8 \n" +
+            "\t \t \t } \n"+
+            "\t }" 
+        }else{
+            tlsBlock =
             " \t tls { \n" +
             "\t \t \t issuer acme { \n"+
             "\t \t \t \t dns " + config.dns_provider_name.name + " " + config.dns_api_token + "\n "+
             "\t \t \t \t resolvers 8.8.8.8 \n" +
             "\t \t \t } \n"+
             "\t }" 
+        }
+        
       } else {
         tlsBlock = ""
       }

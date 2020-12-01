@@ -14,9 +14,9 @@ class UserController {
       });
   
       //Send the users object
-      res.send(users);
+      return res.send(users);
     } catch {
-      res.status(404).send("User not found");
+      return res.status(404).send("User not found");
     }
     
   };
@@ -35,9 +35,9 @@ class UserController {
           "updatedAt",
         ], //We dont want to send the password on response
       });
-      res.status(200).send(user);
+      return res.status(200).send(user);
     } catch (error) {
-      res.status(404).send("User not found");
+      return res.status(404).send("User not found");
     }
   };
 
@@ -52,7 +52,7 @@ class UserController {
         select: ["id", "name", "role"], //We dont want to send the password on response
       });
     } catch (error) {
-      res.status(404).send("User not found");
+      return res.status(404).send("User not found");
     }
   };
 
@@ -77,8 +77,7 @@ class UserController {
     //Validade if the parameters are ok
     const errors = await validate(user);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
     }
 
     //Hash the password, to securely store on DB
@@ -89,12 +88,11 @@ class UserController {
     try {
       await userRepository.save(user);
     } catch (e) {
-      res.status(409).send("username already in use");
-      return;
+      return res.status(409).send("username already in use");
     }
 
     //If all ok, send 201 response
-    res.status(201).send("User created");
+    return res.status(201).send("User created");
   };
 
   static editUser = async (req: Request, res: Response) => {
@@ -111,8 +109,7 @@ class UserController {
       user = await userRepository.findOneOrFail(id);
     } catch (error) {
       //If not found, send a 404 response
-      res.status(404).send("User not found");
-      return;
+      return res.status(404).send("User not found");
     }
 
     //Validate the new values on model
@@ -121,19 +118,19 @@ class UserController {
     user.email = email;
     const errors = await validate(user);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
+
     }
 
     //Try to safe, if fails, that means username already in use
     try {
       await userRepository.save(user);
     } catch (e) {
-      res.status(409).send("username already in use");
-      return;
+      return res.status(409).send("username already in use");
+
     }
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+    return res.status(204).send();
   };
   static initialUser = async (req: Request, res: Response) => {
     //Get the ID from the url
@@ -148,13 +145,13 @@ class UserController {
       user = await userRepository.findOneOrFail(id);
     } catch (error) {
       //If not found, send a 404 response
-      res.status(404).send("User not found");
-      return;
+      return res.status(404).send("User not found");
+
     }
     // Check if old password matches
     if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
-      res.status(401).send();
-      return;
+      return res.status(401).send();
+
     }
     console.log(user.checkIfUnencryptedPasswordIsValid(oldPassword))
     //Validate the new values on model
@@ -164,8 +161,7 @@ class UserController {
 
     const errors = await validate(user);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
     }
 
     user.hashPassword();
@@ -176,7 +172,7 @@ class UserController {
     }
     
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+    return res.status(204).send();
   };
   static deleteUser = async (req: Request, res: Response) => {
     //Get the ID from the url
@@ -187,13 +183,12 @@ class UserController {
     try {
       user = await userRepository.findOneOrFail(id);
     } catch (error) {
-      res.status(404).send("User not found");
-      return;
+      return res.status(404).send("User not found");
     }
     userRepository.delete(id);
 
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+    return res.status(204).send();
   };
 }
 

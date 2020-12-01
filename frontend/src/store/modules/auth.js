@@ -45,6 +45,7 @@ export const auth = {
           })
           .catch(err => {
             commit('auth_error')
+            console.log(err)
             commit('setSnack', { snack: "Oh dear, that didn't work. Check your Email and Password.", color: "error" })
             localStorage.clear()
             reject(err)

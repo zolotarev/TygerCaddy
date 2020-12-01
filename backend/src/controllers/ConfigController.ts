@@ -16,9 +16,9 @@ class ConfigController {
       const config = await configRepository.findOneOrFail(id, {
         relations: ["dns_provider_name"],
       });
-      res.send(config);
+      return res.send(config);
     } catch (error) {
-      res.status(404).send("Config not found");
+      return res.status(404).send("Config not found");
     }
   };
 
@@ -44,8 +44,7 @@ class ConfigController {
       
     } catch (error) {
       //If not found, send a 404 response
-      res.status(404).send("Config not found");
-      return;
+      return res.status(404).send("Config not found");
     }
 
     //Validate the new values on model
@@ -58,20 +57,18 @@ class ConfigController {
 
     const errors = await validate(config);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
-    }
+      return res.status(400).send(errors);
+      return    }
 
     try {
       await configRepository.save(config);
       rebuildCaddyfile();
     } catch (e) {
       console.log(e);
-      res.status(409).send("Config already in use");
-      return;
+      return res.status(409).send("Config already in use");
     }
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+    return res.status(204).send();
   };
 }
 

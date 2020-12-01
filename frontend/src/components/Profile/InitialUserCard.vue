@@ -133,6 +133,7 @@ export default {
           this.$store.commit('setSnack',  { snack: "Email address must be changed", color: "error" })
         }
         this.$store.dispatch('initialUser', data)
+        this.$router.push('login')
 
       }
     }

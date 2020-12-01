@@ -10,7 +10,7 @@ class AppController {
     const apps = await appRepository.find();
 
     //Send the apps object
-    res.send(apps);
+    return res.send(apps);
   };
 
   static getOneById = async (req: Request, res: Response) => {
@@ -22,7 +22,7 @@ class AppController {
     try {
       const app = await appRepository.findOneOrFail(id);
     } catch (error) {
-      res.status(404).send("App not found");
+      return res.status(404).send("App not found");
     }
   };
 
@@ -38,8 +38,7 @@ class AppController {
     //Validade if the parameters are ok
     const errors = await validate(app);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
     }
 
     //Try to save. If fails, the appname is already in use
@@ -47,12 +46,11 @@ class AppController {
     try {
       await appRepository.save(app);
     } catch (e) {
-      res.status(409).send({error:"App already in use"});
-      return;
+      return res.status(409).send({error:"App already in use"});
     }
 
     //If all ok, send 201 response
-    res.status(201).send("App created");
+    return res.status(201).send("App created");
   };
 
   static editApp = async (req: Request, res: Response) => {
@@ -71,8 +69,7 @@ class AppController {
       });
     } catch (error) {
       //If not found, send a 404 response
-      res.status(404).send("App not found");
-      return;
+      return res.status(404).send("App not found");
     }
 
     //Validate the new values on model
@@ -82,8 +79,7 @@ class AppController {
     newApp.verify_ssl = verify_ssl;
     const errors = await validate(newApp);
     if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
     }
 
     //Try to safe, if fails, that means appname already in use
@@ -94,11 +90,10 @@ class AppController {
         await rebuildCaddyfile();
       }
     } catch (e) {
-      res.status(409).send("App already in use");
-      return;
+      return res.status(409).send("App already in use");
     }
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+    return res.status(204).send();
   };
 
   static deleteApp = async (req: Request, res: Response) => {
@@ -110,13 +105,12 @@ class AppController {
     try {
       app = await appRepository.findOneOrFail(id);
     } catch (error) {
-      res.status(404).send("App not found");
-      return;
+      return res.status(404).send("App not found");
     }
     appRepository.delete(id);
 
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+    return res.status(204).send();
   };
 }
 

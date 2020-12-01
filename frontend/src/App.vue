@@ -26,7 +26,7 @@ export default {
         }
     },
     created: function () {
-        this.$http.interceptors.response.use(undefined, function (err) {
+/*         this.$http.interceptors.response.use(undefined, function (err) {
             return new Promise(function (resolve, reject) {
                 if (err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
                     resolve
@@ -35,8 +35,9 @@ export default {
                 reject
                 throw err;
             });
-        });
-        console.log("API Location: " + getEnv('VUE_APP_API_URL'))
+        });*/
+        console.log("API Location: " + getEnv('VUE_APP_API_URL')) 
+
     },
     data: () => ({
 

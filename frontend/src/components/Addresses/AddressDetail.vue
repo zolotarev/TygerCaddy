@@ -18,6 +18,9 @@
             <v-layout row justify-space-between>
               Uses TLS Staging: {{ item.staging }}
             </v-layout>
+                        <v-layout row justify-space-between>
+              Force HTTP Challenge: {{ item.forceHTTPChallenge }}
+            </v-layout>
             <v-layout row justify-space-between v-if="item.app">
               Proxies to: {{ item.app.name }}
             </v-layout>
