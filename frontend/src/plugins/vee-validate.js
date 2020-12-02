@@ -1,11 +1,14 @@
-import { required, email, max } from "vee-validate/dist/rules";
+import { required,  email, max, required_if } from "vee-validate/dist/rules";
 import { extend } from "vee-validate";
 
 extend("required", {
   ...required,
   message: "This field is required"
 });
-
+extend("required_if", {
+  ...required_if,
+  message: "This field is required"
+});
 extend("max", {
   ...max,
   message: "This field must be {length} characters or less"

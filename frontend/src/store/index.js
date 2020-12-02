@@ -12,6 +12,7 @@ import backup from './modules/export';
 import logs from './modules/logs';
 import utility from './modules/utility';
 import settings from './modules/settings';
+import certs from './modules/certs';
 
 Vue.use(Vuex);
 
@@ -29,6 +30,7 @@ export default new Vuex.Store({
     backup,
     logs,
     utility,
-    settings
+    settings,
+    certs
   }
 });

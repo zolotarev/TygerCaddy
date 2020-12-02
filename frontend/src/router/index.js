@@ -11,6 +11,7 @@ import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
 import InitialUser from "../views/InitialUser.vue";
 import Logs from "../views/Logs.vue";
+import Certificates from "../views/Certificates.vue"
 Vue.use(VueRouter);
 
 const routes = [
@@ -50,6 +51,14 @@ const routes = [
     path: "/addresses",
     name: "Addresses",
     component: Addresses,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/certificates",
+    name: "Certificates",
+    component: Certificates,
     meta: {
       requiresAuth: true
     }

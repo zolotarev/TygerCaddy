@@ -7,3 +7,4 @@ temp/
 database.sqlite
 Caddyfile
 .env
+db/certs/*

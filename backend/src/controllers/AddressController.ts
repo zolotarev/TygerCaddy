@@ -37,7 +37,7 @@ class AddressController {
     //Get addresses from database
     const addressRepository = getRepository(Address);
     const addresses = await addressRepository.find({
-      relations: ["app"],
+      relations: ["app", "cert"],
     });
 
     //Send the addresses object
@@ -60,13 +60,15 @@ class AddressController {
 
   static newAddress = async (req: Request, res: Response) => {
     //Get parameters from the body
-    let { address, tls, staging, app, forceHTTPChallenge } = req.body;
+    let { address, tls, staging, app, forceHTTPChallenge, cert, custom_cert } = req.body;
     let newAddress = new Address();
     newAddress.address = address;
     newAddress.tls = tls;
     newAddress.staging = staging;
     newAddress.app = app;
     newAddress.forceHTTPChallenge = forceHTTPChallenge
+    newAddress.cert = cert
+    newAddress.custom_cert = custom_cert
 
     //Validade if the parameters are ok
     const errors = await validate(newAddress);
@@ -92,7 +94,7 @@ class AddressController {
     const id = req.params.id;
 
     //Get values from the body
-    let { address, tls, staging, appId, forceHTTPChallenge } = req.body;
+    let { address, tls, staging, appId, forceHTTPChallenge, cert, custom_cert } = req.body;
     //Try to find address on database
     const addressRepository = getRepository(Address);
     let editAddress;
@@ -110,6 +112,8 @@ class AddressController {
     editAddress.staging = staging;
     editAddress.app = appId;
     editAddress.forceHTTPChallenge = forceHTTPChallenge
+    editAddress.cert = cert
+    editAddress.custom_cert = custom_cert
     const errors = await validate(editAddress);
     if (errors.length > 0) {
       return res.status(400).send(errors);
