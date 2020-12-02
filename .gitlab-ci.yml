@@ -20,6 +20,8 @@ docker dev build:
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - export DOCKER_CLI_EXPERIMENTAL=enabled
+    - docker buildx create --name mybuilder
+    - docker buildx inspect --bootstrap
     - docker buildx use mybuilder
   script:  
     - docker build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
@@ -45,6 +47,8 @@ docker test build:
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - export DOCKER_CLI_EXPERIMENTAL=enabled
+    - docker buildx create --name mybuilder
+    - docker buildx inspect --bootstrap
     - docker buildx use mybuilder
   script:  
     - docker build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
@@ -71,6 +75,8 @@ docker release build:
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - export DOCKER_CLI_EXPERIMENTAL=enabled
+    - docker buildx create --name mybuilder
+    - docker buildx inspect --bootstrap
     - docker buildx use mybuilder
   script:  
     - docker build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_RELEASE_IMAGE -t tygercaddy/tygercaddy:latest .
