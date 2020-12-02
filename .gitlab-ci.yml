@@ -2,6 +2,7 @@ stages:
   - Build Dev Image
   - Push Dev Image
   - Build Test Image
+  - Push Test Image
   - Build Release Image
 
 variables:
