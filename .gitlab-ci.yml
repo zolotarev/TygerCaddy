@@ -25,7 +25,7 @@ docker dev build:
     - docker buildx use mybuilder
     - docker buildx inspect --bootstrap
   script:  
-    - docker build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
+    - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
 
 docker dev push:
   stage: Push Dev Image
@@ -54,7 +54,7 @@ docker test build:
     - docker buildx inspect --bootstrap
 
   script:  
-    - docker build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
+    - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
 
 docker test push:
   stage: Push Test Image
@@ -83,7 +83,7 @@ docker release build:
     - docker buildx use mybuilder
     - docker buildx inspect --bootstrap
   script:  
-    - docker build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_RELEASE_IMAGE -t tygercaddy/tygercaddy:latest .
+    - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_RELEASE_IMAGE -t tygercaddy/tygercaddy:latest .
 docker release push:
   stage: Push Release Image
   rules: 
