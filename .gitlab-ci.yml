@@ -64,8 +64,6 @@ docker test push:
 docker release build:
   stage: Build Release Image
   rules: 
-    - if: $CI_MERGE_REQUEST_IID
-    - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == "master"
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
       when: always
@@ -77,8 +75,6 @@ docker release build:
 docker release push:
   stage: Push Release Image
   rules: 
-    - if: $CI_MERGE_REQUEST_IID
-    - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == "master"
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
       when: always
