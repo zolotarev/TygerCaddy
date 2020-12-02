@@ -100,25 +100,21 @@ export default {
           this.submit()
       },
     resetForm(){
-            this.formData = {
-              address: "",
-              tls: false,
-              staging: false,
-              app: "",
-              forceHTTPChallenge:false
-            }
+            this.key_file = null;
+            this.cert_file = null;
+            this.name = "";
     },
     onSubmit() { 
-      let form = new FormData()
-      if (this.cert_file){
-        form.append("cert_file", this.cert_file)
-      }
-      if (this.pem_file){
-        form.append("pem_file", this.pem_file)
-      }
-      form.append("name", this.name)
-      
-      this.$store.dispatch('addCert', form)
+      let formData = new FormData()
+      //if (this.cert_file){
+        formData.append("cert_file", this.cert_file)
+      //}
+      //if (this.key_file){
+        formData.append("pem_file", this.key_file)
+      //}
+      formData.append("name", this.name)
+      console.log(formData)
+      this.$store.dispatch('addCert', formData)
             this.show = false;
             this.resetForm();
             this.close()

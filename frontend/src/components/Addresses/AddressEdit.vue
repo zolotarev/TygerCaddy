@@ -42,6 +42,30 @@
               label="Force HTTP Challenge?"
               v-model="item.forceHTTPChallenge"
             ></v-switch>
+            <v-switch
+              color="orange"
+              class="px-3"
+              label="Use Custom Certificate?"
+              v-model="item.custom_cert"
+            ></v-switch>
+            <div v-show="item.custom_cert">
+            <validation-provider
+                  v-slot="{ errors }"
+                  name="cert"
+                  rules="required"
+                >
+                  <v-combobox
+          v-model="item.cert"
+          color="orange"
+          :error-messages="errors"
+          :items="certs"
+          item-text="name"
+          item-value="name"
+          label="Select custom certificate:"
+          required
+        ></v-combobox>
+            </validation-provider>
+            </div>
             <validation-provider
                   v-slot="{ errors }"
                   name="app"
@@ -80,6 +104,9 @@ export default {
     value: Boolean,
     item: Object
   },
+  data: () => ({
+    required: false
+  }),
    model: {
         prop: 'value',
         event: 'showhide'
@@ -94,7 +121,8 @@ export default {
       },
     },
     ...mapGetters({
-      apps:'showApps' 
+      apps:'showApps',
+      certs: 'showCerts' 
     })
       
     
@@ -111,7 +139,9 @@ export default {
           tls: this.item.tls,
           staging: this.item.staging,
           appId: this.item.app.id,
-          forceHTTPChallenge: this.item.forceHTTPChallenge
+          certId: this.item.cert.id,
+          forceHTTPChallenge: this.item.forceHTTPChallenge,
+          custom_cert: this.item.custom_cert
       }
         this.$store.dispatch('updateAddress', data)
         this.close()

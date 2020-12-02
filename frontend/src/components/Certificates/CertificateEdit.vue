@@ -11,53 +11,41 @@
       <v-card-text>
             <validation-provider
                   v-slot="{ errors }"
-                  name="address"
-                  rules="required|domain"
+                  name="name"
+                  rules="required"
                 >
                   <v-text-field 
                   color="orange"
-                  name="address" 
-                  label="External Address"  
-                  v-model="item.address"
+                  name="name" 
+                  label="Name"  
+                  v-model="item.name"
                   :error-messages="errors"
                   required>
                 </v-text-field>
             </validation-provider>
-              
-                   <v-switch
-              color="orange"
-              class="px-3"
-              label="Default to HTTPS?"
-              v-model="item.tls"
-            ></v-switch>
-                  <v-switch
-              color="orange"
-              class="px-3"
-              label="Use HTTPS Staging?"
-              v-model="item.staging"
-            ></v-switch>
-                              <v-switch
-              color="orange"
-              class="px-3"
-              label="Force HTTP Challenge?"
-              v-model="item.forceHTTPChallenge"
-            ></v-switch>
-            <validation-provider
-                  v-slot="{ errors }"
-                  name="app"
-                  rules="required"
+              <v-file-input 
+                chips 
+                clearable 
+                persistent-hint 
+                hint="Only Upload the full cert.pem"  
+                label="Cert.pem File" 
+                name="cert_file"
+                v-model="cert_file"
+                color="orange" 
                 >
-                  <v-combobox
-          v-model="item.app"
-          color="orange"
-          :error-messages="errors"
-          :items="apps"
-          item-text="name"
-          item-value="name"
-          label="Select an app to proxy to:"
-          required
-        ></v-combobox>
-            </validation-provider>
+                </v-file-input>
+                <v-file-input 
+                chips 
+                clearable 
+                persistent-hint 
+                hint="Only Upload the full key.pem"  
+                label="key.pem File" 
+                name="key_file"
+                color="orange" 
+                v-model="key_file"
+                >
+                </v-file-input>
+            
           </v-card-text>
 
           <v-card-actions>
@@ -77,8 +65,14 @@ import { mapGetters } from 'vuex'
 export default {
 
     props: {
-    value: Boolean,
-    item: Object
+      value: Boolean,
+      item: Object
+  },
+  data() {
+    return {
+      key_file:null,
+      cert_file:null,
+    }
   },
    model: {
         prop: 'value',
@@ -105,15 +99,16 @@ export default {
       },
     
       onSubmit () {
-        let data = {
-          id: this.item.id,
-          address: this.item.address,
-          tls: this.item.tls,
-          staging: this.item.staging,
-          appId: this.item.app.id,
-          forceHTTPChallenge: this.item.forceHTTPChallenge
-      }
-        this.$store.dispatch('updateAddress', data)
+       let formData = new FormData()
+      //if (this.cert_file){
+        formData.append("cert_file", this.cert_file)
+      //}
+      //if (this.key_file){
+        formData.append("pem_file", this.key_file)
+      //}
+      formData.append("name", this.name)
+      formData.append("id", this.item.id)
+        this.$store.dispatch('updateCert', formData)
         this.close()
       },
      },

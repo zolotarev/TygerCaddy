@@ -29,6 +29,9 @@ export class Address {
   @Column()
   staging: boolean;
 
+  @Column()
+  custom_cert: boolean;
+
   @Column({ default: false })
   forceHTTPChallenge: boolean;
 

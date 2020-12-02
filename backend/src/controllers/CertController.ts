@@ -3,6 +3,8 @@ import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 import { rebuildCaddyfile } from "../middlewares/caddy";
 import { Cert } from "../entity/Cert";
+const path = require('path');
+const rimraf = require('rimraf');
 const fs = require('fs');
 class CertController {
   static listAll = async (req: Request, res: Response) => {
@@ -30,15 +32,15 @@ class CertController {
   static newCert = async (req: Request, res: Response) => {
     //Get parameters from the body
     let { name } = req.body;
-    console.log(req)
+
     if(!req.files) {
-      return res.status(400).send("Error uploading files");
+      return res.status(400).send("res");
   } else {
     let pem_file = req.files.pem_file;
     let cert_file = req.files.cert_file;
     let nameString = name.replace(/[^A-Z0-9]/ig, "_");
-    var directory = "/tygercaddy/backend/db/certs/" + nameString
-
+    var directory = path.resolve(__dirname, '../../db/certs/' + nameString)
+    console.log(directory)
     if (fs.existsSync(directory)) {
         console.log('Cert Directory exists!');
     } else {
@@ -164,13 +166,24 @@ cert.pem_path = pem_directory;
       return res.status(404).send("Cert not found");
     }
     let nameString = cert.name.replace(/[^A-Z0-9]/ig, "_");
-    var directory = "/tygercaddy/backend/db/certs/" + nameString
-
-    fs.rmdir(directory, {recursive:true})
-
-    certRepository.delete(id);
+    var directory = path.resolve(__dirname, '../../db/certs/' + nameString)
+    if(fs.existsSync(directory)){
+      rimraf(directory, (error) => {
+        if(error){
+          console.log(error)
+        } else {
+          console.log("Certificates Deleted")
+        }
+      })
+      certRepository.delete(id);
     //After all send a 204 (no content, but accepted) response
     return res.status(204).send();
+    } else {
+      return res.status(400).send("There was an error deleting the certificates");
+    }
+    
+
+    
   };
 }
 

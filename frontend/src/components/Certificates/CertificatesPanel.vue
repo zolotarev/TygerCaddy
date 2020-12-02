@@ -7,7 +7,7 @@
     <v-toolbar color="orange" dark flat>
       <v-toolbar-title>Certificates</v-toolbar-title>
       <v-spacer></v-spacer>
-        <v-icon large color="white">mdi-domain</v-icon>
+        <v-icon large color="white">mdi-certificate</v-icon>
     </v-toolbar>
       <v-card-title primary-title>
          <v-row
@@ -38,7 +38,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers" 
-        :items="certificates" 
+        :items="certs" 
         :loading="loading" 
         :search="search"
         :options="options"
@@ -50,21 +50,13 @@
  <template
         v-slot:[`item.actions`]="{ item }"
       >
-                <v-tooltip top> 
-            <template v-slot:activator="{ on }">
-            <v-btn icon class="mr-0" color="orange" v-on="on" @click="detailItem(item)"> 
-              <v-icon>mdi-clipboard-list</v-icon> 
-            </v-btn> 
-            </template>
-              <span>View Details</span> 
-            </v-tooltip> 
             <v-tooltip top> 
               <template v-slot:activator="{ on }">
               <v-btn icon class="mr-0" color="orange" @click="editItem(item)" v-on="on"> 
                 <v-icon>mdi-pencil</v-icon> 
               </v-btn> 
               </template>
-              <span>Edit Address</span> 
+              <span>Edit Certificate</span> 
             </v-tooltip>
             <v-tooltip top> 
               <template v-slot:activator="{ on }">
@@ -72,7 +64,7 @@
                 <v-icon>mdi-delete</v-icon> 
               </v-btn> 
               </template>
-              <span>Delete Address</span> 
+              <span>Delete Certificate</span> 
             </v-tooltip>
  </template>
 
@@ -123,11 +115,9 @@ export default {
         ],
         editedItem: {
         id: 0,
-        address: "",
-        tls: "",
-        staging: false,
-        websocket: false,
-        transparent: false
+        name: "",
+        cert_path: "",
+        pem_path: ""
       }
     };
     
@@ -164,7 +154,7 @@ export default {
       },
       
     editItem (item) {
-        this.editedIndex = this.addresses.indexOf(item)
+        this.editedIndex = this.certs.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.editdialog = true
       },
@@ -182,16 +172,10 @@ export default {
       this.deleteid = this.editedItem = Object.assign({}, item);
       this.deletedialog = true;
     },
-    urlproxy (item) {
-      this.editedIndex = this.addresses.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.urldialog = true
-    },
   },
   computed: {
 
     ...mapGetters({
-      certificates: 'showCerts', 
       certificateCount: 'showCertCount',
       certs: 'showCerts',
     })

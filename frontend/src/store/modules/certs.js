@@ -17,11 +17,16 @@ export const certs = {
           })
       },
       addCert({ commit, dispatch }, data) {
+        const headers = { 
+          "Content-Type": "multipart/form-data"
+        };
+        console.log(data)
+        console.log(headers)
         this._vm.$http
-          .post("cert/", data.cert)
+          .post("cert/", data)
           .then(({ data }) => {
             dispatch('getCerts')
-            commit('setSnack', {snack: "Cert " + data.cert.name + " was created!", color: 'success'})
+            commit('setSnack', {snack: "Cert " + data.name + " was created!", color: 'success'})
           })
           .catch((error) => {
             console.log(error)

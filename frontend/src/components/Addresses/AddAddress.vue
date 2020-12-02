@@ -20,7 +20,7 @@
                   label="External Address"  
                   v-model="formData.address"
                   :error-messages="errors"
-                  required>
+                  >
                 </v-text-field>
             </validation-provider>
               
@@ -42,6 +42,32 @@
               label="Force HTTP Challenge"
               v-model="formData.forceHTTPChallenge"
             ></v-switch>
+            <validation-provider rules="" vid="custom_cert">
+                        <v-switch
+              color="orange"
+              class="px-3"
+              label="Use Custom Certificate?"
+              v-model="formData.custom_cert"
+            ></v-switch>
+            </validation-provider>
+            <div v-show="formData.custom_cert">
+            <validation-provider
+                  v-slot="{ errors }"
+                  name="cert"
+                  :rules="{ required_if: { target: 'custom_cert', value: true } }"
+                >
+                  <v-combobox
+          v-model="formData.cert"
+          color="orange"
+          :error-messages="errors"
+          :items="certs"
+          item-text="name"
+          item-value="name"
+          label="Select custom certificate:"
+          
+        ></v-combobox>
+            </validation-provider>
+            </div>
             <validation-provider
                   v-slot="{ errors }"
                   name="app"
@@ -55,7 +81,6 @@
           item-text="name"
           item-value="name"
           label="Select an app to proxy to:"
-          required
         ></v-combobox>
             </validation-provider>
           </v-card-text>
@@ -83,7 +108,9 @@ export default {
         tls: false,
         staging: false,
         app: "",
-        forceHTTPChallenge:false
+        forceHTTPChallenge:false,
+        custom_cert: false,
+        cert:""
       },
       
     };
@@ -97,7 +124,8 @@ export default {
     },
   computed: {
         ...mapGetters({
-      apps:'showApps' 
+      apps:'showApps',
+      certs: 'showCerts'
     }),
     show: {
       get: function() {
@@ -122,7 +150,9 @@ export default {
               tls: false,
               staging: false,
               app: "",
-              forceHTTPChallenge:false
+              forceHTTPChallenge:false,
+              custom_cert: false,
+              cert:""
             }
     },
     onSubmit() { 
@@ -131,7 +161,9 @@ export default {
           tls: this.formData.tls,
           staging: this.formData.staging,
           app: this.formData.app.id,
-          forceHTTPChallenge: this.formData.forceHTTPChallenge
+          forceHTTPChallenge: this.formData.forceHTTPChallenge,
+          custom_cert: this.formData.custom_cert,
+          cert: this.formData.cert.id
       }
       
       this.$store.dispatch('addAddress', data)

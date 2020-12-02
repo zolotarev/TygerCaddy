@@ -77,7 +77,7 @@ export default {
                         {
                 route: "certificates",
                 text: "Certificates",
-                icon: "mdi-domain"
+                icon: "mdi-certificate"
             },
             {
                 route: "backup",

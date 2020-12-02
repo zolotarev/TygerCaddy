@@ -47,7 +47,7 @@ export const getConfig = async () => {
 };
 export const getAddresses = async () => {
     const addressRepository = getRepository(Address);
-    const addresses = await addressRepository.find({ relations: ["app", 'endpoint'] })
+    const addresses = await addressRepository.find({ relations: ["app", 'endpoint', 'cert'] })
     
     return addresses;
 };
@@ -154,29 +154,34 @@ export const generateTlsBlock = async (address) => {
     let tlsBlock = "";
     console.log("Generating TLS block for: " + address.address);
     let config = await getConfig();
+    if(address.custom_cert){
+        tlsBlock = " \t tls " + address.cert.cert_path + " " + address.cert.pem_path + " \n"
+    }else{
+        if (config.use_dns_verification && config.dns_api_token && config.dns_provider_name){
+            if(address.forceHTTPChallenge){
+                tlsBlock =
+                " \t tls { \n" +
+                "\t \t \t issuer acme { \n"+
+                "\t \t \t \t disable_tlsalpn_challenge \n "+
+                "\t \t \t \t resolvers 8.8.8.8 \n" +
+                "\t \t \t } \n"+
+                "\t }" 
+            }else{
+                tlsBlock =
+                " \t tls { \n" +
+                "\t \t \t issuer acme { \n"+
+                "\t \t \t \t dns " + config.dns_provider_name.name + " " + config.dns_api_token + "\n "+
+                "\t \t \t \t resolvers 8.8.8.8 \n" +
+                "\t \t \t } \n"+
+                "\t }" 
+            }
+            
+          } else {
+            tlsBlock = ""
+          }
+    }
 
-    if (config.use_dns_verification && config.dns_api_token && config.dns_provider_name){
-        if(address.forceHTTPChallenge){
-            tlsBlock =
-            " \t tls { \n" +
-            "\t \t \t issuer acme { \n"+
-            "\t \t \t \t disable_tlsalpn_challenge \n "+
-            "\t \t \t \t resolvers 8.8.8.8 \n" +
-            "\t \t \t } \n"+
-            "\t }" 
-        }else{
-            tlsBlock =
-            " \t tls { \n" +
-            "\t \t \t issuer acme { \n"+
-            "\t \t \t \t dns " + config.dns_provider_name.name + " " + config.dns_api_token + "\n "+
-            "\t \t \t \t resolvers 8.8.8.8 \n" +
-            "\t \t \t } \n"+
-            "\t }" 
-        }
-        
-      } else {
-        tlsBlock = ""
-      }
+
     return tlsBlock
 };
 

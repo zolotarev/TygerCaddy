@@ -71,6 +71,11 @@
         <v-icon medium v-if="item.forceHTTPChallenge">mdi-check</v-icon>
           <v-icon medium v-else>mdi-close</v-icon>
       </template>
+      <template
+        v-slot:[`item.cert`]="{ item }"
+      >
+        {{ item.cert.name }}
+      </template>
          <template
         v-slot:[`item.app`]="{ item }"
       >
@@ -158,6 +163,8 @@ export default {
           { text: 'TLS', value: 'tls' },
           { text: 'Staging', value: 'staging' },
           { text: 'Force HTTP Challenge', value: 'forceHTTPChallenge' },
+          { text: 'Use Custom Certs', value: 'custom_cert' },
+          { text: 'Assigned Cert', value: 'cert' },
           { text: 'Application', value: 'app' },
           { text: 'Actions', value: 'actions', sortable: false }
         ],
@@ -167,6 +174,7 @@ export default {
         tls: "",
         staging: false,
         websocket: false,
+        custom_cert: false,
         transparent: false
       }
     };

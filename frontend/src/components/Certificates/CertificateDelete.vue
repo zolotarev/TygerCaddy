@@ -3,13 +3,13 @@
     <v-dialog v-model="show" max-width="500px">
         <v-card>
           <v-card-title class="orange" dark flat>
-            <span class="headline white--text">Delete Address - {{ item.name }}</span>
+            <span class="headline white--text">Delete Certificate - {{ item.name }}</span>
           </v-card-title>
 
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                Are you sure you want to delete this address?
+                Are you sure you want to delete this certificate?
               </v-layout>
             </v-container>
           </v-card-text>
@@ -17,7 +17,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="grey darken-1" dark @click="deleteclose">Cancel</v-btn>
-            <v-btn color="orange darken-1" dark @click="deleteaddress">Delete</v-btn>
+            <v-btn color="orange darken-1" dark @click="deletecertificate">Delete</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -53,10 +53,9 @@ export default {
           deleteclose (){
             this.show = false
       },
-      deleteaddress () {
+      deletecertificate () {
         this.$store.dispatch('deleteCert', this.item)
         this.deleteclose()
-        //this.emitAlert("warning", "The application " + this.editedItem.name + " was deleted successfully!");
       },
      },
 }
