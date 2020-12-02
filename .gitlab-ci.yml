@@ -1,52 +1,45 @@
-image: docker:18.09.7
-
-services:
-  - docker:18.09.7-dind
-
 stages:
-  - Build Image
-  - Test Dev Image
-  - Deploy Dev Build
-  - Deploy BETA Build
+  - Build Dev Image
+  - Build Test Image
+  - Build Release Image
 
 variables:
-  CONTAINER_TEST_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: "/certs"
+  CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:test
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:latest
 
-docker build:
-  stage: Build Image
-  script:  
-  - docker info
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - docker build -t $CI_REGISTRY/tygercaddy/tygercaddy:dev -t tygercaddy/tygercaddy:dev .
-  - docker build -t $CI_REGISTRY/tygercaddy/tygercaddy:dev -t tygercaddy/tygercaddy:beta .
-  - docker push $CI_REGISTRY/tygercaddy/tygercaddy:dev
-  
-
-test:
-  stage: Test Dev Image
+docker dev build:
+  stage: Build Dev Image
+  rules: 
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+      when: always
   before_script:
     - docker info
-    - BRANCH_LOWER=$(echo "$CI_COMMIT_REF_NAME" | awk '{print tolower($0)}')
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker stop tygercaddytest
-    - docker rm tygercaddytest
-    - docker rmi $CONTAINER_TEST_IMAGE
-    - docker run -d -p 81:80 -p 8443:443 -p 9001:9001 --name tygercaddytest $CONTAINER_TEST_IMAGE
+  script:  
+    - docker build -t CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
+    - docker push $CI_REGISTRY/tygercaddy/tygercaddy:dev
 
-  script:
-    - docker exec tygercaddytest /bin/bash /checkresponse.sh
-  
-deploy dev build:
-  stage: Deploy Dev Build
-  script:
-    - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD $DOCKERHUB_REGISTRY
-    - docker push tygercaddy/tygercaddy:dev
+docker test build:
+  stage: Build Test Image
+  rules: 
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "test"'
+      when: always
+  before_script:
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:  
+    - docker build -t CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
+    - docker push $CI_REGISTRY/tygercaddy/tygercaddy:test
 
-deploy BETA build:
-  stage: Deploy Dev Build
-  script:
-    - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD $DOCKERHUB_REGISTRY
-    - docker push tygercaddy/tygercaddy:beta
+docker release build:
+  stage: Build Release Image
+  rules: 
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+      when: always
+  before_script:
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:  
+    - docker build -t CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
+    - docker push $CI_REGISTRY/tygercaddy/tygercaddy:dev
