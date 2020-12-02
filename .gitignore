@@ -120,3 +120,4 @@ node_modules
 backend/db/database.sqlite
 backend/db/Caddyfile
 Caddyfile
+.vscode
