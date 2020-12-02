@@ -26,7 +26,7 @@
                         class="px-3" 
                         label="Skip SSL Verification on Backend?" 
                         v-model="formData.verify_ssl"               
-                        hint="If your backend does not use HTTPS leave this ON"
+                        hint="If your backend does not use HTTPS leave this OFF"
                         input-value="true"
                         persistent-hint>
                     </v-switch>
