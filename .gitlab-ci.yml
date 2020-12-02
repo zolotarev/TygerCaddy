@@ -19,8 +19,9 @@ docker dev build:
   before_script:
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx use mybuilder
   script:  
-    - docker build -t $CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
+    - docker build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
 
 docker dev push:
   stage: Push Dev Image
@@ -42,8 +43,9 @@ docker test build:
   before_script:
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx use mybuilder
   script:  
-    - docker build -t $CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
+    - docker build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
 
 docker test push:
   stage: Push Test Image
@@ -66,8 +68,9 @@ docker release build:
   before_script:
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx use mybuilder
   script:  
-    - docker build -t $CONTAINER_RELEASE_IMAGE -t tygercaddy/tygercaddy:latest .
+    - docker build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_RELEASE_IMAGE -t tygercaddy/tygercaddy:latest .
 docker release push:
   stage: Push Release Image
   rules: 
