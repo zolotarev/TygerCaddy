@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { Length, IsFQDN, IsFirebasePushId} from "class-validator";
 import {App} from "./App";
+import {Cert} from "./Cert";
 import {Endpoint} from "./Endpoint";
 
 @Entity()
@@ -28,6 +29,9 @@ export class Address {
   @Column()
   staging: boolean;
 
+  @Column()
+  custom_cert: boolean;
+
   @Column({ default: false })
   forceHTTPChallenge: boolean;
 
@@ -41,7 +45,8 @@ export class Address {
 
   @ManyToOne(type => App, App => App.address)
     app: App;
-
+  @ManyToOne(type => Cert, Cert => Cert.address)
+    cert: Cert;
   @OneToMany(() => Endpoint, endpoint => endpoint.address)
   endpoint: Endpoint[];
 

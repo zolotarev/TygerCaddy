@@ -74,6 +74,11 @@ export default {
                 text: "Addresses",
                 icon: "mdi-domain"
             },
+                        {
+                route: "certificates",
+                text: "Certificates",
+                icon: "mdi-certificate"
+            },
             {
                 route: "backup",
                 text: "Backup/Restore",
