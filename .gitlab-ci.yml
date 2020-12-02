@@ -2,6 +2,7 @@ stages:
   - Build Dev Image
   - Push Dev Image
   - Build Test Image
+  - Push Test Image
   - Build Release Image
 
 variables:
@@ -41,6 +42,17 @@ docker test build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:  
     - docker build -t CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
+    - docker push $CI_REGISTRY/tygercaddy/tygercaddy:test
+
+docker test push:
+  stage: Push Test Image
+  rules: 
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "test"'
+      when: always
+  before_script:
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:  
     - docker push $CI_REGISTRY/tygercaddy/tygercaddy:test
 
 docker release build:
