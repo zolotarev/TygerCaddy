@@ -15,7 +15,6 @@ variables:
 
 fetch-semantic-version:
   # Requires Node >= 10.13 version
-  image: node:13
   stage: Fetch Version
   only:
     refs:
@@ -136,7 +135,6 @@ docker release push:
     - docker push $CI_REGISTRY/tygercaddy/tygercaddy:latest
 
 release:
-  image: node:13
   stage: Release
   only:
     refs:
