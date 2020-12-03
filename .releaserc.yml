@@ -10,6 +10,8 @@ branches:
   - "+([0-9])?(.{+([0-9]),x}).x"
   - name: "test"
     prerelease: "test"
-publish: 
-  - path: "semantic-realease-docker"
-  - name: "tygercaddy/tygercaddy"
+release: 
+  - verifyConditions: "semantic-release-gitlab-registry"
+  - publish:
+    - path: "semantic-release-gitlab-registry"
+    - name: "tygercaddy/tygercaddy"
