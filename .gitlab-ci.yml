@@ -137,7 +137,7 @@ docker release push:
 
 release:
   image: node:13
-  stage: release
+  stage: Release
   only:
     refs:
     - master
