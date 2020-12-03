@@ -1,15 +1,47 @@
 stages:
+  - Fetch Version
   - Build Dev Image
   - Push Dev Image
   - Build Test Image
   - Push Test Image
   - Build Release Image
   - Push Release Image
+  - Release
 
 variables:
   CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
   CONTAINER_TEST_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:test
   CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:latest
+
+fetch-semantic-version:
+  # Requires Node >= 10.13 version
+  image: node:13
+  stage: fetch-version
+  only:
+    refs:
+    - master
+    - test
+    - /^(([0-9]+)\.)?([0-9]+)\.x/ # This matches maintenance branches
+    - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ # This matches pre-releases
+  script:
+    - npm install @semantic-release/gitlab @semantic-release/exec
+    - npx semantic-release --generate-notes false --dry-run
+  artifacts:
+    paths:
+    - VERSION.txt
+generate-non-semantic-version:
+  stage: fetch-version
+  except:
+    refs:
+    - master
+    - test
+    - /^(([0-9]+)\.)?([0-9]+)\.x/ # This matches maintenance branches
+    - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ # This matches pre-releases
+  script:
+    - echo build-$CI_PIPELINE_ID > VERSION.txt
+  artifacts:
+    paths:
+    - VERSION.txt
 
 docker dev build:
   stage: Build Dev Image
@@ -25,7 +57,8 @@ docker dev build:
     - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
     - docker buildx use mybuilder
     - docker buildx inspect --bootstrap
-  script:  
+  script:
+    - echo "Version is $(cat VERSION.txt)"  
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
 
 docker dev push:
@@ -56,6 +89,7 @@ docker test build:
     - docker buildx inspect --bootstrap
 
   script:  
+    - echo "Version is $(cat VERSION.txt)"  
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
 
 docker test push:
@@ -85,8 +119,10 @@ docker release build:
     - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
     - docker buildx use mybuilder
     - docker buildx inspect --bootstrap
-  script:  
+  script:
+    - echo "Version is $(cat VERSION.txt)"    
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_RELEASE_IMAGE -t tygercaddy/tygercaddy:latest .
+    
 docker release push:
   stage: Push Release Image
   rules: 
@@ -98,3 +134,18 @@ docker release push:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:  
     - docker push $CI_REGISTRY/tygercaddy/tygercaddy:latest
+
+release:
+  image: node:13
+  stage: release
+  only:
+    refs:
+    - master
+    - test
+    # This matches maintenance branches
+    - /^(([0-9]+)\.)?([0-9]+)\.x/
+    # This matches pre-releases
+    - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ 
+  script:
+    - npm install @semantic-release/gitlab
+    - npx semantic-release
