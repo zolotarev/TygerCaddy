@@ -58,6 +58,7 @@ docker dev build:
   script:
     - echo "Version is $(cat VERSION.txt)"  
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
+    - npx semantic-release
 
 docker dev push:
   stage: Push Dev Image
@@ -89,6 +90,7 @@ docker test build:
   script:  
     - echo "Version is $(cat VERSION.txt)"  
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
+    - npx semantic-release
 
 docker test push:
   stage: Push Test Image
@@ -120,6 +122,7 @@ docker release build:
   script:
     - echo "Version is $(cat VERSION.txt)"    
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_RELEASE_IMAGE -t tygercaddy/tygercaddy:latest .
+    - npx semantic-release
 
 docker release push:
   stage: Push Release Image
