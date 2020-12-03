@@ -58,6 +58,7 @@ docker dev build:
   script:
     - echo "Version is $(cat VERSION.txt)"  
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
+    - npx semantic-release
 
 docker dev push:
   stage: Push Dev Image
