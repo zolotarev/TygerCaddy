@@ -74,7 +74,8 @@
       <template
         v-slot:[`item.cert`]="{ item }"
       >
-        {{ item.cert.name }}
+        <div v-if="item.cert">{{ item.cert.name }}</div>
+        <div v-else>None</div>
       </template>
          <template
         v-slot:[`item.app`]="{ item }"
