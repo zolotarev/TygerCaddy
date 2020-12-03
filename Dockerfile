@@ -1,5 +1,6 @@
 #Prep the caddy image for the binary
-FROM caddy:2.1.0-builder AS caddy
+FROM caddy:builder AS caddy
+
 RUN xcaddy build \
     --with github.com/caddy-dns/digitalocean \
     --with github.com/caddy-dns/cloudflare \
