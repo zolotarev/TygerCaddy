@@ -16,7 +16,7 @@ variables:
 fetch-semantic-version:
   # Requires Node >= 10.13 version
   image: node:13
-  stage: fetch-version
+  stage: Fetch Version
   only:
     refs:
     - master
@@ -30,7 +30,7 @@ fetch-semantic-version:
     paths:
     - VERSION.txt
 generate-non-semantic-version:
-  stage: fetch-version
+  stage: Fetch Version
   except:
     refs:
     - master
@@ -122,7 +122,7 @@ docker release build:
   script:
     - echo "Version is $(cat VERSION.txt)"    
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_RELEASE_IMAGE -t tygercaddy/tygercaddy:latest .
-    
+
 docker release push:
   stage: Push Release Image
   rules: 
