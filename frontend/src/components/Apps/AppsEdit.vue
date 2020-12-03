@@ -57,7 +57,7 @@
               color="orange"
               class="px-3"
               label="Verify SSL on the backend?"
-              hint="If your backend does not use HTTPS leave this ON"
+              hint="If your backend does not use HTTPS leave this OFF"
               persistent-hint
               v-model="item.verify_ssl"
             ></v-switch>
