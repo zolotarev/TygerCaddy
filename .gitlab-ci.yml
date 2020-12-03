@@ -21,7 +21,7 @@ docker dev build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - export DOCKER_CLI_EXPERIMENTAL=enabled   
     - export CGO_ENABLED=0
-    - docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
+    - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
     - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
     - docker buildx use mybuilder
     - docker buildx inspect --bootstrap
