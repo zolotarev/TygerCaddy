@@ -1,110 +1,19 @@
-stages:
-  - fetch-version
-  - Build Dev Image
-  - release
-
 image: jdrouet/docker-with-buildx:stable
 
 variables:
-  CONTAINER_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
+  DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
+  CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
 
 services:
   - docker:dind
 
-fetch-semantic-version:
-  # Requires Node >= 10.13 version
-  image: node:13
-  stage: fetch-version
-  only:
-    refs:
-    - master
-    - alpha
-    - /^(([0-9]+)\.)?([0-9]+)\.x/ # This matches maintenance branches
-    - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ # This matches pre-releases
-  script:
-    - npm install @semantic-release/gitlab @semantic-release/exec
-    - npx semantic-release --generate-notes false --dry-run
-  artifacts:
-    paths:
-    - VERSION.txt
-generate-non-semantic-version:
-  stage: fetch-version
-  except:
-    refs:
-    - master
-    - alpha
-    - /^(([0-9]+)\.)?([0-9]+)\.x/ # This matches maintenance branches
-    - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ # This matches pre-releases
-  script:
-    - echo build-$CI_PIPELINE_ID > VERSION.txt
-  artifacts:
-    paths:
-    - VERSION.txt
-BuildAMD64:
-  stage: Build Dev Image
-  image: jdrouet/docker-with-buildx:stable
+build:
+  stage: build
   rules: 
     - if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
   script:
-    - echo "Version is $(cat VERSION.txt)"
-    - export CGO_ENABLED=0
-    - export DOCKER_HOST=
-    - export VERSION=$(cat VERSION.txt)
+    - docker buildx create --use
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker context create tygercaddy
-    - docker buildx create --name tygercaddy
-    - docker buildx use tygercaddy
-    - docker buildx inspect --bootstrap
-    - docker buildx build --platform linux/amd64 --tag $CONTAINER_IMAGE:$VERSION . --push
-BuildARM64:
-  stage: Build Dev Image
-  image: jdrouet/docker-with-buildx:stable
-  rules: 
-    - if: '$CI_COMMIT_BRANCH == "dev"'
-      when: always
-  script:
-    - echo "Version is $(cat VERSION.txt)"
-    - export CGO_ENABLED=0
-    - export DOCKER_HOST=
-    - export VERSION=$(cat VERSION.txt)
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker context create tygercaddy
-    - docker buildx create --name tygercaddy
-    - docker buildx use tygercaddy
-    - docker buildx inspect --bootstrap
-    - docker buildx build --platform linux/arm64/v8 --tag $CONTAINER_IMAGE:$VERSION . --push
-BuildARM:
-  stage: Build Dev Image
-  image: jdrouet/docker-with-buildx:stable
-  rules: 
-    - if: '$CI_COMMIT_BRANCH == "dev"'
-      when: always
-  script:
-    - echo "Version is $(cat VERSION.txt)"
-    - export CGO_ENABLED=0
-    - export DOCKER_HOST=
-    - export VERSION=$(cat VERSION.txt)
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker context create tygercaddy
-    - docker buildx create --name tygercaddy
-    - docker buildx use tygercaddy
-    - docker buildx inspect --bootstrap
-    - docker buildx build --platform linux/arm/v7 --tag $CONTAINER_IMAGE:$VERSION . --push
-
-release:
-  image: node:13
-  stage: release
-  only:
-    refs:
-    - master
-    - test
-    - dev
-    # This matches maintenance branches
-    - /^(([0-9]+)\.)?([0-9]+)\.x/
-    # This matches pre-releases
-    - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ 
-  script:
-    - npm install @semantic-release/gitlab
-    - npx semantic-release
+    - docker buildx build --platform linux/amd64 -t $CONTAINER_DEV_IMAGE . --push
