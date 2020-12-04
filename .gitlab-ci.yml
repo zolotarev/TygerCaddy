@@ -1,20 +1,33 @@
-image: jdrouet/docker-with-buildx:stable
-
 variables:
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
+  CI_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
   CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
+  PLATFORM: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7
 
-services:
-  - docker:dind
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  - docker buildx create --use
 
-build:
+build-master:
+  image: jdrouet/docker-with-buildx:stable
   stage: build
-  rules: 
-    - if: '$CI_COMMIT_BRANCH == "dev"'
-      when: always
+  services:
+    - docker:dind
   script:
-    - docker context create tygercaddy
-    - docker buildx create --name multiarch-builder --driver docker-container --use tygercaddy
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --platform linux/amd64 -t $CONTAINER_DEV_IMAGE . --push
+    - docker buildx build --push -t "$CI_IMAGE"
+      --platform "$PLATFORM" --cache-from "$CI_IMAGE"
+      --build-arg BUILDKIT_INLINE_CACHE=1 .
+  only:
+    - master
+
+build-feature:
+  image: jdrouet/docker-with-buildx:stable
+  stage: build
+  services:
+    - docker:dind
+  script:
+    - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG" 
+      --platform "$PLATFORM" --cache-from "$CI_IMAGE:$CI_COMMIT_REF_SLUG"
+      --build-arg BUILDKIT_INLINE_CACHE=1 .
+  except:
+    - master
