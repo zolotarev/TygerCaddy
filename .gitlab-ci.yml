@@ -14,7 +14,7 @@ build:
     - if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
   script:
-    - docker context create --name tygercaddy
+    - docker context create tygercaddy
     - docker buildx create --name multiarch-builder --driver docker-container --use tygercaddy
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --platform linux/amd64 -t $CONTAINER_DEV_IMAGE . --push
