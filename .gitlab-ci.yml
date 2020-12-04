@@ -54,7 +54,6 @@ BuildAMD64:
     - docker context create tygercaddy
     - docker buildx create tygercaddy
     - docker context use tygercaddy
-    - docker buildx use tygercaddy
     - docker buildx build --platform linux/amd64 --tag $CONTAINER_IMAGE:$VERSION . --push
 BuildARM64:
   stage: Build Dev Image
@@ -70,7 +69,6 @@ BuildARM64:
     - docker context create tygercaddy
     - docker buildx create tygercaddy
     - docker context use tygercaddy
-    - docker buildx use tygercaddy
     - docker buildx build --platform linux/arm64/v8 --tag $CONTAINER_IMAGE:$VERSION . --push
 BuildARM:
   stage: Build Dev Image
@@ -86,7 +84,6 @@ BuildARM:
     - docker context create tygercaddy
     - docker buildx create tygercaddy
     - docker context use tygercaddy
-    - docker buildx use tygercaddy
     - docker buildx build --platform linux/arm/v7 --tag $CONTAINER_IMAGE:$VERSION . --push
 
 release:
