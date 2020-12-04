@@ -55,9 +55,9 @@ docker dev build:
     - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
     - docker buildx use mybuilder
     - docker buildx inspect --bootstrap
-  script:
     - echo "Version is $(cat VERSION.txt)"  
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
+  script:
     - npx semantic-release
 
 docker dev push:
@@ -86,10 +86,9 @@ docker test build:
     - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
     - docker buildx use mybuilder
     - docker buildx inspect --bootstrap
-
-  script:  
     - echo "Version is $(cat VERSION.txt)"  
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
+  script:  
     - npx semantic-release
 
 docker test push:
@@ -119,9 +118,10 @@ docker release build:
     - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
     - docker buildx use mybuilder
     - docker buildx inspect --bootstrap
-  script:
     - echo "Version is $(cat VERSION.txt)"    
     - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_RELEASE_IMAGE -t tygercaddy/tygercaddy:latest .
+  script:
+
     - npx semantic-release
 
 docker release push:
