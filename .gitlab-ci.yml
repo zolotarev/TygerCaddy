@@ -1,35 +1,39 @@
 stages:
-  - Fetch Version
+  - fetch-version
   - Build Dev Image
-  - Build Test Image
-  - Build Release Image
   - Release
 
+image: jdrouet/docker-with-buildx:stable
+
 variables:
-  CONTAINER_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
-  CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
-  CONTAINER_TEST_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:test
-  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:latest
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
 
 fetch-semantic-version:
   # Requires Node >= 10.13 version
-  stage: Fetch Version
+  image: node:13
+  stage: fetch-version
   only:
     refs:
-    - test
+    - master
+    - alpha
     - /^(([0-9]+)\.)?([0-9]+)\.x/ # This matches maintenance branches
     - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ # This matches pre-releases
   script:
+    - npm install @semantic-release/gitlab @semantic-release/exec
     - npx semantic-release --generate-notes false --dry-run
   artifacts:
     paths:
     - VERSION.txt
 generate-non-semantic-version:
-  stage: Fetch Version
+  stage: fetch-version
   except:
     refs:
     - master
-    - test
+    - alpha
     - /^(([0-9]+)\.)?([0-9]+)\.x/ # This matches maintenance branches
     - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ # This matches pre-releases
   script:
@@ -37,70 +41,26 @@ generate-non-semantic-version:
   artifacts:
     paths:
     - VERSION.txt
-
-docker dev build:
+build:
   stage: Build Dev Image
-  rules: 
-    - if: '$CI_COMMIT_BRANCH == "dev"'
-      when: always
-  before_script:
-    - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-    - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
   script:
-    - export DOCKER_CLI_EXPERIMENTAL=enabled   
+    - echo "Version is $(cat VERSION.txt)"
     - export CGO_ENABLED=0
-    - docker buildx use mybuilder
-    - echo "Version is $(cat VERSION.txt)"  
-    - npx semantic-release
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --platform linux/amd64 -t $CONTAINER_DEV_IMAGE . --push
-
-docker test build:
-  stage: Build Test Image
-  rules: 
-    - if: $CI_COMMIT_BRANCH == "test"
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "test"
-      when: always
-
-  before_script:
-    - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-    - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-  script:
-    - export DOCKER_CLI_EXPERIMENTAL=enabled   
-    - export CGO_ENABLED=0
-    - docker buildx use mybuilder
-    - echo "Version is $(cat VERSION.txt)" 
-    - npx semantic-release 
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --platform linux/amd64 -t $CONTAINER_TEST_IMAGE . --push
-
-docker release build:
-  stage: Build Release Image
-  rules: 
-    - if: $CI_COMMIT_BRANCH == "master"
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
-      when: always
-  before_script:
-    - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-    - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-  script:
-    - export DOCKER_CLI_EXPERIMENTAL=enabled   
-    - export CGO_ENABLED=0
-    - docker buildx use mybuilder
-    - echo "Version is $(cat VERSION.txt)" 
-    - npx semantic-release 
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --platform linux/amd64 -t $CONTAINER_RELEASE_IMAGE . --push
-
+    - docker buildx create --use
+    - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --tag $CONTAINER_DEV_IMAGE . --push
 release:
-  stage: Release
+  image: node:13
+  stage: release
   only:
     refs:
     - master
     - test
+    - dev
     # This matches maintenance branches
     - /^(([0-9]+)\.)?([0-9]+)\.x/
     # This matches pre-releases
     - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ 
   script:
+    - npm install @semantic-release/gitlab
     - npx semantic-release
