@@ -1,7 +1,7 @@
 stages:
   - fetch-version
   - Build Dev Image
-  - Release
+  - release
 
 image: jdrouet/docker-with-buildx:stable
 
