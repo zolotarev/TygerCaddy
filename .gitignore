@@ -121,3 +121,4 @@ backend/db/database.sqlite
 backend/db/Caddyfile
 Caddyfile
 .vscode
+.vscode/settings.json
