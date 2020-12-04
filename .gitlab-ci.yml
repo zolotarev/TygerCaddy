@@ -1,14 +1,12 @@
 stages:
   - Fetch Version
   - Build Dev Image
-  - Push Dev Image
   - Build Test Image
-  - Push Test Image
   - Build Release Image
-  - Push Release Image
   - Release
 
 variables:
+  CONTAINER_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
   CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
   CONTAINER_TEST_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:test
   CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:latest
@@ -47,29 +45,16 @@ docker dev build:
     - if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
   before_script:
-    - docker info
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - export DOCKER_CLI_EXPERIMENTAL=enabled   
-    - export CGO_ENABLED=0
     - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
     - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-    - docker buildx use mybuilder
-    - docker buildx inspect --bootstrap
-    - echo "Version is $(cat VERSION.txt)"  
-    - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_DEV_IMAGE -t tygercaddy/tygercaddy:dev .
   script:
+    - export DOCKER_CLI_EXPERIMENTAL=enabled   
+    - export CGO_ENABLED=0
+    - docker buildx use mybuilder
+    - echo "Version is $(cat VERSION.txt)"  
     - npx semantic-release
-
-docker dev push:
-  stage: Push Dev Image
-  rules: 
-    - if: '$CI_COMMIT_BRANCH == "dev"'
-      when: always
-  before_script:
-    - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:  
-    - docker push $CI_REGISTRY/tygercaddy/tygercaddy:dev
+    - docker buildx build --platform linux/amd64 -t $CONTAINER_DEV_IMAGE . --push
 
 docker test build:
   stage: Build Test Image
@@ -77,31 +62,18 @@ docker test build:
     - if: $CI_COMMIT_BRANCH == "test"
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "test"
       when: always
+
   before_script:
-    - docker info
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - export DOCKER_CLI_EXPERIMENTAL=enabled   
-    - export CGO_ENABLED=0
     - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
     - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
+  script:
+    - export DOCKER_CLI_EXPERIMENTAL=enabled   
+    - export CGO_ENABLED=0
     - docker buildx use mybuilder
-    - docker buildx inspect --bootstrap
-    - echo "Version is $(cat VERSION.txt)"  
-    - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_TEST_IMAGE -t tygercaddy/tygercaddy:test .
-  script:  
-    - npx semantic-release
-
-docker test push:
-  stage: Push Test Image
-  rules: 
-    - if: $CI_COMMIT_BRANCH == "test"
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "test"
-      when: always
-  before_script:
-    - docker info
+    - echo "Version is $(cat VERSION.txt)" 
+    - npx semantic-release 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:  
-    - docker push $CI_REGISTRY/tygercaddy/tygercaddy:test
+    - docker buildx build --platform linux/amd64 -t $CONTAINER_TEST_IMAGE . --push
 
 docker release build:
   stage: Build Release Image
@@ -110,31 +82,16 @@ docker release build:
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
       when: always
   before_script:
-    - docker info
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - export DOCKER_CLI_EXPERIMENTAL=enabled   
-    - export CGO_ENABLED=0
     - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
     - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-    - docker buildx use mybuilder
-    - docker buildx inspect --bootstrap
-    - echo "Version is $(cat VERSION.txt)"    
-    - docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t $CONTAINER_RELEASE_IMAGE -t tygercaddy/tygercaddy:latest .
   script:
-
-    - npx semantic-release
-
-docker release push:
-  stage: Push Release Image
-  rules: 
-    - if: $CI_COMMIT_BRANCH == "master"
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
-      when: always
-  before_script:
-    - docker info
+    - export DOCKER_CLI_EXPERIMENTAL=enabled   
+    - export CGO_ENABLED=0
+    - docker buildx use mybuilder
+    - echo "Version is $(cat VERSION.txt)" 
+    - npx semantic-release 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:  
-    - docker push $CI_REGISTRY/tygercaddy/tygercaddy:latest
+    - docker buildx build --platform linux/amd64 -t $CONTAINER_RELEASE_IMAGE . --push
 
 release:
   stage: Release
