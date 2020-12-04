@@ -29,7 +29,7 @@ export class Address {
   @Column()
   staging: boolean;
 
-  @Column()
+  @Column({ default: false })
   custom_cert: boolean;
 
   @Column({ default: false })
