@@ -9,7 +9,6 @@ class AddressController {
 
   static generateCaddyfile = async (req: Request, res: Response) =>{
     let generate = await rebuildCaddyfile();
-    console.log(generate);
     return res.send(generate)
   };
   static getLogForAddress = async (req: Request, res: Response) =>{
