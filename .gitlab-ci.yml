@@ -3,7 +3,7 @@ variables:
   DOCKER_HOST: tcp://docker:2375/
   CI_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
   CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
-  PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v6,linux/arm/v7
+  PLATFORM: linux/amd64,linux/arm64,linux/arm/v7 #,linux/arm/v6
 
 before_script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -47,3 +47,4 @@ build-dev:
       --build-arg BUILDKIT_INLINE_CACHE=1 .
   except:
     - master
+    - test
