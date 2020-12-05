@@ -14,7 +14,7 @@ build-master:
   image: jonoh/docker-buildx-qemu
   stage: build
   services:
-    - docker:dind
+    - docker:19.03.0-dind
   script:
     - update-binfmts --enable
     - docker buildx build -t "$CI_IMAGE" --platform "$PLATFORM" --push $CI_IMAGE
