@@ -25,7 +25,7 @@ build-feature:
   image: jonoh/docker-buildx-qemu
   stage: build
   services:
-    - docker:dind
+    - docker:19.03.0-dind
   script:
     - update-binfmts --enable
     - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG" 
