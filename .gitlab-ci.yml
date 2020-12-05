@@ -1,4 +1,5 @@
 variables:
+  DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: tcp://docker:2375/
   CI_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
   CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
@@ -14,7 +15,7 @@ build-master:
   image: jonoh/docker-buildx-qemu
   stage: build
   services:
-    - gitlab:dind
+    - docker:19.03.0-dind
   script:
     - update-binfmts --enable
     - docker buildx build -t "$CI_IMAGE" --platform "$PLATFORM" --push $CI_IMAGE
@@ -25,7 +26,7 @@ build-feature:
   image: jonoh/docker-buildx-qemu
   stage: build
   services:
-    - gitlab:dind
+    - docker:19.03.0-dind
   script:
     - update-binfmts --enable
     - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG" 
