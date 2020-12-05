@@ -1,5 +1,5 @@
 variables:
-  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_HOST: tcp://localhost:2375/
   CI_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
   CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
   PLATFORM: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7
