@@ -18,7 +18,7 @@ build-release:
     - docker:19.03.0-dind
   script:
     - update-binfmts --enable
-    - docker buildx build -t "$CI_IMAGE" --cache-from $CI_IMAGE --platform "$PLATFORM" --push $CI_IMAGE
+    - docker buildx build -t "$CI_IMAGE" --cache-from $CI_IMAGE --platform "$PLATFORM" --push $CI_IMAGE --build-arg BUILDKIT_INLINE_CACHE=1 .
   only:
     - master
 
