@@ -14,7 +14,7 @@ build-master:
   image: jonoh/docker-buildx-qemu
   stage: build
   services:
-    - docker:19.03.0-dind
+    - gitlab:dind
   script:
     - update-binfmts --enable
     - docker buildx build -t "$CI_IMAGE" --platform "$PLATFORM" --push $CI_IMAGE
@@ -25,7 +25,7 @@ build-feature:
   image: jonoh/docker-buildx-qemu
   stage: build
   services:
-    - docker:19.03.0-dind
+    - gitlab:dind
   script:
     - update-binfmts --enable
     - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG" 
