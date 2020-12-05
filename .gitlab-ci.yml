@@ -3,15 +3,14 @@ variables:
   DOCKER_HOST: tcp://docker:2375/
   CI_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
   CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
-  PLATFORM: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7
+  PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v6,linux/arm/v7
 
 before_script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  #- docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
   - docker buildx create --driver docker-container --use
   - docker buildx inspect --bootstrap
 
-build-master:
+build-release:
   image: jonoh/docker-buildx-qemu
   stage: build
   services:
@@ -22,7 +21,21 @@ build-master:
   only:
     - master
 
-build-feature:
+build-test:
+  image: jonoh/docker-buildx-qemu
+  stage: build
+  services:
+    - docker:19.03.0-dind
+  script:
+    - update-binfmts --enable
+    - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG-test" 
+      --platform "$PLATFORM" 
+      --build-arg BUILDKIT_INLINE_CACHE=1 .
+  except:
+    - master
+    - dev
+
+build-dev:
   image: jonoh/docker-buildx-qemu
   stage: build
   services:
