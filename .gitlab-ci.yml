@@ -11,7 +11,7 @@ variables:
 semantic_release:
   stage: version
   image: smartive/semantic-release-image
-  only:
+  only: 
     - branches
   artifacts:
     paths:
