@@ -1,106 +1,53 @@
-stages:
-  - Fetch Version
-  - Build Dev Image
-  - Build Test Image
-  - Build Release Image
-  - Release
-
 variables:
-  CONTAINER_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  CI_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
   CONTAINER_DEV_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:dev
-  CONTAINER_TEST_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:test
-  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy:latest
+  PLATFORM: linux/amd64,linux/arm64,linux/arm/v7 #,linux/arm/v6
 
-fetch-semantic-version:
-  # Requires Node >= 10.13 version
-  stage: Fetch Version
-  only:
-    refs:
-    - test
-    - /^(([0-9]+)\.)?([0-9]+)\.x/ # This matches maintenance branches
-    - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ # This matches pre-releases
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker buildx create --driver docker-container --use
+  - docker buildx inspect --bootstrap
+
+build-release:
+  image: jonoh/docker-buildx-qemu
+  stage: build
+  services:
+    - docker:19.03.0-dind
   script:
-    - npx semantic-release --generate-notes false --dry-run
-  artifacts:
-    paths:
-    - VERSION.txt
-generate-non-semantic-version:
-  stage: Fetch Version
+    - update-binfmts --enable
+    - docker buildx build -t "$CI_IMAGE" --cache-from $CI_IMAGE --platform "$PLATFORM" --push $CI_IMAGE --build-arg BUILDKIT_INLINE_CACHE=1 .
+  only:
+    - master
+
+build-test:
+  image: jonoh/docker-buildx-qemu
+  stage: build
+  services:
+    - docker:19.03.0-dind
+  script:
+    - update-binfmts --enable
+    - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG-test" 
+      --platform "linux/amd64"
+      --cache-from $CI_IMAGE 
+      --build-arg BUILDKIT_INLINE_CACHE=1 .
   except:
-    refs:
+    - master
+    - dev
+
+build-dev:
+  image: jonoh/docker-buildx-qemu
+  stage: build
+  services:
+    - docker:19.03.0-dind
+  script:
+    - update-binfmts --enable
+    - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG" 
+      --cache-from $CI_IMAGE
+      --platform "linux/amd64" 
+      --build-arg BUILDKIT_INLINE_CACHE=1 .
+  except:
     - master
     - test
-    - /^(([0-9]+)\.)?([0-9]+)\.x/ # This matches maintenance branches
-    - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ # This matches pre-releases
-  script:
-    - echo build-$CI_PIPELINE_ID > VERSION.txt
-  artifacts:
-    paths:
-    - VERSION.txt
-
-docker dev build:
-  stage: Build Dev Image
-  rules: 
-    - if: '$CI_COMMIT_BRANCH == "dev"'
-      when: always
-  before_script:
-    - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-    - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-  script:
-    - export DOCKER_CLI_EXPERIMENTAL=enabled   
-    - export CGO_ENABLED=0
-    - docker buildx use mybuilder
-    - echo "Version is $(cat VERSION.txt)"  
-    - npx semantic-release
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --platform linux/amd64 -t $CONTAINER_DEV_IMAGE . --push
-
-docker test build:
-  stage: Build Test Image
-  rules: 
-    - if: $CI_COMMIT_BRANCH == "test"
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "test"
-      when: always
-
-  before_script:
-    - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-    - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-  script:
-    - export DOCKER_CLI_EXPERIMENTAL=enabled   
-    - export CGO_ENABLED=0
-    - docker buildx use mybuilder
-    - echo "Version is $(cat VERSION.txt)" 
-    - npx semantic-release 
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --platform linux/amd64 -t $CONTAINER_TEST_IMAGE . --push
-
-docker release build:
-  stage: Build Release Image
-  rules: 
-    - if: $CI_COMMIT_BRANCH == "master"
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
-      when: always
-  before_script:
-    - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-    - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-  script:
-    - export DOCKER_CLI_EXPERIMENTAL=enabled   
-    - export CGO_ENABLED=0
-    - docker buildx use mybuilder
-    - echo "Version is $(cat VERSION.txt)" 
-    - npx semantic-release 
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --platform linux/amd64 -t $CONTAINER_RELEASE_IMAGE . --push
-
-release:
-  stage: Release
-  only:
-    refs:
-    - master
-    - test
-    # This matches maintenance branches
-    - /^(([0-9]+)\.)?([0-9]+)\.x/
-    # This matches pre-releases
-    - /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/ 
-  script:
-    - npx semantic-release
