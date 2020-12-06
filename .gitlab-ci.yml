@@ -1,3 +1,13 @@
+stages:
+  - build dev
+  - build dev arm
+  - build dev arm64
+  - build test
+  - build test arm
+  - build test arm64
+  - build release
+  - build release arm
+  - build release arm64
 variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: tcp://docker:2375/
@@ -13,24 +23,72 @@ before_script:
 
 build-release:
   image: jonoh/docker-buildx-qemu
-  stage: build
+  stage: build release
   services:
     - docker:19.03.0-dind
   script:
     - update-binfmts --enable
-    - docker buildx build -t "$CI_IMAGE" --cache-from $CI_IMAGE --platform "$PLATFORM" --push $CI_IMAGE --build-arg BUILDKIT_INLINE_CACHE=1 .
+    - docker buildx build -t "$CI_IMAGE:latest" --cache-from $CI_IMAGE --platform "linux/amd64" --push $CI_IMAGE --build-arg BUILDKIT_INLINE_CACHE=1 .
+  only:
+    - master
+build-release-arm:
+  image: jonoh/docker-buildx-qemu
+  stage: build release arm
+  services:
+    - docker:19.03.0-dind
+  script:
+    - update-binfmts --enable
+    - docker buildx build -t "$CI_IMAGE:latest-arm" --cache-from $CI_IMAGE --platform "linux/arm/v7" --push $CI_IMAGE --build-arg BUILDKIT_INLINE_CACHE=1 .
+  only:
+    - master
+build-release-arm64:
+  image: jonoh/docker-buildx-qemu
+  stage: build release arm64
+  services:
+    - docker:19.03.0-dind
+  script:
+    - update-binfmts --enable
+    - docker buildx build -t "$CI_IMAGE:latest-arm64" --cache-from $CI_IMAGE --platform "linux/arm64" --push $CI_IMAGE --build-arg BUILDKIT_INLINE_CACHE=1 .
   only:
     - master
 
 build-test:
   image: jonoh/docker-buildx-qemu
-  stage: build
+  stage: build test
   services:
     - docker:19.03.0-dind
   script:
     - update-binfmts --enable
-    - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG-test" 
+    - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA" 
       --platform "linux/amd64"
+      --cache-from $CI_IMAGE 
+      --build-arg BUILDKIT_INLINE_CACHE=1 .
+  except:
+    - master
+    - dev
+build-test-arm:
+  image: jonoh/docker-buildx-qemu
+  stage: build test arm
+  services:
+    - docker:19.03.0-dind
+  script:
+    - update-binfmts --enable
+    - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA-arm" 
+      --platform "linux/arm/v7"
+      --cache-from $CI_IMAGE 
+      --build-arg BUILDKIT_INLINE_CACHE=1 .
+  except:
+    - master
+    - dev
+build-test-arm64:
+  image: jonoh/docker-buildx-qemu
+  stage: build test arm64
+  services:
+    - docker:19.03.0-dind
+  script:
+    - update-binfmts --enable
+    - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA-arm64" 
+      --platform "linux/arm64"
       --cache-from $CI_IMAGE 
       --build-arg BUILDKIT_INLINE_CACHE=1 .
   except:
@@ -39,7 +97,7 @@ build-test:
 
 build-dev:
   image: jonoh/docker-buildx-qemu
-  stage: build
+  stage: build dev
   services:
     - docker:19.03.0-dind
   script:
@@ -47,6 +105,34 @@ build-dev:
     - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG" 
       --cache-from $CI_IMAGE
       --platform "linux/amd64" 
+      --build-arg BUILDKIT_INLINE_CACHE=1 .
+  except:
+    - master
+    - test
+build-dev-arm:
+  image: jonoh/docker-buildx-qemu
+  stage: build dev arm
+  services:
+    - docker:19.03.0-dind
+  script:
+    - update-binfmts --enable
+    - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA-arm" 
+      --cache-from $CI_IMAGE
+      --platform "linux/arm/v7" 
+      --build-arg BUILDKIT_INLINE_CACHE=1 .
+  except:
+    - master
+    - test
+build-dev-arm64:
+  image: jonoh/docker-buildx-qemu
+  stage: build dev arm64
+  services:
+    - docker:19.03.0-dind
+  script:
+    - update-binfmts --enable
+    - docker buildx build --push -t "$CI_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA-arm64" 
+      --cache-from $CI_IMAGE
+      --platform "linux/arm64" 
       --build-arg BUILDKIT_INLINE_CACHE=1 .
   except:
     - master
