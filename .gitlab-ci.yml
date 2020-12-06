@@ -33,7 +33,7 @@ build-release:
     - master
 build-release-arm:
   image: jonoh/docker-buildx-qemu
-  stage: build
+  stage: build release arm
   services:
     - docker:19.03.0-dind
   script:
