@@ -23,7 +23,7 @@ before_script:
 
 build-release:
   image: jonoh/docker-buildx-qemu
-  stage: build
+  stage: build release
   services:
     - docker:19.03.0-dind
   script:
@@ -43,7 +43,7 @@ build-release-arm:
     - master
 build-release-arm64:
   image: jonoh/docker-buildx-qemu
-  stage: build
+  stage: build release arm64
   services:
     - docker:19.03.0-dind
   script:
@@ -54,7 +54,7 @@ build-release-arm64:
 
 build-test:
   image: jonoh/docker-buildx-qemu
-  stage: build
+  stage: build test
   services:
     - docker:19.03.0-dind
   script:
@@ -82,7 +82,7 @@ build-test-arm:
     - dev
 build-test-arm64:
   image: jonoh/docker-buildx-qemu
-  stage: build
+  stage: build test arm64
   services:
     - docker:19.03.0-dind
   script:
@@ -125,7 +125,7 @@ build-dev-arm:
     - test
 build-dev-arm64:
   image: jonoh/docker-buildx-qemu
-  stage: build dev arm
+  stage: build dev arm64
   services:
     - docker:19.03.0-dind
   script:
