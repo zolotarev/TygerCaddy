@@ -29,8 +29,8 @@ FROM node:alpine AS nodefrontend
 RUN apk add --no-cache python make g++
 WORKDIR /tygercaddy/frontend
 COPY ./frontend ./
-RUN npm install && \
-    npm run build
+RUN npm install
+RUN npm run build
 
 
 FROM node:alpine AS tygercaddy
@@ -39,13 +39,8 @@ COPY --from=caddy /usr/bin/caddy /usr/bin/caddy
 
 WORKDIR /tygercaddy/backend
 COPY --from=nodebackend /tygercaddy/backend/build ./
-#COPY --from=nodebackend /tygercaddy/backend/initialdb ./initialdb
-#COPY --from=nodebackend /tygercaddy/backend/build/node_modules ./node_modules
 COPY --from=nodebackend /tygercaddy/backend/ormconfig.js ./ormconfig.js
 COPY --from=nodebackend /tygercaddy/backend/prod.example.env ./.env
-#RUN ls
-#COPY --from=nodebackend /tygercaddy/backend/build/db ./db
-#COPY /docker/Caddyfile ./db
 
 WORKDIR /tygercaddy/frontend
 COPY --from=nodefrontend /tygercaddy/frontend/dist ./dist
