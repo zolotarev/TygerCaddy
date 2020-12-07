@@ -33,7 +33,13 @@ build-docker:
       - docker buildx inspect --bootstrap
     script:
       - update-binfmts --enable
-      - docker buildx build --push -t "$CI_IMAGE:$(cat VERSION.txt)" -t "$CI_IMAGE:latest" 
+      - >
+        if [ "$CI_COMMIT_BRANCH" == "dev" ]; then
+          $BRANCH_VERSION=dev-latest
+        else
+          $BRANCH_VERSION=test-latest
+        fi
+      - docker buildx build --push -t "$CI_IMAGE:$(cat VERSION.txt)" -t "$CI_IMAGE:$BRANCH_VERSION" 
         --platform "linux/amd64"
         --cache-from $CI_IMAGE:$(cat VERSION.txt) 
         --build-arg BUILDKIT_INLINE_CACHE=1 .
