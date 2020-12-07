@@ -18,6 +18,12 @@ semantic_release:
     - VERSION.txt
   script:
     - npx semantic-release
+    - cat VERSION.txt
+    - ls -ls
+    - rm -R frontend/src/version.js
+    - echo "export const version = '$(cat VERSION.txt)';" > frontend/src/version.js
+    - cd frontend/src/
+    - ls -ls
 
 build-docker:
     image: jonoh/docker-buildx-qemu
