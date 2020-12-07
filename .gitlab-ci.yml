@@ -35,9 +35,9 @@ build-docker:
       - update-binfmts --enable
       - >
         if [ "$CI_COMMIT_BRANCH" == "dev" ]; then
-          $BRANCH_VERSION=dev-latest
+          export BRANCH_VERSION="dev-latest"
         else
-          $BRANCH_VERSION=test-latest
+          export BRANCH_VERSION="test-latest"
         fi
       - docker buildx build --push -t "$CI_IMAGE:$(cat VERSION.txt)" -t "$CI_IMAGE:$BRANCH_VERSION" 
         --platform "linux/amd64"
