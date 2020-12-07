@@ -11,7 +11,7 @@
   </v-footer>
 </template>
 <script>
-import { version } from "../../version";
+require("../../version.js");
 export default {
   data: () => ({
     currentVersion: version,
