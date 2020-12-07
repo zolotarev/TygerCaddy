@@ -17,6 +17,7 @@ semantic_release:
     paths:
     - VERSION.txt
   script:
+    - npx semantic-release
     - rm -R ./frontend/src/version.js
     - cd ./frontend/src/
     - ls -ls
