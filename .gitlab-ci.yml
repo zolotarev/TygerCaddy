@@ -20,9 +20,9 @@ semantic_release:
     - npx semantic-release
     - cat VERSION.txt
     - ls -ls
-    - rm -R ./frontend/src/version.js
-    - echo "export const version = '$(cat VERSION.txt)';" ./frontend/src/version.js
-    - cd /frontend/src/
+    - rm -R frontend/src/version.js
+    - echo "export const version = '$(cat VERSION.txt)';" > frontend/src/version.js
+    - cd frontend/src/
     - ls -ls
 
 build-docker:
