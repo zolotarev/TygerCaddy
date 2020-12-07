@@ -67,3 +67,21 @@ build-docker-release:
         --platform "linux/amd64,linux/arm64,linux/arm/v7"
         --cache-from $CI_IMAGE:$(cat VERSION.txt) 
         --build-arg BUILDKIT_INLINE_CACHE=1 .
+
+build-docker-ARM64:
+    image: jonoh/docker-buildx-qemu
+    stage: build
+    services:
+      - docker:19.03.0-dind
+    only:
+      - master
+    before_script:
+      - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+      - docker buildx create --driver docker-container --use
+      - docker buildx inspect --bootstrap
+    script:
+      - update-binfmts --enable
+      - docker buildx build -f DockerfileARM64 --push -t "$CI_IMAGE:ARM64-$(cat VERSION.txt)" -t "$CI_IMAGE:ARM64-latest"
+        --platform "linux/arm64"
+        --cache-from $CI_IMAGE:ARM64-$(cat VERSION.txt) 
+        --build-arg BUILDKIT_INLINE_CACHE=1 .
