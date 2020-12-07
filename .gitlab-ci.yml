@@ -21,6 +21,7 @@ semantic_release:
     - cd ./frontend/src/
     - ls -ls
     - echo "export const version = '$(cat VERSION.txt)';" ./frontend/src/version.js
+    - cd ./frontend/src/
     - ls -ls
     - npx semantic-release
 
