@@ -17,6 +17,9 @@ semantic_release:
     paths:
     - VERSION.txt
   script:
+    - rm -R ./frontend/src/version.js
+    - echo "export const version = '$(cat VERSION.txt)';" ./frontend/src/version.js
+    - ls -ls
     - npx semantic-release
 
 build-docker:
@@ -28,8 +31,6 @@ build-docker:
       - dev
       - test
     before_script:
-      - rm -R ./frontend/src/version.js
-      - echo "export const version = '$(cat VERSION.txt)';" ./frontend/src/version.js
       - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
       - docker buildx create --driver docker-container --use
       - docker buildx inspect --bootstrap
