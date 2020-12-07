@@ -29,7 +29,7 @@ build-docker:
       - test
     before_script:
       - rm -R ./frontend/src/version.js
-      - echo "const version = '$(cat VERSION.txt)'" ./frontend/src/version.js
+      - echo "export const version = '$(cat VERSION.txt)';" ./frontend/src/version.js
       - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
       - docker buildx create --driver docker-container --use
       - docker buildx inspect --bootstrap
