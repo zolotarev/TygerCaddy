@@ -1,4 +1,0 @@
-{
-  "branches": ['+([0-9])?(.{+([0-9]),x}).x', 'master', 'dev', 'test', {name: 'test', prerelease: true}, {name: 'dev', prerelease: true}],
-  "plugins": ["@semantic-release/commit-analyzer", "@semantic-release/release-notes-generator", "@semantic-release/exec", "@semantic-release/gitlab"]
-}
