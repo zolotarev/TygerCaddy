@@ -69,6 +69,12 @@ build-docker-release:
       - docker buildx create --driver docker-container --use
       - docker buildx inspect --bootstrap
     script:
+      - ls
+      - cat version.js
+      - cat frontend/src/version.js
+      - rm frontend/src/version.js
+      - cp version.js frontend/src/version.js
+      - cat frontend/src/version.js
       - update-binfmts --enable
       - docker buildx build --push -t "$CI_IMAGE:$(cat VERSION.txt)" -t "$CI_IMAGE:latest"
         --platform "linux/amd64,linux/arm64,linux/arm/v7"
@@ -87,6 +93,12 @@ build-docker-ARM64:
       - docker buildx create --driver docker-container --use
       - docker buildx inspect --bootstrap
     script:
+      - ls
+      - cat version.js
+      - cat frontend/src/version.js
+      - rm frontend/src/version.js
+      - cp version.js frontend/src/version.js
+      - cat frontend/src/version.js
       - update-binfmts --enable
       - docker buildx build -f DockerfileARM64 --push -t "$CI_IMAGE:ARM64-$(cat VERSION.txt)" -t "$CI_IMAGE:ARM64-latest"
         --platform "linux/arm64"
