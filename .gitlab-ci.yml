@@ -26,10 +26,7 @@ semantic_release:
     - cat version.js
 
 build-docker:
-    image: jonoh/docker-buildx-qemu
     stage: build
-    services:
-      - docker:19.03.0-dind
     only:
       - dev
       - test
@@ -58,10 +55,7 @@ build-docker:
         --build-arg BUILDKIT_INLINE_CACHE=1 .
 
 build-docker-release:
-    image: jonoh/docker-buildx-qemu
     stage: build
-    services:
-      - docker:19.03.0-dind
     only:
       - master
     before_script:
