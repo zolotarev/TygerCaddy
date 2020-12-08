@@ -2,9 +2,9 @@ stages:
     - version
     - build
 variables:
-  DOCKER_TLS_CERTDIR: ""
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
+  #DOCKER_TLS_CERTDIR: ""
+  #DOCKER_HOST: tcp://docker:2375/
+  #DOCKER_DRIVER: overlay2
   CI_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
   PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
 
@@ -26,16 +26,14 @@ semantic_release:
     - cat version.js
 
 build-docker:
-    image: jonoh/docker-buildx-qemu
     stage: build
-    services:
-      - docker:19.03.0-dind
     only:
       - dev
       - test
     before_script:
       - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-      - docker buildx create --driver docker-container --use
+      - export DOCKER_CLI_EXPERIMENTAL="enabled"
+      - docker buildx create --use
       - docker buildx inspect --bootstrap
 
     script:
@@ -45,27 +43,26 @@ build-docker:
       - rm frontend/src/version.js
       - cp version.js frontend/src/version.js
       - cat frontend/src/version.js
-      - update-binfmts --enable
+      #- update-binfmts --enable
       - >
         if [ "$CI_COMMIT_BRANCH" == "dev" ]; then
           export BRANCH_VERSION="dev-latest"
         else
           export BRANCH_VERSION="test-latest"
         fi
+      - export DOCKER_CLI_EXPERIMENTAL="enabled"
       - docker buildx build --push -t "$CI_IMAGE:$(cat VERSION.txt)" -t "$CI_IMAGE:$BRANCH_VERSION" 
         --platform "linux/amd64"
         --cache-from $CI_IMAGE:$BRANCH_VERSION 
         --build-arg BUILDKIT_INLINE_CACHE=1 .
 
 build-docker-release:
-    image: jonoh/docker-buildx-qemu
     stage: build
-    services:
-      - docker:19.03.0-dind
     only:
       - master
     before_script:
       - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+      - export DOCKER_CLI_EXPERIMENTAL="enabled"
       - docker buildx create --driver docker-container --use
       - docker buildx inspect --bootstrap
     script:
@@ -75,21 +72,20 @@ build-docker-release:
       - rm frontend/src/version.js
       - cp version.js frontend/src/version.js
       - cat frontend/src/version.js
-      - update-binfmts --enable
+      #- update-binfmts --enable
+      - export DOCKER_CLI_EXPERIMENTAL="enabled"
       - docker buildx build --push -t "$CI_IMAGE:$(cat VERSION.txt)" -t "$CI_IMAGE:latest"
-        --platform "linux/amd64,linux/arm64,linux/arm/v7"
+        --platform "linux/amd64"
         --cache-from $CI_IMAGE:$(cat VERSION.txt) 
         --build-arg BUILDKIT_INLINE_CACHE=1 .
 
 build-docker-ARM64:
-    image: jonoh/docker-buildx-qemu
     stage: build
-    services:
-      - docker:19.03.0-dind
     only:
       - master
     before_script:
       - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+      - export DOCKER_CLI_EXPERIMENTAL="enabled"
       - docker buildx create --driver docker-container --use
       - docker buildx inspect --bootstrap
     script:
@@ -99,7 +95,8 @@ build-docker-ARM64:
       - rm frontend/src/version.js
       - cp version.js frontend/src/version.js
       - cat frontend/src/version.js
-      - update-binfmts --enable
+      #- update-binfmts --enable
+      - export DOCKER_CLI_EXPERIMENTAL="enabled"
       - docker buildx build -f DockerfileARM64 --push -t "$CI_IMAGE:ARM64-$(cat VERSION.txt)" -t "$CI_IMAGE:ARM64-latest"
         --platform "linux/arm64"
         --cache-from $CI_IMAGE:ARM64-$(cat VERSION.txt) 
