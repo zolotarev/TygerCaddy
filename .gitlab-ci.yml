@@ -41,9 +41,9 @@ build-docker:
     script:
       - ls
       - cat version.js
-      - cat /frontend/src/version.js
-      - rm /frontend/src/version.js
-      - cp version.js /frontend/src/version.js
+      - cat frontend/src/version.js
+      - rm frontend/src/version.js
+      - cp version.js frontend/src/version.js
       - update-binfmts --enable
       - >
         if [ "$CI_COMMIT_BRANCH" == "dev" ]; then
