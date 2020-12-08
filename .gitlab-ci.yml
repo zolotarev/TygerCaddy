@@ -37,11 +37,12 @@ build-docker:
       - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
       - docker buildx create --driver docker-container --use
       - docker buildx inspect --bootstrap
+
+    script:
       - cat version.js
       - cat /frontend/src/version.js
       - rm /frontend/src/version.js
       - cp version.js /frontend/src/version.js
-    script:
       - update-binfmts --enable
       - >
         if [ "$CI_COMMIT_BRANCH" == "dev" ]; then
