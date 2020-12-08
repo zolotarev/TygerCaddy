@@ -77,7 +77,7 @@ build-docker-release:
       - cat frontend/src/version.js
       - update-binfmts --enable
       - docker buildx build --push -t "$CI_IMAGE:$(cat VERSION.txt)" -t "$CI_IMAGE:latest"
-        --platform "linux/amd64,linux/arm64,linux/arm/v7"
+        --platform "linux/amd64"
         --cache-from $CI_IMAGE:$(cat VERSION.txt) 
         --build-arg BUILDKIT_INLINE_CACHE=1 .
 
