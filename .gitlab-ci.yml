@@ -3,8 +3,8 @@ stages:
     - build
 variables:
   DOCKER_TLS_CERTDIR: ""
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
+  #DOCKER_HOST: tcp://docker:2375/
+  #DOCKER_DRIVER: overlay2
   CI_IMAGE: $CI_REGISTRY/tygercaddy/tygercaddy
   PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
 
@@ -76,10 +76,7 @@ build-docker-release:
         --build-arg BUILDKIT_INLINE_CACHE=1 .
 
 build-docker-ARM64:
-    image: jonoh/docker-buildx-qemu
     stage: build
-    services:
-      - docker:19.03.0-dind
     only:
       - master
     before_script:
