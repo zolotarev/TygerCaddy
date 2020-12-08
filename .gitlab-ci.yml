@@ -43,7 +43,7 @@ build-docker:
       - rm frontend/src/version.js
       - cp version.js frontend/src/version.js
       - cat frontend/src/version.js
-      - update-binfmts --enable
+      #- update-binfmts --enable
       - >
         if [ "$CI_COMMIT_BRANCH" == "dev" ]; then
           export BRANCH_VERSION="dev-latest"
@@ -72,7 +72,7 @@ build-docker-release:
       - rm frontend/src/version.js
       - cp version.js frontend/src/version.js
       - cat frontend/src/version.js
-      - update-binfmts --enable
+      #- update-binfmts --enable
       - export DOCKER_CLI_EXPERIMENTAL="enabled"
       - docker buildx build --push -t "$CI_IMAGE:$(cat VERSION.txt)" -t "$CI_IMAGE:latest"
         --platform "linux/amd64"
@@ -95,7 +95,7 @@ build-docker-ARM64:
       - rm frontend/src/version.js
       - cp version.js frontend/src/version.js
       - cat frontend/src/version.js
-      - update-binfmts --enable
+      #- update-binfmts --enable
       - export DOCKER_CLI_EXPERIMENTAL="enabled"
       - docker buildx build -f DockerfileARM64 --push -t "$CI_IMAGE:ARM64-$(cat VERSION.txt)" -t "$CI_IMAGE:ARM64-latest"
         --platform "linux/arm64"
