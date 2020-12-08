@@ -39,6 +39,7 @@ build-docker:
       - docker buildx inspect --bootstrap
 
     script:
+      - ls
       - cat version.js
       - cat /frontend/src/version.js
       - rm /frontend/src/version.js
