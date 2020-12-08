@@ -16,14 +16,14 @@ semantic_release:
   artifacts:
     paths:
     - VERSION.txt
+    - version.js
   script:
     - npx semantic-release
     - cat VERSION.txt
     - ls -ls
     - rm -R frontend/src/version.js
-    - echo "export const version = '$(cat VERSION.txt)';" > frontend/src/version.js
-    - cd frontend/src/
-    - ls -ls
+    - echo "export const version = '$(cat VERSION.txt)';" > version.js
+    - cat version.js
 
 build-docker:
     image: jonoh/docker-buildx-qemu
@@ -37,6 +37,10 @@ build-docker:
       - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
       - docker buildx create --driver docker-container --use
       - docker buildx inspect --bootstrap
+      - cat version.js
+      - cat /frontend/src/version.js
+      - rm /frontend/src/version.js
+      - cp version.js /frontend/src/version.js
     script:
       - update-binfmts --enable
       - >
