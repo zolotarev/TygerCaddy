@@ -82,7 +82,7 @@ build-docker-release:
 build-docker-ARM64:
     stage: build
     only:
-      - master
+      - dev
     before_script:
       - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
       - export DOCKER_CLI_EXPERIMENTAL="enabled"

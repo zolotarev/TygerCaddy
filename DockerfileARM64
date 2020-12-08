@@ -1,5 +1,5 @@
 #Prep the caddy image for the binary
-FROM arm64v8/caddy:2.2.0-builder AS caddy
+FROM caddy:builder AS caddy
 
 RUN xcaddy build \
     --with github.com/caddy-dns/digitalocean \
@@ -24,7 +24,7 @@ RUN mkdir -p /tygercaddy/backend/build/initialdb
 RUN mv /tygercaddy/backend/build/db/database.sqlite /tygercaddy/backend/build/initialdb/
 
 
-FROM arm64v8/node:10-alpine3.9 AS nodefrontend
+FROM node:alpine AS nodefrontend
 RUN apk add --no-cache python make g++
 WORKDIR /tygercaddy/frontend
 COPY ./frontend ./
@@ -32,7 +32,7 @@ RUN npm install
 RUN npm run build
 
 
-FROM arm64v8/node:10-alpine3.9 AS tygercaddy
+FROM node:alpine AS tygercaddy
 COPY --from=caddy /usr/bin/caddy /usr/bin/caddy
 
 
