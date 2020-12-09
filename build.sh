@@ -8,7 +8,7 @@ if [ "$CI_COMMIT_BRANCH" == "dev" ]; then
 else
     export BRANCH_VERSION="test-latest"
 fi
-docker buildx build -f DockerfileARM64 --push -t "$CI_IMAGE:${VERSION_PREFIX}$(cat VERSION.txt)" -t "$CI_IMAGE:${VERSION_PREFIX}$TAG_VERSION" \
+docker buildx build --push -t "$CI_IMAGE:${VERSION_PREFIX}$(cat VERSION.txt)" -t "$CI_IMAGE:${VERSION_PREFIX}$TAG_VERSION" \
                     --platform "$PLATFORM"
                     --cache-from $CI_IMAGE:ARM64-$(cat VERSION.txt) 
                     --build-arg BUILDKIT_INLINE_CACHE=1 .
