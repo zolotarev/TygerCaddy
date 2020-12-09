@@ -27,6 +27,7 @@ semantic_release:
 
 build-docker:
     stage: build
+    image: jonoh/docker-buildx-qemu
     variables:
       PLATFORM: linux/amd64
     services:
@@ -51,6 +52,7 @@ build-docker:
 
 build-docker-release:
     stage: build
+    image: jonoh/docker-buildx-qemu
     services:
       - docker:19.03.0-dind
     variables:
