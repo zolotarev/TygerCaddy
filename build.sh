@@ -13,5 +13,5 @@ echo "First tag is:  $CI_IMAGE:${VERSION_PREFIX}$(cat VERSION.txt)"
 echo "Second tag is:  $CI_IMAGE:${VERSION_PREFIX}$TAG_VERSION"
 docker buildx build --push -t "$CI_IMAGE:${VERSION_PREFIX}$(cat VERSION.txt)" -t "$CI_IMAGE:${VERSION_PREFIX}$TAG_VERSION" \
                     --platform "$PLATFORM" \
-                    --cache-from $CI_IMAGE:${VERSION_PREFIX}-latest \
+                    --cache-from $CI_IMAGE:${VERSION_PREFIX}latest \
                     --build-arg BUILDKIT_INLINE_CACHE=1 .
