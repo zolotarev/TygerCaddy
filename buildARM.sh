@@ -13,8 +13,9 @@ echo "Second tag is:  $CI_IMAGE:${VERSION_PREFIX}$TAG_VERSION"
 export DOCKER_CLI_EXPERIMENTAL=enabled
 export DOCKER_HOST=unix:///var/run/docker.sock
 docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-docker buildx create --name ARMBuilder
-docker buildx use ARMBuilder
+docker buildx rm ARMBuilder
+docker buildx create --name ARMBuilder --use unix:///var/run/docker.sock
+#docker buildx use ARMBuilder
 docker buildx inspect --bootstrap
 update-binfmts --enable
 docker buildx build --push -t "$CI_IMAGE:${VERSION_PREFIX}$(cat VERSION.txt)" -t "$CI_IMAGE:${VERSION_PREFIX}$TAG_VERSION" \
