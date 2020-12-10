@@ -11,6 +11,8 @@ variables:
 semantic_release:
   stage: version
   image: smartive/semantic-release-image
+  tags: 
+   - docker
   only: 
     - branches
   artifacts:
@@ -28,6 +30,8 @@ semantic_release:
 build-docker:
     stage: build
     image: jonoh/docker-buildx-qemu
+    tags: 
+      - docker
     variables:
       PLATFORM: linux/amd64
     services:
@@ -53,6 +57,8 @@ build-docker:
 build-docker-release:
     stage: build
     image: jonoh/docker-buildx-qemu
+    tags: 
+      - docker
     services:
       - docker:19.03.0-dind
     variables:
@@ -71,6 +77,8 @@ build-docker-release:
 
 build-docker-ARM64:
     stage: build
+    tags: 
+      - shell
     variables:
       PLATFORM: linux/arm64
       TAG_VERSION: latest
