@@ -90,5 +90,4 @@ build-docker-ARM64:
     script:
       - ls
       - cat version.js
-      - cat frontend/src/version.js
       - sh buildARM.sh

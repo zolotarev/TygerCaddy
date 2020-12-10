@@ -2,7 +2,6 @@
 rm frontend/src/version.js
 cp version.js frontend/src/version.js
 cat frontend/src/version.js
-update-binfmts --enable
 echo "Image will be tagged with $CI_COMMIT_BRANCH"
 if [ "$CI_COMMIT_BRANCH" = "dev" ]; then
     export BRANCH_VERSION="dev-latest"
