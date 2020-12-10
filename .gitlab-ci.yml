@@ -71,18 +71,14 @@ build-docker-release:
 
 build-docker-ARM64:
     stage: build
-    services:
-      - docker:19.03.0-dind
-    image: jonoh/docker-buildx-qemu
     variables:
       PLATFORM: linux/arm64
       TAG_VERSION: latest
       VERSION_PREFIX: "ARM64-"
     only:
+      - dev
       - test
       - master
-    before_script:
-      - sh prebuild.sh
     script:
       - ls
       - cat version.js
