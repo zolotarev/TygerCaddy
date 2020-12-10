@@ -17,7 +17,6 @@ export class InitialConfig1597402755162 implements MigrationInterface {
             let dns = [
                 {name: "digitalocean"},
                 {name: "cloudflare"},
-                {name: "dnspod"},
                 {name: "route53"},
                 {name: "gandi"},
             ]

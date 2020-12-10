@@ -4,7 +4,6 @@ FROM caddy:builder-alpine AS caddy
 RUN xcaddy build \
     --with github.com/caddy-dns/digitalocean \
     --with github.com/caddy-dns/cloudflare \
-    --with github.com/caddy-dns/dnspod \
     --with github.com/caddy-dns/route53 \
     --with github.com/caddy-dns/gandi
 
