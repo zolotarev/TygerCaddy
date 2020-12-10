@@ -83,6 +83,7 @@ build-docker-ARM64:
       PLATFORM: linux/arm64
       TAG_VERSION: latest
       VERSION_PREFIX: "ARM64-"
+      DOCKER_HOST: unix:///var/run/docker.sock
     only:
       - dev
       - test
