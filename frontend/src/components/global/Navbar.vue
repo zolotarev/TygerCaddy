@@ -1,12 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer
-      dark
-      class="blue-grey darken-3"
-      clipped
-      v-model="drawer"
-      app
-    >
+    <v-navigation-drawer dark class="blue-grey darken-3" clipped v-model="drawer" app>
       <template v-slot:prepend>
         <v-list-item two-line>
           <v-list-item-avatar>
@@ -26,12 +20,7 @@
       <v-divider></v-divider>
 
       <v-list dense nav>
-        <v-list-item
-          v-for="link in links"
-          :key="link.text"
-          link
-          :to="link.route"
-        >
+        <v-list-item v-for="link in links" :key="link.text" link :to="link.route">
           <v-list-item-icon>
             <v-icon>{{ link.icon }}</v-icon>
           </v-list-item-icon>
@@ -92,6 +81,11 @@ export default {
         route: "load-balance",
         text: "Load Balancing",
         icon: "mdi-certificate",
+      },
+      {
+        route: "dns-providers",
+        text: "DNS Providers",
+        icon: "mdi-domain",
       },
       {
         route: "backup",

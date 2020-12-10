@@ -15,6 +15,16 @@ class DNSController {
       return res.status(404).send("DNS Providers not found");
     }
   };
+  static getActiveDNS = async (req: Request, res: Response) => {
+    //Get the DNSProviders from database
+    const DNSRepository = getRepository(DNSProvider);
+    try {
+      const DNS = await DNSRepository.find({where:{active:true}});
+      return res.send(DNS);
+    } catch (error) {
+      return res.status(404).send("DNS Providers not found");
+    }
+  };
   static editDNS = async (req: Request, res: Response) => {
     //Get the ID from the url
     const id = req.params.id;
