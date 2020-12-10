@@ -1,5 +1,5 @@
 #Prep the caddy image for the binary
-FROM caddy:builder AS caddy
+FROM caddy:builder-alpine AS caddy
 
 RUN xcaddy build \
     --with github.com/caddy-dns/digitalocean \
