@@ -85,7 +85,6 @@ build-docker-ARM64:
       VERSION_PREFIX: "ARM64-"
       DOCKER_HOST: unix:///var/run/docker.sock
     only:
-      - dev
       - test
       - master
     script:
