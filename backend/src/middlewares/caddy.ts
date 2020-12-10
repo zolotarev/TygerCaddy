@@ -157,7 +157,7 @@ export const generateTlsBlock = async (address) => {
     if(address.custom_cert){
         tlsBlock = " \t tls " + address.cert.cert_path + " " + address.cert.pem_path + " \n"
     }else{
-        if (config.use_dns_verification && config.dns_api_token && config.dns_provider_name){
+        if (config.use_dns_verification && address.dns.api_key && config.dns.name){
             if(address.forceHTTPChallenge){
                 tlsBlock =
                 " \t tls { \n" +
@@ -170,7 +170,7 @@ export const generateTlsBlock = async (address) => {
                 tlsBlock =
                 " \t tls { \n" +
                 "\t \t \t issuer acme { \n"+
-                "\t \t \t \t dns " + config.dns_provider_name.name + " " + config.dns_api_token + "\n "+
+                "\t \t \t \t dns " + address.dns.name + " " + address.dns.api_key + "\n "+
                 "\t \t \t \t resolvers 8.8.8.8 \n" +
                 "\t \t \t } \n"+
                 "\t }" 

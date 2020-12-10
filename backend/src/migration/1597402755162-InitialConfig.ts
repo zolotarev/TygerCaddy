@@ -15,10 +15,10 @@ export class InitialConfig1597402755162 implements MigrationInterface {
             await configRepository.save(config);
 
             let dns = [
-                {name: "digitalocean"},
-                {name: "cloudflare"},
-                {name: "route53"},
-                {name: "gandi"},
+                {name: "digitalocean", api_key: "", active: "false"},
+                {name: "cloudflare", api_key: "", active: "false"},
+                {name: "route53", api_key: "", active: "false"},
+                {name: "gandi", api_key: "", active: "false"},
             ]
 
 

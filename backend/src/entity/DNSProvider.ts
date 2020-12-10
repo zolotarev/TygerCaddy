@@ -19,6 +19,13 @@ export class DNSProvider {
   @Column()
   name: string;
 
+  @Column()
+  api_key: string;
+
+  @Column({default:false})
+  active: boolean;
+
+  @Column()
   createdAt: Date;
 
   @Column()

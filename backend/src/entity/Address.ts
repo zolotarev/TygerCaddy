@@ -11,6 +11,7 @@ import {
 import { Length, IsFQDN, IsFirebasePushId} from "class-validator";
 import {App} from "./App";
 import {Cert} from "./Cert";
+import {DNSProvider} from "./DNSProvider";
 import {Endpoint} from "./Endpoint";
 
 @Entity()
@@ -45,6 +46,8 @@ export class Address {
 
   @ManyToOne(type => App, App => App.address)
     app: App;
+  @ManyToOne(type => DNSProvider, DNS => DNS.address)
+    dns: DNSProvider;
   @ManyToOne(type => Cert, Cert => Cert.address)
     cert: Cert;
   @OneToMany(() => Endpoint, endpoint => endpoint.address)
