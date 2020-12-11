@@ -6,14 +6,17 @@
       </v-flex>
       <v-flex xs4>
         <p class="white--text text-right my-3">
-          Version:
-          <a
-            :href="
-              'https://gitlab.tygercaddy.co.uk/tygercaddy/TygerCaddy/-/releases#' +
-              currentVersion
-            "
-            >{{ currentVersion }}</a
-          >
+          <small>
+            Version:
+            <a
+              class="white--text"
+              :href="
+                'https://gitlab.tygercaddy.co.uk/tygercaddy/TygerCaddy/-/releases#' +
+                currentVersion
+              "
+              >{{ currentVersion }}</a
+            >
+          </small>
         </p>
       </v-flex>
     </v-layout>
@@ -23,7 +26,7 @@
 import { version } from "../../version.js";
 export default {
   data: () => ({
-    currentVersion: version,
+    currentVersion: version || "Development Live",
   }),
 };
 </script>
