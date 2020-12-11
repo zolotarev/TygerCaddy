@@ -9,17 +9,21 @@
         <v-card-text>
           <v-container fluid>
             <h3>Address Detail:</h3>
-            <v-layout row justify-space-between>
-              Address: {{ item.address }}
-            </v-layout>
-            <v-layout row justify-space-between>
-              Uses TLS: {{ item.tls }}
-            </v-layout>
+            <v-layout row justify-space-between> Address: {{ item.address }} </v-layout>
+            <v-layout row justify-space-between> Uses TLS: {{ item.tls }} </v-layout>
             <v-layout row justify-space-between>
               Uses TLS Staging: {{ item.staging }}
             </v-layout>
-                        <v-layout row justify-space-between>
+            <v-layout row justify-space-between>
               Force HTTP Challenge: {{ item.forceHTTPChallenge }}
+            </v-layout>
+            <v-layout row justify-space-between>
+              <div v-if="item.cert">Custom Cert: {{ item.cert.name }}</div>
+              <div v-else>Custom Cert: NONE</div>
+            </v-layout>
+            <v-layout row justify-space-between>
+              <div v-if="item.dns">DNS Provider: {{ item.dns.name }}</div>
+              <div v-else>DNS Provider: NONE</div>
             </v-layout>
             <v-layout row justify-space-between v-if="item.app">
               Proxies to: {{ item.app.name }}
@@ -36,7 +40,7 @@
             :items="endpoints"
             :loading="loading"
             :footer-props="{
-              itemsPerPageOptions: itemsPerPageOptions
+              itemsPerPageOptions: itemsPerPageOptions,
             }"
             class="elevation-1"
           >
@@ -97,7 +101,7 @@ import AddressDeleteEndpoint from "@/components/Endpoints/AddressDeleteEndpoint"
 export default {
   components: {
     AddressEditEndpoint,
-    AddressDeleteEndpoint
+    AddressDeleteEndpoint,
   },
   data() {
     return {
@@ -105,45 +109,45 @@ export default {
       deleteEndpointShow: false,
       itemsPerPageOptions: [10, 20, 30, 40, 50, 100],
       options: {
-        rowsPerPage: 30
+        rowsPerPage: 30,
       },
       headers: [
         {
           text: "Endpoint ID",
           align: "left",
-          value: "id"
+          value: "id",
         },
         { text: "Endpoint", value: "endpoint" },
         { text: "Address", value: "address" },
         { text: "App", value: "app" },
-        { text: "Actions", value: "actions", sortable: false }
+        { text: "Actions", value: "actions", sortable: false },
       ],
       loading: false,
-      endpoint: {}
+      endpoint: {},
     };
   },
   props: {
     value: Boolean,
-    item: Object
+    item: Object,
   },
   model: {
     prop: "value",
-    event: "showhide"
+    event: "showhide",
   },
   computed: {
     detailshow: {
-      get: function() {
+      get: function () {
         return this.value;
       },
-      set: function(value) {
+      set: function (value) {
         this.$emit("showhide", value);
-      }
+      },
     },
     ...mapGetters({
       providers: "showDNS",
       apps: "showApps",
-      endpoints: "showEndpoints"
-    })
+      endpoints: "showEndpoints",
+    }),
   },
   methods: {
     close() {
@@ -159,7 +163,7 @@ export default {
       this.endpoint = Object.assign({}, endpoint);
       this.endpoint.addrid = addrid;
       this.deleteEndpointShow = true;
-    }
-  }
+    },
+  },
 };
 </script>

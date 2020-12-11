@@ -41,13 +41,13 @@ export const checkLogDir = async (address) => {
 
 export const getConfig = async () => {
     const configRepository = getRepository(Config);
-    const config = await configRepository.findOne({where:{id:1}, relations:['dns_provider_name']});
+    const config = await configRepository.findOne({where:{id:1}});
     //console.log(config)
     return config;
 };
 export const getAddresses = async () => {
     const addressRepository = getRepository(Address);
-    const addresses = await addressRepository.find({ relations: ["app", 'endpoint', 'cert'] })
+    const addresses = await addressRepository.find({ relations: ["app", 'endpoint', 'cert', 'dns'] })
     
     return addresses;
 };
@@ -153,11 +153,9 @@ export const generateProxyBlock = async (address) => {
 export const generateTlsBlock = async (address) => {
     let tlsBlock = "";
     console.log("Generating TLS block for: " + address.address);
-    let config = await getConfig();
     if(address.custom_cert){
         tlsBlock = " \t tls " + address.cert.cert_path + " " + address.cert.pem_path + " \n"
     }else{
-        if (config.use_dns_verification && config.dns_api_token && config.dns_provider_name){
             if(address.forceHTTPChallenge){
                 tlsBlock =
                 " \t tls { \n" +
@@ -167,23 +165,23 @@ export const generateTlsBlock = async (address) => {
                 "\t \t \t } \n"+
                 "\t }" 
             }else{
-                tlsBlock =
-                " \t tls { \n" +
-                "\t \t \t issuer acme { \n"+
-                "\t \t \t \t dns " + config.dns_provider_name.name + " " + config.dns_api_token + "\n "+
-                "\t \t \t \t resolvers 8.8.8.8 \n" +
-                "\t \t \t } \n"+
-                "\t }" 
-            }
-            
-          } else {
-            tlsBlock = ""
-          }
+                if( address.dns ){
+                    if (address.dns.api_key && address.dns.name){
+                        tlsBlock =
+                        " \t tls { \n" +
+                        "\t \t \t issuer acme { \n"+
+                        "\t \t \t \t dns " + address.dns.name + " " + address.dns.api_key + "\n "+
+                        "\t \t \t \t resolvers 8.8.8.8 \n" +
+                        "\t \t \t } \n"+
+                        "\t }" 
+                        }
+                }else {
+                    tlsBlock = ""
+                  }
+          } 
+        }
+        return tlsBlock
     }
-
-
-    return tlsBlock
-};
 
 export const generateLogPart = async (address) => {
     var log = "\n \t \t log {" +"\n \t \t \t output file /tygercaddy/backend/db/logs/" + address.address + ".json \n"+ "\n \t \t \t format json \n "+ "\t \t } \n";

@@ -5,14 +5,6 @@ export const settings = {
   },
 
   actions: {
-    getDnsProviders({commit}){
-      this._vm.$http.get("dns/").then( function( response ){
-        commit('GET_DNS', response.data)
-      })
-      .catch(function(){
-          commit('setSnack', {snack: "Could not communicate with the backend!", color: "error"})
-      });
-    },
     getConfig( { commit } ){
       this._vm.$http.get("config/").then( function( response ){
         commit('GET_SETTINGS', response.data)
@@ -32,16 +24,10 @@ export const settings = {
     GET_SETTINGS( state , data) {
       state.settings = data
     },
-    GET_DNS( state , data) {
-      state.dnsProviders = data
-    }
   },
   getters: {
     showConfig( state ){
       return state.settings
-    },
-    showDNS( state ){
-      return state.dnsProviders
     },
   }
 }
