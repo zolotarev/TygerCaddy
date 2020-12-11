@@ -16,7 +16,13 @@ export const checkId = (req: Request) => {
 
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   //Get the jwt token from the head
-  const token = <string>req.headers["authorization"].replace('Bearer ', '');
+  let token =""
+  if (req.headers["authorization"]){
+     token = <string>req.headers["authorization"].replace('Bearer ', '');
+  } else {
+     token =""
+  }
+  
   let jwtPayload;
   
   //Try to validate the token and get data

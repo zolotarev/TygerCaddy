@@ -59,7 +59,7 @@ class AddressController {
 
   static newAddress = async (req: Request, res: Response) => {
     //Get parameters from the body
-    let { address, tls, staging, app, forceHTTPChallenge, cert, custom_cert } = req.body;
+    let { address, tls, staging, app, forceHTTPChallenge, cert, custom_cert, dns } = req.body;
     let newAddress = new Address();
     newAddress.address = address;
     newAddress.tls = tls;
@@ -68,7 +68,7 @@ class AddressController {
     newAddress.forceHTTPChallenge = forceHTTPChallenge
     newAddress.cert = cert
     newAddress.custom_cert = custom_cert
-
+    newAddress.dns = dns
     //Validade if the parameters are ok
     const errors = await validate(newAddress);
     if (errors.length > 0) {
@@ -93,7 +93,7 @@ class AddressController {
     const id = req.params.id;
 
     //Get values from the body
-    let { address, tls, staging, appId, forceHTTPChallenge, cert, custom_cert } = req.body;
+    let { address, tls, staging, appId, forceHTTPChallenge, cert, custom_cert, dns } = req.body;
     //Try to find address on database
     const addressRepository = getRepository(Address);
     let editAddress;
@@ -113,6 +113,7 @@ class AddressController {
     editAddress.forceHTTPChallenge = forceHTTPChallenge
     editAddress.cert = cert
     editAddress.custom_cert = custom_cert
+    editAddress.dns = dns
     const errors = await validate(editAddress);
     if (errors.length > 0) {
       return res.status(400).send(errors);
@@ -123,7 +124,7 @@ class AddressController {
       await addressRepository.save(editAddress);
       await rebuildCaddyfile();
     } catch (e) {
-      return res.status(409).send("Address already in use");
+      return res.status(409).send(e);
     }
     //After all send a 204 (no content, but accepted) response
     return res.status(204).send();

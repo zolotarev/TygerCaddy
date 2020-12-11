@@ -3,12 +3,11 @@ import {
   PrimaryGeneratedColumn,
   Column,
   Unique,
-  OneToOne,
+  OneToMany,
   CreateDateColumn,
   UpdateDateColumn
 } from "typeorm";
-import { Length } from "class-validator";
-import { Config } from "./Config";
+import { Address } from "./Address"
 
 @Entity()
 @Unique(["name"])
@@ -26,10 +25,13 @@ export class DNSProvider {
   active: boolean;
 
   @Column()
+  @CreateDateColumn()
   createdAt: Date;
 
   @Column()
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @OneToMany(type => Address, Address => Address.dns)
+  address: Address;
 }

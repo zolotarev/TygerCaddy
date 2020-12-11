@@ -26,7 +26,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="certs"
+        :items="dns"
         :loading="loading"
         :search="search"
         :options="options"
@@ -35,6 +35,10 @@
         }"
         class="elevation-1"
       >
+        <template v-slot:[`item.active`]="{ item }">
+          <v-icon medium v-if="item.active">mdi-check</v-icon>
+          <v-icon medium v-else>mdi-close</v-icon>
+        </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-tooltip top>
             <template v-slot:activator="{ on }">
@@ -57,7 +61,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import DNSProvidersEdit from "../DNSProviders/DNSEdit";
+import DNSEdit from "../DNSProviders/DNSEdit";
 
 export default {
   data() {
@@ -78,7 +82,7 @@ export default {
         },
         { text: "Name", value: "name" },
         { text: "API Key", value: "api_key" },
-        { text: "Active", value: "Active" },
+        { text: "Active", value: "active" },
         { text: "Actions", value: "actions", sortable: false },
       ],
       editedItem: {
@@ -105,7 +109,7 @@ export default {
       this.close();
     },
     editItem(item) {
-      this.editedIndex = this.certs.indexOf(item);
+      this.editedIndex = this.dns.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.editdialog = true;
     },
@@ -113,7 +117,7 @@ export default {
   computed: {
     ...mapGetters({
       DNSCount: "showDNSCount",
-      dns: "activeDNS",
+      dns: "getDNS",
     }),
   },
 

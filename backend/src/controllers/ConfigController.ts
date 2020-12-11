@@ -13,9 +13,7 @@ class ConfigController {
     //Get the config from database
     const configRepository = getRepository(Config);
     try {
-      const config = await configRepository.findOneOrFail(id, {
-        relations: ["dns_provider_name"],
-      });
+      const config = await configRepository.findOneOrFail(id);
       return res.send(config);
     } catch (error) {
       return res.status(404).send("Config not found");

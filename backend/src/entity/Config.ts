@@ -28,9 +28,6 @@ import {
     redirect_https: boolean;
   
     @Column()
-    use_dns_verification: boolean;
-  
-    @Column()
     @CreateDateColumn()
     createdAt: Date;
   

@@ -1,30 +1,26 @@
 <template>
   <v-container>
-    <h2 class="blue-grey--text darken-5 pa-2">All Certificates</h2>
+    <h2 class="blue-grey--text darken-5 pa-2">DNS Providers</h2>
     <v-layout row wrap>
       <v-flex xs12 sm12 pa-3>
-        <certificates-panel></certificates-panel>
+        <DNSPanel></DNSPanel>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-
-
-import CertificatesPanel from "../components/Certificates/CertificatesPanel";
+import DNSPanel from "../components/DNSProviders/DNSPanel.vue";
 export default {
   data() {
     return {
-      totalSteps: 100
+      totalSteps: 100,
     };
   },
   components: {
-    CertificatesPanel
+    DNSPanel,
   },
-  methods: {
-   
-  }
+  methods: {},
 };
 </script>
 <style>

@@ -1,68 +1,56 @@
-export const addresses = {
+export const dns = {
   state:{
-    addresses: [],
-    addressCount: null
+    dns: [],
+    activeDNS:[],
+    dnsCount: null
   },
 
   actions: {
-    getAddresses( { commit } ){
-      this._vm.$http.get("address/").then( function( response ){
-        commit('GET_ADDS', response.data)
+    getDNS( { commit } ){
+      this._vm.$http.get("dns/").then( function( response ){
+        commit('GET_DNS', response.data)
+      })
+      .catch(function(){
+          commit('setSnack', {snack: "Could not communicate with the backend!", color: "error"})
+      });
+    },
+    getActiveDNS( { commit } ){
+      this._vm.$http.get("dns/active").then( function( response ){
+        commit('GET_ACTIVE_DNS', response.data)
       })
       .catch(function(){
           commit('setSnack', {snack: "Could not communicate with the backend!", color: "error"})
       });
     },
     
-    addAddress({ commit, dispatch }, data) {
-      let address = data
-      this._vm.$http.post("address/", data)
-        .then(() => {
-          dispatch('getAddresses');
-          commit('setSnack', { snack: "New proxy created from " + address.address, color: "success" })
-        })
-        .catch(() => {
-          commit('setSnack', { snack: "Could not save the proxy! Please check your data and try again", color: "error" })
-        });
-    },
-    updateAddress( { commit, dispatch }, data ){
-      this._vm.$http.patch("address/" + data.id + "/", data).then(({ data }) => {
-          dispatch('getAddresses');
-          commit('setSnack', {snack: "Address " + data.address + " was updated!", color: "success" })
+    updateDNS( { commit, dispatch }, data ){
+      this._vm.$http.patch("dns/" + data.id + "/", data).then(({ data }) => {
+          dispatch('getDNS');
+          commit('setSnack', {snack: "DNS " + data.name + " was updated!", color: "success" })
         })
     },
-    deleteAddress({ commit, dispatch }, data) {
-      const add = data
-      this._vm.$http.delete("address/" + data.id + "/", data)
-        .then(() => {
-          dispatch('getAddresses');
-          commit('setSnack', { snack: "Address " + add.address + " (" + add.app.name + ")" + " was deleted!", color: "warning" })
-        })
-        .catch(() => {
-          commit('setSnack', { snack: "There was an error! Please check your data and try again", color: "error" })
-        });
-    },
-    generate({commit}){
-      this._vm.$http.get('address/generate')
-      .then(()=>{
-        commit('setSnack', { snack: "Generate command sent to backend", color: "warning" })
-      })
-    }
   },
   mutations: {
-    GET_ADDS( state , data) {
-      state.addresses = data
-      state.addressCount = data.length
+    GET_DNS( state , data) {
+      state.dns = data
+      state.dnsCount = data.length
+    },
+    GET_ACTIVE_DNS( state , data) {
+      state.activeDNS = data
+      state.dnsCount = data.length
     }
   },
   getters: {
-    showAddresses( state ){
-      return state.addresses
+    getDNS( state ){
+      return state.dns
     },
-    showAddressCount( state ){
-      return state.addressCount
+    getActiveDNS( state ){
+      return state.activeDNS
+    },
+    showDNSCount( state ){
+      return state.dns
     }
   }
 }
 
-export default addresses
+export default dns
