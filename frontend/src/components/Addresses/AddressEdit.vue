@@ -91,6 +91,7 @@
                 hint="To use DNS Verification, select the DNS provider for this domain."
                 placeholder="Select an active DNS Provider"
                 persistent-hint
+                clearable
               ></v-combobox>
             </validation-provider>
           </v-card-text>
@@ -147,14 +148,15 @@ export default {
       if (this.item.dns) {
         dns_provider = this.item.dns.id;
       } else {
-        dns_provider = "";
+        dns_provider = null;
       }
       if (this.item.cert) {
         custom_certificate = this.item.cert.id;
       } else {
-        custom_certificate = "";
+        custom_certificate = null;
       }
-
+      console.log(dns_provider);
+      console.log(custom_certificate);
       let data = {
         id: this.item.id,
         address: this.item.address,
@@ -166,6 +168,7 @@ export default {
         custom_cert: this.item.custom_cert,
         dnsId: dns_provider,
       };
+      console.log(data);
       this.$store.dispatch("updateAddress", data);
       this.close();
     },

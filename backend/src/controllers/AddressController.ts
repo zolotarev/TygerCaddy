@@ -93,7 +93,7 @@ class AddressController {
     const id = req.params.id;
 
     //Get values from the body
-    let { address, tls, staging, appId, forceHTTPChallenge, cert, custom_cert, dns } = req.body;
+    let { address, tls, staging, appId, forceHTTPChallenge, certId, custom_cert, dnsId } = req.body;
     //Try to find address on database
     const addressRepository = getRepository(Address);
     let editAddress;
@@ -104,28 +104,31 @@ class AddressController {
       return res.status(404).send("Address not found");
  
     }
-
     //Validate the new values on model
     editAddress.address = address;
     editAddress.tls = tls;
     editAddress.staging = staging;
     editAddress.app = appId;
     editAddress.forceHTTPChallenge = forceHTTPChallenge
-    editAddress.cert = cert
+    editAddress.cert = certId
     editAddress.custom_cert = custom_cert
-    editAddress.dns = dns
+    editAddress.dns = dnsId
+   
+    console.log(editAddress)
     const errors = await validate(editAddress);
     if (errors.length > 0) {
       return res.status(400).send(errors);
     }
-
     //Try to safe, if fails, that means addressname already in use
     try {
       await addressRepository.save(editAddress);
       await rebuildCaddyfile();
+      
     } catch (e) {
       return res.status(409).send(e);
     }
+    
+
     //After all send a 204 (no content, but accepted) response
     return res.status(204).send();
   };

@@ -46,9 +46,9 @@ export class Address {
 
   @ManyToOne(type => App, App => App.address)
     app: App;
-  @ManyToOne(type => DNSProvider, DNS => DNS.address)
-    dns: DNSProvider;
-  @ManyToOne(type => Cert, Cert => Cert.address)
+  @ManyToOne(type => DNSProvider, DNS => DNS.address, { nullable: true })
+    dns?: DNSProvider;
+  @ManyToOne(type => Cert, Cert => Cert.address, { nullable: true })
     cert: Cert;
   @OneToMany(() => Endpoint, endpoint => endpoint.address)
   endpoint: Endpoint[];
