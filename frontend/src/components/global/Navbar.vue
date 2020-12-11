@@ -37,13 +37,17 @@
 
       <v-toolbar-title>TygerCaddy Vue Frontend</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn dark tile text class="orange" @click="logout">
-        <v-icon>mdi-lock</v-icon>
-        <div class="d-none d-lg-block">logout</div>
+      <v-btn dark tile text class="orange" @click="QuickAdd">
+        <v-icon>mdi-autorenew</v-icon>
+        <div class="d-none d-lg-block">Quick Add</div>
       </v-btn>
       <v-btn dark tile text class="orange" @click="GenerateCaddyfile">
         <v-icon>mdi-autorenew</v-icon>
         <div class="d-none d-lg-block">Re-Generate</div>
+      </v-btn>
+      <v-btn dark tile text class="orange" @click="logout">
+        <v-icon>mdi-lock</v-icon>
+        <div class="d-none d-lg-block">logout</div>
       </v-btn>
     </v-app-bar>
   </div>
@@ -120,6 +124,9 @@ export default {
     },
     GenerateCaddyfile() {
       this.$store.dispatch("generate");
+    },
+    QuickAdd() {
+      this.$router.push("quickadd");
     },
   },
 };
