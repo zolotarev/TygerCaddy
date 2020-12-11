@@ -36,7 +36,7 @@ class AddressController {
     //Get addresses from database
     const addressRepository = getRepository(Address);
     const addresses = await addressRepository.find({
-      relations: ["app", "cert"],
+      relations: ["app", "cert", "dns"],
     });
 
     //Send the addresses object
