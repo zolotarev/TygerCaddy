@@ -43,7 +43,7 @@
       </v-btn>
       <v-btn dark tile text class="orange" @click="GenerateCaddyfile">
         <v-icon>mdi-autorenew</v-icon>
-        <div class="d-none d-lg-block">Generate</div>
+        <div class="d-none d-lg-block">Re-Generate</div>
       </v-btn>
     </v-app-bar>
   </div>
@@ -80,12 +80,12 @@ export default {
       {
         route: "load-balance",
         text: "Load Balancing",
-        icon: "mdi-certificate",
+        icon: "mdi-call-split",
       },
       {
         route: "dns-providers",
         text: "DNS Providers",
-        icon: "mdi-domain",
+        icon: "mdi-dns",
       },
       {
         route: "backup",
@@ -101,11 +101,6 @@ export default {
         route: "logs",
         text: "Logs",
         icon: "mdi-text-box-search-outline",
-      },
-      {
-        route: "restart",
-        text: "Restart Proxy",
-        icon: "mdi-autorenew",
       },
     ],
   }),
