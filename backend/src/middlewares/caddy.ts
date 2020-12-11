@@ -156,7 +156,6 @@ export const generateTlsBlock = async (address) => {
     if(address.custom_cert){
         tlsBlock = " \t tls " + address.cert.cert_path + " " + address.cert.pem_path + " \n"
     }else{
-        if (address.dns.api_key && address.dns.name){
             if(address.forceHTTPChallenge){
                 tlsBlock =
                 " \t tls { \n" +
@@ -166,23 +165,23 @@ export const generateTlsBlock = async (address) => {
                 "\t \t \t } \n"+
                 "\t }" 
             }else{
-                tlsBlock =
-                " \t tls { \n" +
-                "\t \t \t issuer acme { \n"+
-                "\t \t \t \t dns " + address.dns.name + " " + address.dns.api_key + "\n "+
-                "\t \t \t \t resolvers 8.8.8.8 \n" +
-                "\t \t \t } \n"+
-                "\t }" 
-            }
-            
-          } else {
-            tlsBlock = ""
-          }
+                if( address.dns ){
+                    if (address.dns.api_key && address.dns.name){
+                        tlsBlock =
+                        " \t tls { \n" +
+                        "\t \t \t issuer acme { \n"+
+                        "\t \t \t \t dns " + address.dns.name + " " + address.dns.api_key + "\n "+
+                        "\t \t \t \t resolvers 8.8.8.8 \n" +
+                        "\t \t \t } \n"+
+                        "\t }" 
+                        }
+                }else {
+                    tlsBlock = ""
+                  }
+          } 
+        }
+        return tlsBlock
     }
-
-
-    return tlsBlock
-};
 
 export const generateLogPart = async (address) => {
     var log = "\n \t \t log {" +"\n \t \t \t output file /tygercaddy/backend/db/logs/" + address.address + ".json \n"+ "\n \t \t \t format json \n "+ "\t \t } \n";
