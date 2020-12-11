@@ -11,7 +11,8 @@ import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
 import InitialUser from "../views/InitialUser.vue";
 import Logs from "../views/Logs.vue";
-import Certificates from "../views/Certificates.vue"
+import Certificates from "../views/Certificates.vue";
+import DNSProviders from "../views/DNSProviders.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -59,6 +60,14 @@ const routes = [
     path: "/certificates",
     name: "Certificates",
     component: Certificates,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/dns-providers",
+    name: "DNS Providers",
+    component: DNSProviders,
     meta: {
       requiresAuth: true
     }

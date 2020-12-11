@@ -28,12 +28,6 @@ import {
     redirect_https: boolean;
   
     @Column()
-    use_dns_verification: boolean;
-  
-    @Column()
-    dns_api_token: string;
-  
-    @Column()
     @CreateDateColumn()
     createdAt: Date;
   
@@ -41,8 +35,5 @@ import {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToOne(type => DNSProvider)
-    @JoinColumn()
-    dns_provider_name: DNSProvider;
   }
   

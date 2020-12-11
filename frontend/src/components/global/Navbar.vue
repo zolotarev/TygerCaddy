@@ -1,12 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer
-      dark
-      class="blue-grey darken-3"
-      clipped
-      v-model="drawer"
-      app
-    >
+    <v-navigation-drawer dark class="blue-grey darken-3" clipped v-model="drawer" app>
       <template v-slot:prepend>
         <v-list-item two-line>
           <v-list-item-avatar>
@@ -26,12 +20,7 @@
       <v-divider></v-divider>
 
       <v-list dense nav>
-        <v-list-item
-          v-for="link in links"
-          :key="link.text"
-          link
-          :to="link.route"
-        >
+        <v-list-item v-for="link in links" :key="link.text" link :to="link.route">
           <v-list-item-icon>
             <v-icon>{{ link.icon }}</v-icon>
           </v-list-item-icon>
@@ -54,7 +43,7 @@
       </v-btn>
       <v-btn dark tile text class="orange" @click="GenerateCaddyfile">
         <v-icon>mdi-autorenew</v-icon>
-        <div class="d-none d-lg-block">Generate</div>
+        <div class="d-none d-lg-block">Re-Generate</div>
       </v-btn>
     </v-app-bar>
   </div>
@@ -91,7 +80,12 @@ export default {
       {
         route: "load-balance",
         text: "Load Balancing",
-        icon: "mdi-certificate",
+        icon: "mdi-call-split",
+      },
+      {
+        route: "dns-providers",
+        text: "DNS Providers",
+        icon: "mdi-dns",
       },
       {
         route: "backup",
@@ -107,11 +101,6 @@ export default {
         route: "logs",
         text: "Logs",
         icon: "mdi-text-box-search-outline",
-      },
-      {
-        route: "restart",
-        text: "Restart Proxy",
-        icon: "mdi-autorenew",
       },
     ],
   }),
