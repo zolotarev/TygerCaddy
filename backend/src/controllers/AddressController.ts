@@ -113,8 +113,7 @@ class AddressController {
     editAddress.cert = certId
     editAddress.custom_cert = custom_cert
     editAddress.dns = dnsId
-   
-    console.log(editAddress)
+  
     const errors = await validate(editAddress);
     if (errors.length > 0) {
       return res.status(400).send(errors);
