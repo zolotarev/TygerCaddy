@@ -13,6 +13,7 @@ import InitialUser from "../views/InitialUser.vue";
 import Logs from "../views/Logs.vue";
 import Certificates from "../views/Certificates.vue";
 import DNSProviders from "../views/DNSProviders.vue";
+import QuickAdd from "../views/QuickAdd.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -100,6 +101,14 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/quickadd",
+    name: "QuickAdd",
+    component: QuickAdd,
     meta: {
       requiresAuth: true
     }
