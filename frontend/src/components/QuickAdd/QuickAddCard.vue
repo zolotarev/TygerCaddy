@@ -20,7 +20,7 @@
 
               <v-divider></v-divider>
 
-              <v-stepper-step step="3" color="orange"> Choose Settings </v-stepper-step>
+              <v-stepper-step step="3" color="orange"> Confirm </v-stepper-step>
             </v-stepper-header>
 
             <v-stepper-items>
@@ -29,10 +29,10 @@
                   <v-stepper-content step="1">
                     <validation-provider v-slot="{ errors }" name="Name" rules="required">
                       <v-text-field
-                        name="appName"
+                        name="name"
                         label="Name"
                         color="orange"
-                        v-model="app.appName"
+                        v-model="app.name"
                         :error-messages="errors"
                       >
                       </v-text-field>
@@ -84,7 +84,43 @@
                 </form>
               </validation-observer>
               <v-stepper-content step="2">
-                <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+                <validation-observer ref="observer" v-slot="{ handleSubmit }">
+                  <form name="form2" @submit.prevent="handleSubmit(Submit1)">
+                    <validation-provider
+                      v-slot="{ errors }"
+                      name="address"
+                      rules="required|domain"
+                    >
+                      <v-text-field
+                        color="orange"
+                        name="address"
+                        label="External Address"
+                        v-model="address.address"
+                        :error-messages="errors"
+                      >
+                      </v-text-field>
+                    </validation-provider>
+
+                    <v-switch
+                      color="orange"
+                      class="px-3"
+                      label="Default to HTTPS?"
+                      v-model="address.tls"
+                    ></v-switch>
+                    <v-switch
+                      color="orange"
+                      class="px-3"
+                      label="Use HTTPS Staging?"
+                      v-model="address.staging"
+                    ></v-switch>
+                    <v-switch
+                      color="orange"
+                      class="px-3"
+                      label="Force HTTP Challenge"
+                      v-model="address.forceHTTPChallenge"
+                    ></v-switch>
+                  </form>
+                </validation-observer>
 
                 <v-btn color="orange" dark @click="e1 = 3"> Continue </v-btn>
 
@@ -92,9 +128,31 @@
               </v-stepper-content>
 
               <v-stepper-content step="3">
-                <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
-
-                <v-btn color="orange" dark> Finish </v-btn>
+                <v-container class="fill-height" fluid>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="6">
+                      <h4>Address:</h4>
+                      <p>{{ address.address }}</p>
+                      <h4>HTTPS:</h4>
+                      <p>{{ address.tls }}</p>
+                      <h4>Staging:</h4>
+                      <p>{{ address.staging }}</p>
+                      <h4>Force HTTP Challenge:</h4>
+                      <p>{{ address.forceHTTPChallenge }}</p>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <h4>App:</h4>
+                      <p>{{ app.name }}</p>
+                      <h4>IP:</h4>
+                      <p>{{ app.ip_address }}</p>
+                      <h4>Port:</h4>
+                      <p>{{ app.port_number }}</p>
+                      <h4>SSL Verification:</h4>
+                      <p>{{ app.verify_ssl }}</p>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <v-btn color="orange" dark @click="SubmitForm()"> Finish </v-btn>
 
                 <v-btn text @click="e1 = 1"> Cancel </v-btn>
               </v-stepper-content>
@@ -112,7 +170,7 @@ export default {
     return {
       e1: 1,
       app: {
-        appName: "",
+        name: "",
         ip_address: "",
         port_number: "",
         verify_ssl: false,
@@ -127,8 +185,31 @@ export default {
   },
   computed: {},
   methods: {
+    resetForm() {
+      (this.app = {
+        name: "",
+        ip_address: "",
+        port_number: "",
+        verify_ssl: false,
+      }),
+        (this.address = {
+          address: "",
+          tls: false,
+          staging: false,
+          forceHTTPChallenge: false,
+        });
+    },
     Submit1() {
       this.e1 = this.e1 + 1;
+    },
+    SubmitForm() {
+      let data = {
+        address: this.address,
+        app: this.app,
+      };
+      this.$store.dispatch("quickAdd", data);
+      this.resetForm();
+      this.$router.push("/");
     },
   },
 };

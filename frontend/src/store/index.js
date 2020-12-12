@@ -13,7 +13,7 @@ import utility from './modules/utility';
 import settings from './modules/settings';
 import certs from './modules/certs';
 import dns from './modules/dns';
-
+import quickadd from './modules/quickadd';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -31,6 +31,7 @@ export default new Vuex.Store({
     logs,
     utility,
     settings,
+    quickadd,
     dns,
     certs
   }

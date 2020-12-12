@@ -38,7 +38,7 @@
       <v-toolbar-title>TygerCaddy Vue Frontend</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn dark tile text class="orange" @click="QuickAdd">
-        <v-icon>mdi-autorenew</v-icon>
+        <v-icon>mdi-wizard-hat</v-icon>
         <div class="d-none d-lg-block">Quick Add</div>
       </v-btn>
       <v-btn dark tile text class="orange" @click="GenerateCaddyfile">

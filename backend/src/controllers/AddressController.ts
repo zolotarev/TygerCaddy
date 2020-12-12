@@ -80,12 +80,13 @@ class AddressController {
     try {
       await addressRepository.save(newAddress);
       await rebuildCaddyfile();
+          //If all ok, send 201 response
+    return res.status(201).send(newAddress);
     } catch (e) {
-      return res.status(409).send("Address already in use");
+      return res.status(409).send(e);
     }
 
-    //If all ok, send 201 response
-    return res.status(201).send("Address created");
+
   };
 
   static editAddress = async (req: Request, res: Response) => {
@@ -118,7 +119,7 @@ class AddressController {
     if (errors.length > 0) {
       return res.status(400).send(errors);
     }
-    //Try to safe, if fails, that means addressname already in use
+    //Try to save, if fails, that means addressname already in use
     try {
       await addressRepository.save(editAddress);
       await rebuildCaddyfile();
