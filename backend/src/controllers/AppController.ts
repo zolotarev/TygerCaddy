@@ -3,6 +3,7 @@ import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 import { rebuildCaddyfile } from "../middlewares/caddy";
 import { App } from "../entity/App";
+import { createShorthandPropertyAssignment } from "typescript";
 class AppController {
   static listAll = async (req: Request, res: Response) => {
     //Get apps from database
@@ -44,13 +45,14 @@ class AppController {
     //Try to save. If fails, the appname is already in use
     const appRepository = getRepository(App);
     try {
-      await appRepository.save(app);
+      let createdApp = await appRepository.save(app);
+      return res.status(201).send(createdApp);
     } catch (e) {
       return res.status(409).send({error:"App already in use"});
     }
 
     //If all ok, send 201 response
-    return res.status(201).send("App created");
+    
   };
 
   static editApp = async (req: Request, res: Response) => {
