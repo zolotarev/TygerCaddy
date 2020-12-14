@@ -34,8 +34,8 @@
 
     <v-app-bar color="orange" dark fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title>TygerCaddy Vue Frontend</v-toolbar-title>
+      <img :src="require('@/assets/TygerLogo-White.svg')" style="max-height: 95%" />
+      <v-toolbar-title></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn dark tile text class="orange" @click="QuickAdd">
         <v-icon>mdi-wizard-hat</v-icon>
