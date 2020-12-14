@@ -1,57 +1,59 @@
 <template>
   <v-app id="inspire">
     <div class="context">
-  <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center">
-      <v-col cols="12" sm="8" md="4">
-        <v-card elevation="12">
-          <v-toolbar color="orange" dark :src="require('../assets/sidebar-background.jpg')">
-            <v-toolbar-title>TygerCaddy Login</v-toolbar-title>
-          </v-toolbar>
-          <v-container>
-        <validation-observer
-    ref="observer"
-    v-slot="{ handleSubmit }"
-  >
-      <form name="form" @submit.prevent="handleSubmit(onSubmit)">
-
-            <validation-provider
-        v-slot="{ errors }"
-        name="email"
-        rules="required|email"
-      >
-        <v-text-field
-          v-model="email"
-          :error-messages="errors"
-          append-icon="mdi-account"
-          label="E-mail"
-          color="orange"
-          required
-        ></v-text-field>
-            </validation-provider>
-            <validation-provider v-slot="{ errors }">          
-<v-text-field
-            v-model="password"
-            :append-icon="'mdi-eye'"
-            :type="'password'"
-            :error-messages="errors"
-            color="orange"
-            name="password"
-            label="Password"
-            required
-          ></v-text-field>
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-col cols="12" sm="8" md="4">
+            <v-card elevation="12">
+              <v-toolbar
+                color="orange"
+                dark
+                :src="require('../assets/sidebar-background.jpg')"
+              >
+                <img
+                  :src="require('@/assets/TygerLogo-White.svg')"
+                  style="max-height: 95%"
+                />
+              </v-toolbar>
+              <v-container>
+                <validation-observer ref="observer" v-slot="{ handleSubmit }">
+                  <form name="form" @submit.prevent="handleSubmit(onSubmit)">
+                    <validation-provider
+                      v-slot="{ errors }"
+                      name="email"
+                      rules="required|email"
+                    >
+                      <v-text-field
+                        v-model="email"
+                        :error-messages="errors"
+                        append-icon="mdi-account"
+                        label="E-mail"
+                        color="orange"
+                        required
+                      ></v-text-field>
+                    </validation-provider>
+                    <validation-provider v-slot="{ errors }">
+                      <v-text-field
+                        v-model="password"
+                        :append-icon="'mdi-eye'"
+                        :type="'password'"
+                        :error-messages="errors"
+                        color="orange"
+                        name="password"
+                        label="Password"
+                        required
+                      ></v-text-field>
                     </validation-provider>
 
                     <v-btn dark class="orange" type="submit">Login</v-btn>
-
-      </form>
-        </validation-observer>
-        </v-container>
-    </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
-  </div>
+                  </form>
+                </validation-observer>
+              </v-container>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
     <div class="area">
       <ul class="circles">
         <li></li>
@@ -69,53 +71,51 @@
   </v-app>
 </template>
 
-
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     return {
-          email:"",
-          password:"",
+      email: "",
+      password: "",
       loading: false,
-      message: ''
+      message: "",
     };
   },
   computed: {
     ...mapGetters({
-      loggedIn: 'isLoggedIn',
+      loggedIn: "isLoggedIn",
     }),
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push('/');
+      this.$router.push("/");
     }
   },
   methods: {
     onSubmit() {
       this.loading = true;
-        if (this.email && this.password) {
-            let user = {
-                email: this.email, 
-                password: this.password
-            }
-          this.$store.dispatch('login', user).then(
-            () => {
-              
-              this.$router.push('/');
-            },
-            error => {
-              this.loading = false;
-              this.message =
-                (error.response && error.response.data && error.response.data.message) ||
-                error.message ||
-                error.toString();
-            }
-          );
-        }
-    }
-  }
+      if (this.email && this.password) {
+        let user = {
+          email: this.email,
+          password: this.password,
+        };
+        this.$store.dispatch("login", user).then(
+          () => {
+            this.$router.push("/");
+          },
+          (error) => {
+            this.loading = false;
+            this.message =
+              (error.response && error.response.data && error.response.data.message) ||
+              error.message ||
+              error.toString();
+          }
+        );
+      }
+    },
+  },
 };
 </script>
 
