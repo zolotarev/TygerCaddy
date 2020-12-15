@@ -5,6 +5,7 @@ import { validate } from "class-validator";
 import { Address } from "../entity/Address";
 import { App } from "../entity/App";
 import { Endpoint } from "../entity/Endpoint";
+import { LoadBalance } from "../entity/LoadBalance";
 
 class BackupController {
   static tyger2Restore = async (req: Request, res: Response) => {
@@ -125,16 +126,18 @@ class BackupController {
     const appRepository = getRepository(App);
     const addressRepository = getRepository(Address);
     const endpointRepository = getRepository(Endpoint);
+    const lbRepository = getRepository(LoadBalance);
     let output = {};
 
     let addresses = await addressRepository.find({ relations: ["app"] });
     let apps = await appRepository.find(); 
-    let endpoints = await endpointRepository.find({ relations: ["app", "address"] });
-    
+    let endpoints = await endpointRepository.find({ relations: ["app", "address", "policy", "policy.policy"] });
+    let loadBalancers = await lbRepository.find()
     output = {
       addresses: addresses,
       apps: apps, 
-      endpoints: endpoints
+      endpoints: endpoints,
+      loadBalancers: loadBalancers
     }
 
     return res.status(200).send(output)
