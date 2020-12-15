@@ -1,18 +1,18 @@
 <template>
   <div>
-    <AddCertificate v-model="addCertificateForm" />
-    <CertificateDelete v-model="deletedialog" :item="deleteid" />
-    <CertificateEdit v-model="editdialog" :item="editedItem" />
+    <AddLoadBalancer v-model="addLoadBalancerForm" />
+    <LoadBalancerDelete v-model="deletedialog" :item="deleteid" />
+    <LoadBalancerEdit v-model="editdialog" :item="editedItem" />
     <v-card flat class="blue-grey lighten-5">
       <v-toolbar color="orange" dark flat>
-        <v-toolbar-title>Certificates</v-toolbar-title>
+        <v-toolbar-title>Load Balancers</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-icon large color="white">mdi-certificate</v-icon>
+        <v-icon large color="white">mdi-call-split</v-icon>
       </v-toolbar>
       <v-card-title primary-title>
         <v-row class="mb-6" no-gutters>
           <v-col class="d-none d-lg-block">
-            <h2 class="blue-grey--text darken-4">Certificates</h2>
+            <h2 class="blue-grey--text darken-4">Load Balancers</h2>
           </v-col>
           <v-col>
             <v-text-field
@@ -25,21 +25,16 @@
             ></v-text-field>
           </v-col>
           <v-col class="text-right">
-            <v-btn
-              rounded
-              color="orange"
-              dark
-              @click.stop="addCertificateForm = true"
-            >
+            <v-btn rounded color="orange" dark @click.stop="addLoadBalancerForm = true">
               <v-icon dark>mdi-plus</v-icon>
-              <div class="d-none d-lg-block">Add Certificate</div>
+              <div class="d-none d-lg-block">Add Load Balancer</div>
             </v-btn>
           </v-col>
         </v-row>
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="certs"
+        :items="lb"
         :loading="loading"
         :search="search"
         :options="options"
@@ -51,31 +46,19 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-tooltip top>
             <template v-slot:activator="{ on }">
-              <v-btn
-                icon
-                class="mr-0"
-                color="orange"
-                @click="editItem(item)"
-                v-on="on"
-              >
+              <v-btn icon class="mr-0" color="orange" @click="editItem(item)" v-on="on">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
             </template>
-            <span>Edit Certificate</span>
+            <span>Edit Load Balancer</span>
           </v-tooltip>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
-              <v-btn
-                icon
-                class="mr-0"
-                color="orange"
-                @click="deleteItem(item)"
-                v-on="on"
-              >
+              <v-btn icon class="mr-0" color="orange" @click="deleteItem(item)" v-on="on">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </template>
-            <span>Delete Certificate</span>
+            <span>Delete Load Balancer</span>
           </v-tooltip>
         </template>
 
@@ -91,10 +74,10 @@
 <script>
 import { mapGetters } from "vuex";
 
-import AddCertificate from "../Certificates/AddCertificate";
+import AddLoadBalancer from "../LoadBalancing/AddLoadBalancer";
 
-import CertificateDelete from "../Certificates/CertificateDelete";
-import CertificateEdit from "../Certificates/CertificateEdit";
+import LoadBalancerDelete from "../LoadBalancing/LoadBalancerDelete";
+import LoadBalancerEdit from "../LoadBalancing/LoadBalancerEdit";
 
 export default {
   data() {
@@ -103,7 +86,7 @@ export default {
         rowsPerPage: 30,
       },
       itemsPerPageOptions: [10, 20, 30, 40, 50, 100],
-      addCertificateForm: false,
+      addLoadBalancerForm: false,
       deletedialog: false,
       detaildialog: false,
       urldialog: false,
@@ -119,8 +102,9 @@ export default {
           value: "id",
         },
         { text: "Name", value: "name" },
-        { text: "Cert Path", value: "cert_path" },
-        { text: "Pem Path", value: "pem_path" },
+        { text: "Try Duration", value: "try_duration" },
+        { text: "Try Interval", value: "try_interval" },
+        { text: "Policy", value: "policy.name" },
         { text: "Actions", value: "actions", sortable: false },
       ],
       editedItem: {
@@ -132,9 +116,9 @@ export default {
     };
   },
   components: {
-    AddCertificate,
-    CertificateDelete,
-    CertificateEdit,
+    AddLoadBalancer,
+    LoadBalancerDelete,
+    LoadBalancerEdit,
   },
   methods: {
     close() {
@@ -153,12 +137,12 @@ export default {
     },
 
     save() {
-      this.$store.commit("UPDATE_ADDRESS", this.editedItem);
+      this.$store.commit("updateLb", this.editedItem);
       this.close();
     },
 
     deleteadd() {
-      this.$store.commit("DELETE_ADDRESS", this.editedItem);
+      this.$store.commit("deleteLb", this.editedItem);
       this.deleteclose();
     },
 
@@ -167,16 +151,6 @@ export default {
       this.editedItem = Object.assign({}, item);
       this.editdialog = true;
     },
-    detailItem(item) {
-      this.editedIndex = this.addresses.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      let data = {
-        id: this.editedItem.id,
-      };
-
-      this.$store.dispatch("getEndpoints", data);
-      this.detaildialog = true;
-    },
     deleteItem(item) {
       this.deleteid = this.editedItem = Object.assign({}, item);
       this.deletedialog = true;
@@ -184,13 +158,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      certificateCount: "showCertCount",
-      certs: "showCerts",
+      lb: "showLbs",
     }),
   },
 
   mounted() {
-    this.$store.dispatch("getCerts");
+    this.$store.dispatch("getLb");
+    this.$store.dispatch("getPolicies");
     this.loading = false;
   },
 };

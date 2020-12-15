@@ -4,6 +4,8 @@ import {
   Column,
   Unique,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany
@@ -13,6 +15,7 @@ import {App} from "./App";
 import {Cert} from "./Cert";
 import {DNSProvider} from "./DNSProvider";
 import {Endpoint} from "./Endpoint";
+import { LoadBalance } from "./LoadBalance";
 
 @Entity()
 @Unique(["address"])
@@ -44,12 +47,15 @@ export class Address {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(type => App, App => App.address)
-    app: App;
+  @ManyToMany(() => App)
+  @JoinTable()
+    app: App[];
   @ManyToOne(type => DNSProvider, DNS => DNS.address, { nullable: true })
     dns?: DNSProvider;
   @ManyToOne(type => Cert, Cert => Cert.address, { nullable: true })
     cert: Cert;
+  @ManyToOne(type => LoadBalance, LoadBalance => LoadBalance.address, { nullable: true })
+  policy: LoadBalance;
   @OneToMany(() => Endpoint, endpoint => endpoint.address)
   endpoint: Endpoint[];
 

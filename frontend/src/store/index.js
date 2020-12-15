@@ -14,6 +14,7 @@ import settings from './modules/settings';
 import certs from './modules/certs';
 import dns from './modules/dns';
 import quickadd from './modules/quickadd';
+import loadbalance from './modules/loadbalance';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     utility,
     settings,
     quickadd,
+    loadbalance,
     dns,
     certs
   }

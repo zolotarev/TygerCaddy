@@ -15,7 +15,7 @@ export const quickadd = {
         dispatch('getApps')
         commit('setSnack', {snack: "App " + savedApp.data.name + " was created!", color: 'success'})
         
-        address.app= savedApp.data.id
+        address.app= savedApp.data
         this._vm.$http.post("address/", address).then((savedAddress) => {
           console.log(savedAddress.data)
           dispatch('getAddresses');

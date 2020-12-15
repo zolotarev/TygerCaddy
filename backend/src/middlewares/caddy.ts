@@ -47,8 +47,7 @@ export const getConfig = async () => {
 };
 export const getAddresses = async () => {
     const addressRepository = getRepository(Address);
-    const addresses = await addressRepository.find({ relations: ["app", 'endpoint', 'cert', 'dns'] })
-    
+    const addresses = await addressRepository.find({ relations: ["app", 'endpoint', 'cert', 'dns', 'policy', 'policy.policy'] })
     return addresses;
 };
 export const getEndpoints = async (addressId) => {
@@ -125,28 +124,40 @@ export const generateEndpointsBlock = async (endpoints) => {
 };
 export const generateProxyBlock = async (address) => {
     let proxyBlock = "";
-    console.log("Generating proxy block for: " + address.app.name);
+    console.log("Generating proxy block for: " + address.address);
+    let apps = ""
+        address.app.forEach((app)=>{
+            apps = apps + app.ip_address + ":" + app.port_number + " "
+        });
+        let lbblock = ""
+        if(address.policy){
+            console.log(address.policy.policy)
+            lbblock = "\n \t \t " +
+                      "lb_policy " + address.policy.policy.name +
+                      "\n \t \t " +
+                      "lb_try_duration " + address.policy.try_duration + 
+                      "\n \t \t " +
+                      "lb_try_interval " + address.policy.try_interval + 
+                      "\n \t \t "
+        }
+
     if (!address.app.verify_ssl){
         proxyBlock =
             address.address +
             " { \n" +
-            "\t reverse_proxy " +
-            address.app.ip_address +
-            ":" +
-            address.app.port_number +
+            "\t reverse_proxy " + apps +
             " { \n " +
-            "\t \t transport http { \n \t \t \t tls_insecure_skip_verify \n \t \t } \n" +
+            lbblock + 
+            "\n \t \t transport http { \n \t \t \t tls_insecure_skip_verify \n \t \t } \n" +
             "\t } \n" 
       } else {
         proxyBlock =
             address.address +
             " { \n" +
-            "\t reverse_proxy " +
-            address.app.ip_address +
-            ":" +
-            address.app.port_number +
+            "\t reverse_proxy " + apps +
             " { \n \n " +
-            "\t } \n" 
+            lbblock + 
+            "\n \t } \n" 
       }
     return proxyBlock
 };
@@ -228,7 +239,6 @@ export const rebuildCaddyfile = async () => {
         if (endpoints){
             endpointsBlock = await generateEndpointsBlock(endpoints);
         };
-
         //Start Building the Proxy Blocks
         let proxyBlock = await generateProxyBlock(address);
 

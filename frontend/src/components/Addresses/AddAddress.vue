@@ -68,15 +68,24 @@
             <validation-provider v-slot="{ errors }" name="app" rules="required">
               <v-combobox
                 v-model="formData.app"
+                multiple
                 color="orange"
                 :error-messages="errors"
                 :items="apps"
                 item-text="name"
                 item-value="name"
+                dense
+                small-chips
+                item-color="orange"
                 label="Select an app to proxy to:"
               ></v-combobox>
             </validation-provider>
-            <validation-provider v-slot="{ errors }" name="dns" rules="">
+            <validation-provider
+              v-slot="{ errors }"
+              name="dns"
+              rules=""
+              v-if="formData.forceHTTPChallenge == false"
+            >
               <v-combobox
                 v-model="formData.dns"
                 name="dns"
@@ -91,6 +100,23 @@
                 persistent-hint
               ></v-combobox>
             </validation-provider>
+            <div v-if="formData.app.length >= 2">
+              <validation-provider v-slot="{ errors }" name="policy" rules="">
+                <v-combobox
+                  v-model="formData.policy"
+                  name="policy"
+                  color="orange"
+                  :error-messages="errors"
+                  :items="policies"
+                  item-text="name"
+                  item-value="name"
+                  label="Load Balance Policy:"
+                  hint="To Load Balacing, select the Load Balancer for this domain."
+                  placeholder="Select a Load Balancer"
+                  persistent-hint
+                ></v-combobox>
+              </validation-provider>
+            </div>
           </v-card-text>
 
           <v-card-actions>
@@ -113,10 +139,12 @@ export default {
         address: "",
         tls: false,
         staging: false,
-        app: "",
+        app: [],
+        policy: null,
         forceHTTPChallenge: false,
         custom_cert: false,
-        cert: "",
+        cert: null,
+        dns: null,
       },
     };
   },
@@ -132,6 +160,7 @@ export default {
       apps: "showApps",
       certs: "showCerts",
       dns: "getActiveDNS",
+      policies: "showLbs",
     }),
     show: {
       get: function () {
@@ -155,11 +184,12 @@ export default {
         address: "",
         tls: false,
         staging: false,
-        app: "",
+        app: [],
+        policy: null,
         forceHTTPChallenge: false,
         custom_cert: false,
-        cert: "",
-        dns: "",
+        cert: null,
+        dns: null,
       };
     },
     onSubmit() {
@@ -167,12 +197,14 @@ export default {
         address: this.formData.address,
         tls: this.formData.tls,
         staging: this.formData.staging,
-        app: this.formData.app.id,
+        app: this.formData.app,
         forceHTTPChallenge: this.formData.forceHTTPChallenge,
         custom_cert: this.formData.custom_cert,
-        cert: this.formData.cert.id,
-        dns: this.formData.dns.id,
+        cert: this.formData.cert || null,
+        policy: this.formData.policy || null,
+        dns: this.formData.dns || null,
       };
+      console.log(data);
 
       this.$store.dispatch("addAddress", data);
       this.show = false;

@@ -1,6 +1,7 @@
 import {MigrationInterface, QueryRunner, getRepository} from "typeorm";
 import { Config } from "../entity/Config";
 import { DNSProvider } from "../entity/DNSProvider";
+import { LoadBalancePolicy } from "../entity/LoadBalancePolicy";
 export class InitialConfig1597402755162 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -22,6 +23,14 @@ export class InitialConfig1597402755162 implements MigrationInterface {
             const dnsRepository = getRepository(DNSProvider);
             await dnsRepository.save(dns);
             
+            let LoadBalancePolicies = [
+                {name:"first", description:"Choose the first available upstream"},
+                {name:"least_conn", description:"Choose upstream with fewest number of current requests"},
+                {name:"random", description:"Randomly choose an upstream"},
+                {name:"round_robin", description:"Iterate each upstream in turn"},
+            ]
+            const lbRepository = getRepository(LoadBalancePolicy);
+            await lbRepository.save(LoadBalancePolicies);
     }
     public async down(queryRunner: QueryRunner): Promise<void> {
     }
