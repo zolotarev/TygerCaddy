@@ -98,7 +98,7 @@ class BackupController {
       }
   }
   static tygercaddyRestore = async (req: Request, res: Response) => {
-    let { addresses, apps, endpoints } = req.body.backup;
+    let { addresses, apps, endpoints, loadBalancers } = req.body.backup;
 
     if(apps){
       await getConnection().createQueryBuilder().insert().into(App)
@@ -120,6 +120,12 @@ class BackupController {
         endpoints
       )
       .execute()
+    }
+    if (loadBalancers){
+      await getConnection().createQueryBuilder().insert().into(LoadBalance)
+      .values(
+        loadBalancers
+      )
     }
   }
   static exportBackup = async (req: Request, res: Response) => {
