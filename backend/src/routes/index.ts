@@ -8,6 +8,8 @@ import address from "./address";
 import endpoint from "./endpoint";
 import backup from "./backup";
 import cert from "./cert";
+import loadbalance from "./loadbalance";
+
 const routes = Router();
 
 routes.use("/auth", auth);
@@ -19,4 +21,5 @@ routes.use("/dns", DNS);
 routes.use("/endpoint", endpoint);
 routes.use("/backup", backup);
 routes.use("/cert", cert);
+routes.use("/loadbalance", loadbalance);
 export default routes;

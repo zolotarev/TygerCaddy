@@ -8,28 +8,23 @@ import {
     UpdateDateColumn
   } from "typeorm";
   import { Length, IsNotEmpty, IsIP, IsPort } from "class-validator";
-
+  import * as bcrypt from "bcryptjs";
+  import {LoadBalance} from "./LoadBalance";
+  import {Endpoint} from "./Endpoint";
+  import { isIPv4 } from "net";
   
   @Entity()
   @Unique(["name"])
-  export class App {
+  export class LoadBalancePolicy {
     @PrimaryGeneratedColumn()
     id: number;
-  
+
     @Column()
-    @Length(4, 20)
+    @Length(4, 50)
     name: string;
-  
-    @Column()
-    @IsIP()
-    ip_address: string;
 
     @Column()
-    @IsPort()
-    port_number: string;
-
-    @Column()
-    verify_ssl: boolean;
+    description: string;
   
     @Column()
     @CreateDateColumn()
@@ -38,5 +33,8 @@ import {
     @Column()
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @OneToMany(type => LoadBalance, LoadBalance => LoadBalance.policy)
+      policy: LoadBalance;
   }
   
