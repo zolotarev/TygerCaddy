@@ -66,10 +66,9 @@ class AppController {
     const appRepository = getRepository(App);
     let newApp;
     try {
-      newApp = await appRepository.findOneOrFail(id, {
-        relations: ["address"],
-      });
+      newApp = await appRepository.findOneOrFail(id);
     } catch (error) {
+      console.log(error)
       //If not found, send a 404 response
       return res.status(404).send("App not found");
     }
@@ -87,11 +86,10 @@ class AppController {
     //Try to safe, if fails, that means appname already in use
     try {
       await appRepository.save(newApp);
-      if (newApp.address.length !== 0) {
         console.log("New Caddyfile Needed!");
         await rebuildCaddyfile();
-      }
     } catch (e) {
+      console.log(e)
       return res.status(409).send("App already in use");
     }
     //After all send a 204 (no content, but accepted) response
