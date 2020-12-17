@@ -36,7 +36,7 @@ build-docker:
     variables:
       PLATFORM: linux/amd64
       TAG_VERSION: latest
-      DOCKER_HOST: unix:///var/run/docker.sock
+      DOCKER_HOST: tcp://docker:2375/
     services:
       - docker:19.03.0-dind
     only:
