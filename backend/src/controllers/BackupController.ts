@@ -135,9 +135,9 @@ class BackupController {
     const lbRepository = getRepository(LoadBalance);
     let output = {};
 
-    let addresses = await addressRepository.find({ relations: ["app"] });
+    let addresses = await addressRepository.find({ relations: ["app","policy", "policy.policy"] });
     let apps = await appRepository.find(); 
-    let endpoints = await endpointRepository.find({ relations: ["app", "address", "policy", "policy.policy"] });
+    let endpoints = await endpointRepository.find({ relations: ["app", "address"] });
     let loadBalancers = await lbRepository.find()
     output = {
       addresses: addresses,
