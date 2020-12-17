@@ -5,6 +5,7 @@ import { User } from "../entity/User";
 import { Address } from "../entity/Address";
 import { Endpoint } from "../entity/Endpoint";
 import { stderr } from "process";
+import { verify } from "jsonwebtoken";
 
 export const checkCaddy = async () => {
     //check that caddy is available by polling the config.
@@ -122,6 +123,7 @@ export const generateEndpointsBlock = async (endpoints) => {
     });
     return endpointsBlock
 };
+
 export const generateProxyBlock = async (address) => {
     let proxyBlock = "";
     console.log("Generating proxy block for: " + address.address);
@@ -140,25 +142,19 @@ export const generateProxyBlock = async (address) => {
                       "lb_try_interval " + address.policy.try_interval + 
                       "\n \t \t "
         }
-
-    if (!address.app.verify_ssl){
+        let ssl_skip = ""
+        let skip_ssl_verify = address.app.some( app => app['verify_ssl'] === true )
+        if(skip_ssl_verify) {
+            ssl_skip="\n \t \t transport http { \n \t \t \t tls_insecure_skip_verify \n \t \t } \n"
+        }
         proxyBlock =
             address.address +
             " { \n" +
             "\t reverse_proxy " + apps +
             " { \n " +
             lbblock + 
-            "\n \t \t transport http { \n \t \t \t tls_insecure_skip_verify \n \t \t } \n" +
+            ssl_skip +
             "\t } \n" 
-      } else {
-        proxyBlock =
-            address.address +
-            " { \n" +
-            "\t reverse_proxy " + apps +
-            " { \n \n " +
-            lbblock + 
-            "\n \t } \n" 
-      }
     return proxyBlock
 };
 export const generateTlsBlock = async (address) => {
