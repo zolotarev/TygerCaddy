@@ -1,6 +1,7 @@
 stages:
     - version
     - build
+    - push
 variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: tcp://docker:2375/
@@ -95,15 +96,10 @@ build-docker-ARM64-release:
 push-to-docker-hub:
     stage: push
     tags: 
-      - shell
+      - docker
     variables:
-      PLATFORM: linux/arm64,linux/arm/v7
-      TAG_VERSION: latest
-      VERSION_PREFIX: "ARM64-"
       DOCKER_HOST: unix:///var/run/docker.sock
       DOCKER_HUB: hub.docker.com/morph1904/tygercaddy
-      DOCKER_HUB_USER: morph1904
-      DOCKER_HUB_PASS: R3cNiLqTNdnQ
     only:
       - master
     script:
