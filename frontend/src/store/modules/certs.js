@@ -24,9 +24,9 @@ export const certs = {
         console.log(headers)
         this._vm.$http
           .post("cert/", data)
-          .then(({ data }) => {
+          .then(() => {
             dispatch('getCerts')
-            commit('setSnack', {snack: "Cert " + data.name + " was created!", color: 'success'})
+            commit('setSnack', {snack: "Certificate was created!", color: 'success'})
           })
           .catch((error) => {
             console.log(error)
@@ -37,15 +37,15 @@ export const certs = {
         this._vm.$http.patch("cert/" + data.id + "/", data)
           .then(() => {
             dispatch('getCerts')
-            commit('setSnack', {snack: "Cert " + data.name + " was updated!", color: 'success'})
+            commit('setSnack', {snack: "Certificate was updated!", color: 'success'})
           })
       },
       deleteCert({ commit, dispatch }, data) {
-        let cert = data
+       
         this._vm.$http.delete("cert/" + data.id + "/", data)
           .then(() => {
             dispatch('getCerts')
-            commit('setSnack', { snack: "Cert " + cert.name + " was deleted!", color: "warning" })
+            commit('setSnack', { snack: "Certificate was deleted!", color: "warning" })
           })
       },
     },
