@@ -97,10 +97,12 @@ configBlock = configBlock + email
 if (config.automatic_https) {
     configBlock = configBlock + "\n \t auto_https disable_redirects \n } \n";
     console.log("Set the Auto HTTPS Disable redirects")
-} else if (config.redirect_https && config.automatic_https) {
-    configBlock = "\n \t auto_https on \n } \n ";
+} 
+if (config.redirect_https && config.automatic_https) {
+    configBlock = "{ \n \t auto_https on \n } \n ";
     console.log("Set the Auto HTTPS On")
-} else if (!config.automatic_https) {
+} 
+if (!config.automatic_https) {
     configBlock = configBlock + "\n \t auto_https off \n } \n";
     console.log("Set the Auto HTTPS Off")
 }
