@@ -56,7 +56,6 @@ export const auth = {
       return new Promise((resolve, reject)=>{
         this._vm.$http({url: '/auth/initialuser', data: user, method:'post'})
         .then(response => {
-          console.log(response)
           commit('setSnack', { snack: "Initial User updated, please login with your new details", color: "success" })
           dispatch('logout');
           resolve(response)

@@ -16,11 +16,11 @@ export const endpoints = {
     addEndpoint({ commit }, data) {
       this._vm.$http
         .post("endpoint/", data)
-        .then(({ data }) => {
-          commit('setSnack', {snack: "Endpoint " + data.endpoint + " was created!", color: 'success'})
+        .then(() => {
+          commit('setSnack', {snack: "Endpoint was created!", color: 'success'})
         })
         .catch(() => {
-          commit('setSnack', {snack: "Could not save the proxy! Please check your data and try again", color: 'error'})
+          commit('setSnack', {snack: "Could not save the endpoint! Please check your data and try again", color: 'error'})
         });
     },
     updateEndpoint({ commit, dispatch }, data) {
@@ -31,7 +31,7 @@ export const endpoints = {
             id: data.address
           }
           dispatch('getEndpoints', addr)
-          commit('setSnack', {snack: "Endpoint " + data.endpoint + " was updated!", color: 'success'})
+          commit('setSnack', {snack: "Endpoint was updated!", color: 'success'})
         })
     },
     deleteEndpoint({ commit, dispatch }, data) {
@@ -42,7 +42,7 @@ export const endpoints = {
             id: data.addrid
           }
           dispatch('getEndpoints', addr)
-          commit('setSnack', { snack: "Endpoint " + data.endpoint + " was deleted!", color: 'warning'})
+          commit('setSnack', { snack: "Endpoint was deleted!", color: 'warning'})
         })
     },
   },

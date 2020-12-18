@@ -71,15 +71,16 @@
                       class="px-3"
                       label="Skip SSL Verification on Backend?"
                       v-model="app.verify_ssl"
-                      hint="If your application uses a HTTPS backend with a self signed or otherwise invalid certificate, or your backend does not use HTTPS, this should be ON."
+                      hint="If your app or backend is expecting a HTTPS request, and does not provide a valid certificate, switch this on. "
                       input-value="true"
                       persistent-hint
                     >
                     </v-switch>
                     <br />
-                    <v-btn color="orange" dark type="submit"> Continue </v-btn>
-
-                    <v-btn text> Cancel </v-btn>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="orange" dark type="submit"> Continue </v-btn>
+                    </v-card-actions>
                   </v-stepper-content>
                 </form>
               </validation-observer>
@@ -122,9 +123,13 @@
                   </form>
                 </validation-observer>
 
-                <v-btn color="orange" dark @click="e1 = 3"> Continue </v-btn>
-
-                <v-btn text> Cancel </v-btn>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="grey" dark @click="e1 = 1"> Cancel </v-btn>
+                  <v-btn color="orange" dark type="submit" @click="e1 = 3">
+                    Continue
+                  </v-btn>
+                </v-card-actions>
               </v-stepper-content>
 
               <v-stepper-content step="3">
@@ -152,9 +157,14 @@
                     </v-col>
                   </v-row>
                 </v-container>
-                <v-btn color="orange" dark @click="SubmitForm()"> Finish </v-btn>
 
-                <v-btn text @click="e1 = 1"> Cancel </v-btn>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="grey" dark @click="e1 = 1"> Cancel </v-btn>
+                  <v-btn color="orange" dark type="submit" @click="SubmitForm()">
+                    Finish
+                  </v-btn>
+                </v-card-actions>
               </v-stepper-content>
             </v-stepper-items>
           </v-stepper>

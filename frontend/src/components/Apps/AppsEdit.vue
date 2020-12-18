@@ -8,11 +8,7 @@
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <form name="form" @submit.prevent="handleSubmit(onSubmit)">
           <v-card-text>
-            <validation-provider
-              v-slot="{ errors }"
-              name="Name"
-              rules="required"
-            >
+            <validation-provider v-slot="{ errors }" name="Name" rules="required">
               <v-text-field
                 name="appName"
                 label="Name"
@@ -58,7 +54,7 @@
               color="orange"
               class="px-3"
               label="Verify SSL on the backend?"
-              hint="If your application uses a HTTPS backend with a self signed or otherwise invalid certificate, or your backend does not use HTTPS, this should be ON."
+              hint="If your app or backend is expecting a HTTPS request, and does not provide a valid certificate, switch this on. "
               persistent-hint
               v-model="item.verify_ssl"
             ></v-switch>

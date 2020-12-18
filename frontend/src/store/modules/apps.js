@@ -19,9 +19,9 @@ export const apps = {
     addApp({ commit, dispatch }, data) {
       this._vm.$http
         .post("app/", data.app)
-        .then(({ data }) => {
+        .then(() => {
           dispatch('getApps')
-          commit('setSnack', {snack: "App " + data.name + " (" + data.url + ")" + " was created!", color: 'success'})
+          commit('setSnack', {snack: "App was created!", color: 'success'})
         })
         .catch((error) => {
           console.log(error)
@@ -32,15 +32,14 @@ export const apps = {
       this._vm.$http.patch("app/" + data.id + "/", data)
         .then(() => {
           dispatch('getApps')
-          commit('setSnack', {snack: "App " + data.name + " (" + data.url + ")" + " was updated!", color: 'success'})
+          commit('setSnack', {snack: "App was updated!", color: 'success'})
         })
     },
     deleteApp({ commit, dispatch }, data) {
-      let app = data
       this._vm.$http.delete("app/" + data.id + "/", data)
         .then(() => {
           dispatch('getApps')
-          commit('setSnack', { snack: "App " + app.name + " (" + app.url + ")" + " was deleted!", color: "warning" })
+          commit('setSnack', { snack: "App was deleted!", color: "warning" })
         })
     },
   },

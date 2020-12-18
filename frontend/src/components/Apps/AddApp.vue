@@ -8,11 +8,7 @@
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <form name="form" @submit.prevent="handleSubmit(onSubmit)">
           <v-card-text>
-            <validation-provider
-              v-slot="{ errors }"
-              name="Name"
-              rules="required"
-            >
+            <validation-provider v-slot="{ errors }" name="Name" rules="required">
               <v-text-field
                 name="appName"
                 label="Name"
@@ -59,7 +55,7 @@
               class="px-3"
               label="Skip SSL Verification on Backend?"
               v-model="formData.verify_ssl"
-              hint="If your application uses a HTTPS backend with a self signed or otherwise invalid certificate, or your backend does not use HTTPS, this should be ON."
+              hint="If your app or backend is expecting a HTTPS request, and does not provide a valid certificate, switch this on. "
               input-value="true"
               persistent-hint
             >
@@ -67,7 +63,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="grey" @click="close">Cancel</v-btn>
+            <v-btn color="grey" @click="close" dark>Cancel</v-btn>
             <v-btn color="orange" dark type="submit">Save</v-btn>
           </v-card-actions>
         </form>
