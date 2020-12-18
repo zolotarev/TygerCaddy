@@ -43,7 +43,6 @@ export const checkLogDir = async (address) => {
 export const getConfig = async () => {
     const configRepository = getRepository(Config);
     const config = await configRepository.findOne({where:{id:1}});
-    //console.log(config)
     return config;
 };
 export const getAddresses = async () => {
@@ -135,7 +134,6 @@ export const generateProxyBlock = async (address) => {
         });
         let lbblock = ""
         if(address.policy){
-            console.log(address.policy.policy)
             lbblock = "\n \t \t " +
                       "lb_policy " + address.policy.policy.name +
                       "\n \t \t " +
