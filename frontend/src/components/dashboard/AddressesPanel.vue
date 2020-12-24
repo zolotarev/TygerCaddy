@@ -61,12 +61,35 @@
           <v-icon medium v-if="item.forceHTTPChallenge">mdi-check</v-icon>
           <v-icon medium v-else>mdi-close</v-icon>
         </template>
+        <template v-slot:[`item.custom_cert`]="{ item }">
+          <v-icon medium v-if="item.custom_cert">mdi-check</v-icon>
+          <v-icon medium v-else>mdi-close</v-icon>
+        </template>
         <template v-slot:[`item.cert`]="{ item }">
           <div v-if="item.cert">{{ item.cert.name }}</div>
           <div v-else>None</div>
         </template>
         <template v-slot:[`item.app`]="{ item }">
-          {{ item.app.name }}
+          <v-chip
+            class="ma-1"
+            color="orange"
+            dark
+            small
+            outlined
+            pill
+            v-for="app in item.app"
+            :key="app.name"
+            @click="navigateApp(app.name)"
+            >{{ app.name }}
+          </v-chip>
+        </template>
+        <template v-slot:[`item.policy`]="{ item }">
+          <div v-if="item.policy">
+            <v-chip class="ma-1" color="success" dark small outlined pill>
+              {{ item.policy.name }}
+            </v-chip>
+          </div>
+          <div v-else>N/A</div>
         </template>
         <template v-slot:[`item.dns`]="{ item }">
           <div v-if="item.dns">
@@ -158,6 +181,7 @@ export default {
         { text: "Assigned Cert", value: "cert" },
         { text: "Application", value: "app" },
         { text: "DNS", value: "dns" },
+        { text: "LB Policy", value: "policy" },
         { text: "Actions", value: "actions", sortable: false },
       ],
       editedItem: {
@@ -230,6 +254,9 @@ export default {
       this.editedItem = Object.assign({}, item);
       this.urldialog = true;
     },
+    navigateApp(name) {
+      this.$router.push({ name: "appName", params: { name: name } });
+    },
   },
   computed: {
     ...mapGetters({
@@ -243,6 +270,7 @@ export default {
   mounted() {
     this.$store.dispatch("getAddresses");
     this.$store.dispatch("getActiveDNS");
+    this.$store.dispatch("getLb");
     this.loading = false;
   },
 };

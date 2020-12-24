@@ -7,19 +7,14 @@ export const quickadd = {
     quickAdd({ commit, dispatch }, data) {
       let address = data.address
       let app = data.app
-
       this._vm.$http
       .post("app/", app)
       .then(( savedApp ) => {
-        console.log(savedApp.data)
-        dispatch('getApps')
-        commit('setSnack', {snack: "App " + savedApp.data.name + " was created!", color: 'success'})
-        
-        address.app= savedApp.data.id
-        this._vm.$http.post("address/", address).then((savedAddress) => {
-          console.log(savedAddress.data)
+        dispatch('getApps')        
+        address.app = [savedApp.data]
+        this._vm.$http.post("address/", address).then(() => {
+          console.log(address)
           dispatch('getAddresses');
-          commit('setSnack', { snack: "New address created " + savedAddress.data.address, color: "success" })
           commit('setSnack', { snack: "QuickAdd Completed!", color: "success" })
         })
       })

@@ -25,8 +25,23 @@
               <div v-if="item.dns">DNS Provider: {{ item.dns.name }}</div>
               <div v-else>DNS Provider: NONE</div>
             </v-layout>
-            <v-layout row justify-space-between v-if="item.app">
-              Proxies to: {{ item.app.name }}
+            <v-layout row v-if="item.app">
+              Proxies to:<br />
+              <v-chip
+                class="ma-1"
+                color="orange"
+                dark
+                small
+                outlined
+                pill
+                v-for="app in item.app"
+                :key="app.name"
+                >{{ app.name }}
+              </v-chip>
+            </v-layout>
+            <v-layout row justify-space-between>
+              <div v-if="item.policy">Load Balance Policy: {{ item.policy.name }}</div>
+              <div v-else>Load Blance Policy: NONE</div>
             </v-layout>
           </v-container>
         </v-card-text>

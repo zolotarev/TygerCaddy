@@ -24,9 +24,9 @@ export const dns = {
     },
     
     updateDNS( { commit, dispatch }, data ){
-      this._vm.$http.patch("dns/" + data.id + "/", data).then(({ data }) => {
+      this._vm.$http.patch("dns/" + data.id + "/", data).then(() => {
           dispatch('getDNS');
-          commit('setSnack', {snack: "DNS " + data.name + " was updated!", color: "success" })
+          commit('setSnack', {snack: "DNS was updated!", color: "success" })
         })
     },
   },

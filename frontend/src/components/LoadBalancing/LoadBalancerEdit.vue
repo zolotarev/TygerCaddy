@@ -96,23 +96,6 @@
                 clearable
               ></v-combobox>
             </validation-provider>
-            <div v-if="item.app.length >= 2">
-              <validation-provider v-slot="{ errors }" name="policy" rules="">
-                <v-combobox
-                  v-model="item.policy"
-                  name="policy"
-                  color="orange"
-                  :error-messages="errors"
-                  :items="policies"
-                  item-text="name"
-                  item-value="name"
-                  label="Load Balance Policy:"
-                  hint="To Load Balacing, select the Load Balancer for this domain."
-                  placeholder="Select a Load Balancer"
-                  persistent-hint
-                ></v-combobox>
-              </validation-provider>
-            </div>
           </v-card-text>
 
           <v-card-actions>
@@ -153,7 +136,6 @@ export default {
       apps: "showApps",
       certs: "showCerts",
       dns: "getActiveDNS",
-      policies: "showLbs",
     }),
   },
   methods: {
@@ -187,7 +169,6 @@ export default {
         forceHTTPChallenge: this.item.forceHTTPChallenge,
         custom_cert: this.item.custom_cert,
         dnsId: dns_provider,
-        policy: this.item.policy,
       };
       console.log(data);
       this.$store.dispatch("updateAddress", data);

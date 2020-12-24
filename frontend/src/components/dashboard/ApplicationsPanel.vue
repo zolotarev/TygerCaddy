@@ -60,13 +60,7 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-tooltip top>
             <template v-slot:activator="{ on }">
-              <v-btn
-                icon
-                class="mr-0"
-                color="orange"
-                @click="editItem(item)"
-                v-on="on"
-              >
+              <v-btn icon class="mr-0" color="orange" @click="editItem(item)" v-on="on">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
             </template>
@@ -74,13 +68,7 @@
           </v-tooltip>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
-              <v-btn
-                icon
-                class="mr-0"
-                color="orange"
-                @click="deleteItem(item)"
-                v-on="on"
-              >
+              <v-btn icon class="mr-0" color="orange" @click="deleteItem(item)" v-on="on">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </template>
@@ -177,6 +165,9 @@ export default {
   mounted() {
     this.$store.dispatch("getApps");
     this.loading = false;
+    if (this.$route.params.name) {
+      this.search = this.$route.params.name;
+    }
   },
 };
 </script>

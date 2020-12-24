@@ -14,6 +14,7 @@ import Logs from "../views/Logs.vue";
 import Certificates from "../views/Certificates.vue";
 import DNSProviders from "../views/DNSProviders.vue";
 import QuickAdd from "../views/QuickAdd.vue";
+import LoadBalance from "../views/LoadBalancing.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -22,7 +23,8 @@ const routes = [
     name: "Dashboard",
     component: Dashboard,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Dashboard"
     }
   },
   {
@@ -30,7 +32,8 @@ const routes = [
     name: "Home",
     component: Dashboard,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Dashboard"
     }
   },
   {
@@ -38,7 +41,8 @@ const routes = [
     name: "InitialUser",
     component: InitialUser,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Initial User"
     }
   },
   {
@@ -46,7 +50,17 @@ const routes = [
     name: "Apps",
     component: Apps,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Apps"
+    }
+  },
+  {
+    path: "/apps/:name",
+    name: "appName",
+    component: Apps,
+    meta: {
+      requiresAuth: true,
+      title:"Apps"
     }
   },
   {
@@ -54,7 +68,8 @@ const routes = [
     name: "Addresses",
     component: Addresses,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Addresses"
     }
   },
   {
@@ -62,7 +77,8 @@ const routes = [
     name: "Certificates",
     component: Certificates,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Certificates"
     }
   },
   {
@@ -70,7 +86,8 @@ const routes = [
     name: "DNS Providers",
     component: DNSProviders,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"DNS Providers"
     }
   },
   {
@@ -78,7 +95,8 @@ const routes = [
     name: "Backup",
     component: Backup,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Backup"
     }
   },
   {
@@ -86,7 +104,8 @@ const routes = [
     name: "Config",
     component: Config,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Config"
     }
   },
   {
@@ -94,7 +113,8 @@ const routes = [
     name: "Logs",
     component: Logs,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Logs"
     }
   },
   {
@@ -102,7 +122,8 @@ const routes = [
     name: "Profile",
     component: Profile,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Profile"
     }
   },
   {
@@ -110,13 +131,27 @@ const routes = [
     name: "QuickAdd",
     component: QuickAdd,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title:"Quick Add"
+    }
+  },
+  {
+    path: "/load-balance",
+    name: "LoadBalance",
+    component: LoadBalance,
+    meta: {
+      requiresAuth: true,
+      title:"Load Balance"
     }
   },
   {
     path: "/login",
     name: "Login",
-    component: Login
+    component: Login,
+    meta: {
+      requiresAuth: false,
+      title:"Login"
+    }
   },
 ];
 
@@ -126,6 +161,8 @@ const router = new VueRouter({
   routes
 });
 router.beforeEach((to, from, next) => {
+  let title = to.meta.title
+  document.title = "TygerCaddy | " + title;
   if (to.matched.some(record => record.name == 'Login')) {
     store.commit('SET_LAYOUT', 'simple-layout')
   }else{

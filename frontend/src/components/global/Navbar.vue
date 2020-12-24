@@ -67,14 +67,19 @@ export default {
         icon: "mdi-home",
       },
       {
+        route: "addresses",
+        text: "Addresses",
+        icon: "mdi-domain",
+      },
+      {
         route: "apps",
         text: "Applications",
         icon: "mdi-apps",
       },
       {
-        route: "addresses",
-        text: "Addresses",
-        icon: "mdi-domain",
+        route: "dns-providers",
+        text: "DNS Providers",
+        icon: "mdi-dns",
       },
       {
         route: "certificates",
@@ -85,11 +90,6 @@ export default {
         route: "load-balance",
         text: "Load Balancing",
         icon: "mdi-call-split",
-      },
-      {
-        route: "dns-providers",
-        text: "DNS Providers",
-        icon: "mdi-dns",
       },
       {
         route: "backup",

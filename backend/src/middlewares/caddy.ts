@@ -5,6 +5,7 @@ import { User } from "../entity/User";
 import { Address } from "../entity/Address";
 import { Endpoint } from "../entity/Endpoint";
 import { stderr } from "process";
+import { verify } from "jsonwebtoken";
 
 export const checkCaddy = async () => {
     //check that caddy is available by polling the config.
@@ -42,13 +43,11 @@ export const checkLogDir = async (address) => {
 export const getConfig = async () => {
     const configRepository = getRepository(Config);
     const config = await configRepository.findOne({where:{id:1}});
-    //console.log(config)
     return config;
 };
 export const getAddresses = async () => {
     const addressRepository = getRepository(Address);
-    const addresses = await addressRepository.find({ relations: ["app", 'endpoint', 'cert', 'dns'] })
-    
+    const addresses = await addressRepository.find({ relations: ["app", 'endpoint', 'cert', 'dns', 'policy', 'policy.policy'] })
     return addresses;
 };
 export const getEndpoints = async (addressId) => {
@@ -97,10 +96,12 @@ configBlock = configBlock + email
 if (config.automatic_https) {
     configBlock = configBlock + "\n \t auto_https disable_redirects \n } \n";
     console.log("Set the Auto HTTPS Disable redirects")
-} else if (config.redirect_https && config.automatic_https) {
-    configBlock = "\n \t auto_https on \n } \n ";
+} 
+if (config.redirect_https && config.automatic_https) {
+    configBlock = "{ \n \t auto_https on \n } \n ";
     console.log("Set the Auto HTTPS On")
-} else if (!config.automatic_https) {
+} 
+if (!config.automatic_https) {
     configBlock = configBlock + "\n \t auto_https off \n } \n";
     console.log("Set the Auto HTTPS Off")
 }
@@ -123,31 +124,37 @@ export const generateEndpointsBlock = async (endpoints) => {
     });
     return endpointsBlock
 };
+
 export const generateProxyBlock = async (address) => {
     let proxyBlock = "";
-    console.log("Generating proxy block for: " + address.app.name);
-    if (!address.app.verify_ssl){
+    console.log("Generating proxy block for: " + address.address);
+    let apps = ""
+        address.app.forEach((app)=>{
+            apps = apps + app.ip_address + ":" + app.port_number + " "
+        });
+        let lbblock = ""
+        if(address.policy){
+            lbblock = "\n \t \t " +
+                      "lb_policy " + address.policy.policy.name +
+                      "\n \t \t " +
+                      "lb_try_duration " + address.policy.try_duration + 
+                      "\n \t \t " +
+                      "lb_try_interval " + address.policy.try_interval + 
+                      "\n \t \t "
+        }
+        let ssl_skip = ""
+        let skip_ssl_verify = address.app.some( app => app['verify_ssl'] === true )
+        if(skip_ssl_verify) {
+            ssl_skip="\n \t \t transport http { \n \t \t \t tls_insecure_skip_verify \n \t \t } \n"
+        }
         proxyBlock =
             address.address +
             " { \n" +
-            "\t reverse_proxy " +
-            address.app.ip_address +
-            ":" +
-            address.app.port_number +
+            "\t reverse_proxy " + apps +
             " { \n " +
-            "\t \t transport http { \n \t \t \t tls_insecure_skip_verify \n \t \t } \n" +
+            lbblock + 
+            ssl_skip +
             "\t } \n" 
-      } else {
-        proxyBlock =
-            address.address +
-            " { \n" +
-            "\t reverse_proxy " +
-            address.app.ip_address +
-            ":" +
-            address.app.port_number +
-            " { \n \n " +
-            "\t } \n" 
-      }
     return proxyBlock
 };
 export const generateTlsBlock = async (address) => {
@@ -228,7 +235,6 @@ export const rebuildCaddyfile = async () => {
         if (endpoints){
             endpointsBlock = await generateEndpointsBlock(endpoints);
         };
-
         //Start Building the Proxy Blocks
         let proxyBlock = await generateProxyBlock(address);
 

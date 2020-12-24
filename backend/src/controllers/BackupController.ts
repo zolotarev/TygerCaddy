@@ -5,6 +5,7 @@ import { validate } from "class-validator";
 import { Address } from "../entity/Address";
 import { App } from "../entity/App";
 import { Endpoint } from "../entity/Endpoint";
+import { LoadBalance } from "../entity/LoadBalance";
 
 class BackupController {
   static tyger2Restore = async (req: Request, res: Response) => {
@@ -97,7 +98,7 @@ class BackupController {
       }
   }
   static tygercaddyRestore = async (req: Request, res: Response) => {
-    let { addresses, apps, endpoints } = req.body.backup;
+    let { addresses, apps, endpoints, loadBalancers } = req.body.backup;
 
     if(apps){
       await getConnection().createQueryBuilder().insert().into(App)
@@ -120,21 +121,29 @@ class BackupController {
       )
       .execute()
     }
+    if (loadBalancers){
+      await getConnection().createQueryBuilder().insert().into(LoadBalance)
+      .values(
+        loadBalancers
+      )
+    }
   }
   static exportBackup = async (req: Request, res: Response) => {
     const appRepository = getRepository(App);
     const addressRepository = getRepository(Address);
     const endpointRepository = getRepository(Endpoint);
+    const lbRepository = getRepository(LoadBalance);
     let output = {};
 
-    let addresses = await addressRepository.find({ relations: ["app"] });
+    let addresses = await addressRepository.find({ relations: ["app","policy", "policy.policy"] });
     let apps = await appRepository.find(); 
     let endpoints = await endpointRepository.find({ relations: ["app", "address"] });
-    
+    let loadBalancers = await lbRepository.find()
     output = {
       addresses: addresses,
       apps: apps, 
-      endpoints: endpoints
+      endpoints: endpoints,
+      loadBalancers: loadBalancers
     }
 
     return res.status(200).send(output)

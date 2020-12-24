@@ -36,7 +36,7 @@ class AddressController {
     //Get addresses from database
     const addressRepository = getRepository(Address);
     const addresses = await addressRepository.find({
-      relations: ["app", "cert", "dns"],
+      relations: ["app", "cert", "dns", "policy"],
     });
 
     //Send the addresses object
@@ -59,7 +59,8 @@ class AddressController {
 
   static newAddress = async (req: Request, res: Response) => {
     //Get parameters from the body
-    let { address, tls, staging, app, forceHTTPChallenge, cert, custom_cert, dns } = req.body;
+    let { address, tls, staging, app, forceHTTPChallenge, cert, custom_cert, dns, policy } = req.body;
+    console.log(app)
     let newAddress = new Address();
     newAddress.address = address;
     newAddress.tls = tls;
@@ -69,6 +70,8 @@ class AddressController {
     newAddress.cert = cert
     newAddress.custom_cert = custom_cert
     newAddress.dns = dns
+    newAddress.policy = policy
+    console.log(newAddress)
     //Validade if the parameters are ok
     const errors = await validate(newAddress);
     if (errors.length > 0) {
@@ -78,10 +81,10 @@ class AddressController {
     //Try to save. If fails, the addressname is already in use
     const addressRepository = getRepository(Address);
     try {
-      await addressRepository.save(newAddress);
+      let result = await addressRepository.save(newAddress);
       await rebuildCaddyfile();
           //If all ok, send 201 response
-    return res.status(201).send(newAddress);
+    return res.status(201).send(result);
     } catch (e) {
       return res.status(409).send(e);
     }
@@ -94,7 +97,7 @@ class AddressController {
     const id = req.params.id;
 
     //Get values from the body
-    let { address, tls, staging, appId, forceHTTPChallenge, certId, custom_cert, dnsId } = req.body;
+    let { address, tls, staging, app, forceHTTPChallenge, cert, custom_cert, dns, policy } = req.body;
     //Try to find address on database
     const addressRepository = getRepository(Address);
     let editAddress;
@@ -109,11 +112,12 @@ class AddressController {
     editAddress.address = address;
     editAddress.tls = tls;
     editAddress.staging = staging;
-    editAddress.app = appId;
+    editAddress.app = app;
     editAddress.forceHTTPChallenge = forceHTTPChallenge
-    editAddress.cert = certId
+    editAddress.cert = cert
     editAddress.custom_cert = custom_cert
-    editAddress.dns = dnsId
+    editAddress.dns = dns
+    editAddress.policy = policy
   
     const errors = await validate(editAddress);
     if (errors.length > 0) {
