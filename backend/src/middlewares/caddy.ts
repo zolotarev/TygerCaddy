@@ -98,7 +98,7 @@ if (config.automatic_https) {
     console.log("Set the Auto HTTPS Disable redirects")
 } 
 if (config.redirect_https && config.automatic_https) {
-    configBlock = "{ \n \t auto_https on \n } \n ";
+    configBlock = "{ \n \t \n } \n ";
     console.log("Set the Auto HTTPS On")
 } 
 if (!config.automatic_https) {
