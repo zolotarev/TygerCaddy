@@ -98,14 +98,14 @@ if (config.automatic_https) {
     console.log("Set the Auto HTTPS Disable redirects")
 } 
 if (config.redirect_https && config.automatic_https) {
-    configBlock = "{ \n \t auto_https on \n } \n ";
+    configBlock = "{ \n \t \n } \n ";
     console.log("Set the Auto HTTPS On")
 } 
 if (!config.automatic_https) {
     configBlock = configBlock + "\n \t auto_https off \n } \n";
     console.log("Set the Auto HTTPS Off")
 }
-configBlock = configBlock + ":{$FRONTEND_PORT} { \n \t root * /tygercaddy/frontend/dist \n \t root * /tygercaddy/frontend/dist \n \t encode gzip zstd \n \t try_files {path} {path}/ /index.html \n \t file_server \n } \n";
+configBlock = configBlock + ":{$FRONTEND_PORT} { \n \t root * /tygercaddy/frontend/dist \n \t encode gzip zstd \n \t try_files {path} {path}/ /index.html \n \t file_server \n } \n";
 console.log("Config Block Generated...")
 return configBlock;
 };
