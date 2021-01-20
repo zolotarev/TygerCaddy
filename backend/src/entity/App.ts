@@ -17,7 +17,7 @@ import {
     id: number;
   
     @Column()
-    @Length(4, 20)
+    @Length(4, 64)
     name: string;
   
     @Column()
