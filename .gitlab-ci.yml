@@ -98,7 +98,7 @@ push-to-docker-hub:
     tags: 
       - docker
     variables:
-      DOCKER_HOST: unix:///var/run/docker.sock
+      DOCKER_HOST: tcp://docker:2375/
       DOCKER_HUB: hub.docker.com/morph1904/tygercaddy
     only:
       - master
