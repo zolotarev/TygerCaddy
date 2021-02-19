@@ -16,7 +16,7 @@ class CertController {
     return res.send(certs);
   };
 
-  static getOneById = async (req: Request, res: Response) => {
+  static getOneById = async (req: any, res: Response) => {
     //Get the ID from the url
     const id: string = req.params.id;
 
@@ -29,7 +29,7 @@ class CertController {
     }
   };
 
-  static newCert = async (req: Request, res: Response) => {
+  static newCert = async (req: any, res: Response) => {
     //Get parameters from the body
     let { name } = req.body;
 
@@ -83,7 +83,7 @@ class CertController {
     
   };
 
-  static editCert = async (req: Request, res: Response) => {
+  static editCert = async (req: any, res: Response) => {
     //Get the ID from the url
     const id = req.params.id;
 
